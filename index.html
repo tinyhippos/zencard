@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>ZenCard</title>
+    <link rel="stylesheet" type="text/css" href="app/css/styles.css"/>
+    
+    <script type="text/javascript" src="app/thirdparty/jquery-1.4.2.js"></script>
+    <script type="text/javascript" src="app/thirdparty/jquery-barcode-1.3.3.js"></script>
+    
+    <script type="text/javascript" src="app/app.js"></script>
+
+  </head>
+  <body>
+    
+    <div class="layout">
+        <div>
+            <form onsubmit="ZenCard.Main.generate(this.barcode_number.value); return false;" method="post">
+                <input type="text" name="barcode_number" value="1234567890128" />
+                <button>Generate</button>
+                <button onclick="ZenCard.Main.clear(); return false;">Clear</button>
+            </form>
+        </div>
+        <div id="barcodes"></div>
+    </div>
+    
+  </body>
+</html>
