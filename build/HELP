@@ -1,0 +1,21 @@
+# == Synopsis
+#   ZenCard builder tools
+#
+# == Examples
+#   This command builds a uncompressed version of the files
+#     build.rb
+#
+#   compresses the files
+#     build.rb --compress
+#
+# == Usage 
+#   build.rb [options]
+#
+#   For help use: build.rb -h
+#
+# == Options
+#   -h,   --help               Displays help message
+#   -c,   --compress           Compress/Minimize JS file
+#   -q,   --quiet              Output as little as possible, overrides verbose
+#   -V,   --verbose            Verbose output
+#
