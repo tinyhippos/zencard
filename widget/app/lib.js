@@ -88,7 +88,7 @@
 }(ZenCard, $));
 
 
-// ----------------- Utils ----------------- \\
+// ----------------- Exception ----------------- \\
 (ZenCard.Exception = function ($, JQuery){
 
 	return {
