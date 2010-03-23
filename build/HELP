@@ -5,9 +5,6 @@
 #   This command builds a uncompressed version of the files
 #     build.rb
 #
-#   compresses the files
-#     build.rb --compress
-#
 # == Usage 
 #   build.rb [options]
 #

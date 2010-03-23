@@ -7,8 +7,9 @@ require 'ostruct'
 require 'parseconfig'
 require 'fileutils'
 
+require "modules/GenericApplication"
 require "modules/Compressor"
-require "modules/Helpers"
+require "modules/IOHelper"
 require "classes/Builder"
 
 #-------------------------------------------------

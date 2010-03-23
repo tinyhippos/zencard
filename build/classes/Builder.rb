@@ -18,6 +18,8 @@ class Builder
         @stdin = stdin
         @argv = args
 
+		@lib_src = ""
+
         # Set defaults
         @options = OpenStruct.new
         @options.verbose = false
@@ -38,31 +40,69 @@ class Builder
     # Does the actual building of all the JS code
     def build
 
-    begin
+		begin
 
-      if self.parsed_options?
+			if self.parsed_options?
 
+				self.log("--> Beginning Build...\n") if @options.verbose
 
-      end
+				#self.continue?("--> Creating build directory...\n") do
+					#FileUtils.mkdir self.config("BUILD_DIRECTORY") if !File.directory? self.config("BUILD_DIRECTORY")
+				#end
 
-    rescue Exception => e  
-      self.handle_exception(e)
-    end
+				#self.continue?("--> Clearing the build directory...\n") do
+					#self.delete_full_dir_contents(self.config("BUILD_DIRECTORY"))
+				#end
+				
+				self.continue?("--> Reading in library src...\n") do
+					self.collect_files([self.config("APPLICATION_LIB_SOURCE_DIRECTORY")], @lib_src)
+				end
 
+				if @options.compress
+					self.continue?("--> Compressing javascript files...\n") do
+						self.compress_fragments(@output_methods.code, [@lib_src])
+					end
+				end
+
+				self.continue?("--> Saving library src...\n") do
+					self.save(self.author_stamp + @lib_src, self.config("APPLICATION_LIB_FILE"))
+				end
+
+				self.log("**Finished** :-)")
+
+			end
+
+		rescue Exception => e  
+			self.handle_exception(e)
+		end
 
     end
 
     protected
+
+    def collect_files(directory_array, obj)
+        directory_array.each do |directory|
+            Dir.foreach directory do |file_name|
+                obj << self.read_in_file(directory+file_name) + "\n"
+            end
+        end
+        obj.gsub!(/@/,"")
+    end
+
+	def config(param)
+		@config.params[param]
+	end
 
     # parses command line options and does its thang
     def parsed_options?
 
         opts = OptionParser.new
 
-        opts.on('-h', '--help')                         { self.output_help  }
-        opts.on('-V', '--verbose')                      { @options.verbose = true }  
-        opts.on('-q', '--quiet')                        { @options.quiet = true }
-        opts.on('-c', '--compress')                        { @options.compress = true }
+        opts.on('-h', '--help')         { self.output_help(self.config("HELP"))  }
+        opts.on('-V', '--verbose')      { @options.verbose = true }  
+        opts.on('-q', '--quiet')        { @options.quiet = true }
+        opts.on('-c', '--compress')     { @options.compress = true }
+        opts.on('-l', '--license')      { self.log(self.read_in_file(self.config("LICENSE"))) ; exit!(0) }
 
         begin
             opts.parse!(@argv)
@@ -93,8 +133,10 @@ class Builder
 
     # compress each of the file fragments
 
-    def compress_fragments(output_method=@output_methods.code, fragments)
+    def compress_fragments(output_method, fragments)
 
+		output_method = @output_methods.code if !output_method
+		
         frag_length = fragments.length
 
         fragments.each_with_index do |item, index|
@@ -102,6 +144,16 @@ class Builder
             fragments[index] = item.replace(self.compress(output_method, @compilation_levels.simpleoptimizations, item))
         end
 
+    end
+
+    def author_stamp
+        stamp = "/* \n  " + self.config("APPNAME") + " :: Built On #{Time.now}\n\n" +
+            (self.read_in_file(self.config("LICENSE")) do |line|
+                "  #{line}"
+            end) + 
+            "*/\n"
+
+        stamp
     end
 
 end

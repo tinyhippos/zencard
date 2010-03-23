@@ -3,34 +3,6 @@
 #  Some basic methods, including FileIO, logging, exception handling
 module Helpers
 
-    HELP = "HELP"
-
-    # log something bitches!
-    def log(msg)
-        puts msg.to_s
-    end
-
-    #handle exceptions the DRY way, or at least start to.
-    def handle_exception(e)
-        msg = e.message
-
-        if e.message.to_s != e.exception.to_s
-          msg = e.exception.to_s+" :: "+msg
-        end
-
-        self.log "\nERROR RESCUE\n\n #{msg}"
-        self.log "\nBACKTRACE\n\n#{e.backtrace.join("\n")}\n\n"
-    end
-
-    #generic base method to show the current programs usage.
-    def output_help
-        begin
-            self.log(self.read_in_file(HELP))
-        rescue SystemExit => e
-            exit!(0)
-        end
-    end
-
     # Copy all contents from orig dir to target dir
     def copy_full_dir(orig, target)
         FileUtils.cp_r(orig, target)

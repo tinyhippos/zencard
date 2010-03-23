@@ -17,8 +17,7 @@ module Compressor
     #   * jscode :: (String) to optimize
     def compress(output_info, compilation_level, jscode)
 
-        response = Net::HTTP.post_form(URI.parse(
-                                        'http://closure-compiler.appspot.com/compile'), {
+        response = Net::HTTP.post_form(URI.parse('http://closure-compiler.appspot.com/compile'), {
                                         'js_code' => jscode,
                                         'compilation_level' => compilation_level,
                                         'output_format' => 'text',
