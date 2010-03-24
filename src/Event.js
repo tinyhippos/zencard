@@ -5,53 +5,52 @@
  */
 (ZenCard.Event = function ($){
 
-    var _listeners = {};
+		var _listeners = {};
 
-    return {
-		
-        eventTypes: {
-        },
+		return {
 
-        on: function (eventType, listener, scope) {
-			$.Utils.validateNumberOfArguments(2, 3, arguments.length);
-			$.Utils.validateMultipleArgumentTypes(arguments, ["string", "function", "object"]);
-			var listenerList = _listeners[eventType] = _listeners[eventType] || [];
-			listenerList.push([listener, scope]);
-        },
+			eventTypes: {
+			},
 
-        trigger: function (eventType, args) {
-			args = args || [];
-            $.Utils.validateNumberOfArguments(1, 2, arguments.length);
-			$.Utils.validateMultipleArgumentTypes(arguments, ["string", "array"]);
+			on: function (eventType, listener, scope) {
+				$.Utils.validateNumberOfArguments(2, 3, arguments.length);
+				$.Utils.validateMultipleArgumentTypes(arguments, ["string", "function", "object"]);
+				var listenerList = _listeners[eventType] = _listeners[eventType] || [];
+				listenerList.push([listener, scope]);
+			},
 
-            if (!_listeners || !_listeners[eventType]) {
-                return;
-            }
+			trigger: function (eventType, args) {
+				args = args || [];
+				$.Utils.validateNumberOfArguments(1, 2, arguments.length);
+				$.Utils.validateMultipleArgumentTypes(arguments, ["string", "array"]);
 
-			var i, listenerList = _listeners[eventType];
+				if (!_listeners || !_listeners[eventType]) {
+					return;
+				}
 
-			for (i = 0; i < listenerList.length; i+=1) {
+				var i, listenerList = _listeners[eventType];
 
-                try {
-                    listenerList[i][0].apply(listenerList[i][1], args);
-                }
-                catch (e) {
-                    $.Exception.handle(e);
-                }
-            }
-        },
+				for (i = 0; i < listenerList.length; i+=1) {
+					try {
+						listenerList[i][0].apply(listenerList[i][1], args);
+					}
+					catch (e) {
+						$.Exception.handle(e);
+					}
+				}
+			},
 
-		eventHasSubscriber: function (eventType){
-			$.Utils.validateNumberOfArguments(1, 1, arguments.length);
-			$.Utils.validateArgumentType(eventType, "string");
-			return _listeners[eventType] ? true : false;
-        },
+			eventHasSubscriber: function (eventType){
+				$.Utils.validateNumberOfArguments(1, 1, arguments.length);
+				$.Utils.validateArgumentType(eventType, "string");
+				return _listeners[eventType] ? true : false;
+			},
 
-        getEventSubscribers: function (eventType) {
-			$.Utils.validateNumberOfArguments(1, 1, arguments.length);
-			$.Utils.validateArgumentType(eventType, "string");
-            return $.Copy(_listeners[eventType]) || [];
-        }
+			getEventSubscribers: function (eventType) {
+				$.Utils.validateNumberOfArguments(1, 1, arguments.length);
+				$.Utils.validateArgumentType(eventType, "string");
+				return $.Copy(_listeners[eventType]) || [];
+			}
 
     };
 

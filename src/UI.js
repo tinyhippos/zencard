@@ -22,9 +22,9 @@
 
         },
 
-		setTitle: function (text){
-			JQuery($.Constants.common.headerTitle).html(text);
-		}
+        setTitle: function (text){
+            JQuery($.Constants.common.headerTitle).html(text);
+        }
 		
 
     };

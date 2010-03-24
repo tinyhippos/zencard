@@ -1,9 +1,9 @@
 // ----------------- Utils ----------------- \\
 (ZenCard.Utils = function ($){
 
-    return {
+	return {
 
-        createElement: function(elementType, attributes){
+		createElement: function(elementType, attributes){
 
 			attributes = attributes || {};
 
@@ -12,29 +12,32 @@
 			var d = document.createElement(elementType);
 
 			for (var attr in attributes){
-				
+
 				if(attributes.hasOwnProperty(attr)){
+					
 					switch (attr.toLowerCase()){
 
 						case "innerhtml":
-							d.innerHTML = attributes[attr];
+						d.innerHTML = attributes[attr];
 						break;
 
 						case "innertext":
-							d.innerText = attributes[attr];
+						d.innerText = attributes[attr];
 						break;
 
 						default:
-							d.setAttribute(attr,attributes[attr]);
+						d.setAttribute(attr,attributes[attr]);
+						
 					}
+					
 				}
 
 			}
 
 			return d;
 		},
-        
-        validateNumberOfArguments: function (lowerBound, upperBound, numberOfArguments){
+
+		validateNumberOfArguments: function (lowerBound, upperBound, numberOfArguments){
 
 			if (arguments.length < 3 || arguments.length > 3) {
 				$.Exception.raise($.Exception.types.Argument, "Wrong number of arguments when calling: tinyHippos.Utils.validateNumberOfArguments()");
@@ -53,29 +56,32 @@
 			}
 
 		},
-        
+
 		validateArgumentType: function (arg, argType){
 			var invalidArg = false;
-            switch (argType) {
-                case "array":
-                    if (!arg instanceof Array){ invalidArg = true; }
-                break;
-                case "date":
-                    if (!arg instanceof Date){ invalidArg = true; }
-                break;
-                default:
+			
+			switch (argType) {
+				case "array":
+					if (!arg instanceof Array){ invalidArg = true; }
+					break;
+				case "date":
+					if (!arg instanceof Date){ invalidArg = true; }
+					break;
+				default:
 					if (typeof arg !== argType){ invalidArg = true; }
-                break;
-            }
-            if(invalidArg) { $.Exception.raise($.Exception.types.ArgumentType, "Invalid Argument type. argument: " + arg + " ==> was expected to be of type: " + argType); }
+				break;
+			}
+			if(invalidArg) {
+				$.Exception.raise($.Exception.types.ArgumentType, "Invalid Argument type. argument: " + arg + " ==> was expected to be of type: " + argType);
+			}
 		},
 
 		validateMultipleArgumentTypes: function (argArray, argTypeArray){
 			for (var i = 0; i < argArray.length; i+=1){
-                this.validateArgumentType(argArray[i], argTypeArray[i]);
-            }
+				this.validateArgumentType(argArray[i], argTypeArray[i]);
+			}
 		}
-        
-    };
-    
+
+	};
+
 }(ZenCard));
