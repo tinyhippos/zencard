@@ -20,7 +20,12 @@
         setRightNav: function(text, view, callback){
             _setNav(document.getElementById($.Constants.common.navRight), text, view);
 
-        }
+        },
+
+		setTitle: function (text){
+			JQuery($.Constants.common.headerTitle).html(text);
+		}
+		
 
     };
 

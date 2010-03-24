@@ -55,6 +55,7 @@
 
         // ---------------- Navigation stuff
 
+		// TODO: add other callback in case callee wants to pass a custom callback not in Routes.
 		navigate: function (view){
             
 			try{
@@ -101,6 +102,10 @@
         historyChanged: function(view, callback){
             _history.push([view, callback]);
         },
+
+		lastHistoryView: function (popOff){
+			return popOff ? (_history.pop()[0]) : (_history[0][0] || $.Constants.common.defaultView);
+		},
 
         loading: function(){
             $.UI.loadView("<strong>loading...</strong>");

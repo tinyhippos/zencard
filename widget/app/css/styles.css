@@ -108,12 +108,21 @@ h3{ font-size: 1.00em; }
 .layout .header a#nav_left{
 	float: left;
 	padding: 1em;
+	width: auto;
 	margin: 0.75em 0 0 0.75em;
 }
+
+/*
+.layout .header a#nav_left:hover {
+	padding-right: 25px;
+	background: inherit url('../images/loader.gif') no-repeat center right;
+}
+*/
 
 .layout .header a#nav_right{
 	float: right;
 	padding: 1em;
+	width: auto;
 	margin: 0.75em 0.75em 0 0;
 }
 
@@ -122,7 +131,7 @@ h3{ font-size: 1.00em; }
  */
 
 .layout .view{
-	padding: 5em 2em 0 2em;
+	padding: 5em 0 0 0;
 	position: relative;
 	overflow-y: hidden;
 	overflow-x: auto;
@@ -153,4 +162,15 @@ h3{ font-size: 1.00em; }
 .layout .view #barcodes{
     margin: 10px;
     overflow: hidden;
+}
+
+/*
+ * list view
+ */
+.card_to_select{
+	padding: .5em 1.5em;
+	border-bottom: 1px solid #CCCCCC;
+	font-weight: bold;
+	font-size: 1.17em;
+	/* TODO : added arrors in right part as bg image */
 }

@@ -7,7 +7,9 @@
         "view": ".view",
         "viewDirectory": "app/views/",
         "navLeft": "nav_left",
-        "navRight": "nav_right"
+        "navRight": "nav_right",
+        "defaultView": "index.html",
+        "headerTitle": ".header h1"
 	}
 
 });
