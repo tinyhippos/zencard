@@ -4,7 +4,8 @@
     function _setNav(el, text, view){
 
         el.innerHTML = text;
-        el.setAttribute("onclick", "ZenCard.Main.navigate('" + view + "')");
+        // TODO: dont do this..
+        el.setAttribute("onclick", "ZenCard.Routes.navigate('" + view + "')");
     }
 
     return {

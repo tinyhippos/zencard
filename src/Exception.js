@@ -14,15 +14,22 @@
 			ConsoleMethodNotFound: "ConsoleMethodNotFound"
 		},
 
-		handle: function(exception, reThrow, logToConsole){
-			$.Utils.validateNumberOfArguments(1, 3, arguments.length);
+		handle: function(exception, reThrow){
+			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
 
 			reThrow = reThrow || false;
 
-			var eMsg = exception.message || "exception caught!",
-			msg = eMsg+"\n\n"+(exception.stack || "*no stack provided*")+"\n\n";
+            // TODO: find out why jsUnity stops running if line below is deleted
+			$.Utils.validateMultipleArgumentTypes(arguments, ['object', 'boolean']);
 
-			if($.Console.isAvailable() && !logToConsole){ $.Console.error(msg); }
+			var eMsg = exception.message || "exception caught!",
+				msg = eMsg+"\n\n"+(exception.stack || "*no stack provided*")+"\n\n",
+				smallMsg;
+
+			// TODO: make this more robust (i.e. catch errors that could mangle logging an error to non-existence console or markup), also log Exception name
+			if($.Console.isAvailable()){
+				$.Console.error(msg);
+			}
 
 			if (reThrow){
 				throw exception;

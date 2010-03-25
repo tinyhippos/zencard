@@ -1,11 +1,3 @@
-<form action="" onsubmit="ZenCard.Main.generate(this.barcode_number.value, this.barcode_type.value); return false;" method="post">
-	<select name="barcode_type" id="barcode_type"></select>
-	<input type="text" name="barcode_number" value="1234567890128" />
-	<button>Generate</button>
-	<button onclick="ZenCard.Main.clear(); return false;">Clear</button>
-</form>
-
-<a onclick="ZenCard.Main.navigate('cards/add.html');">add card</a>
-<a onclick="ZenCard.Main.navigate('cards/barcode_select.html');">barcode select</a>
-
-<div id="barcodes"></div>
+<div class="bg_hack">
+	<img width="100%" src="app/images/loadpage.png" alt="" />
+</div>

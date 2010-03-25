@@ -18,16 +18,16 @@
 
 			try{
 
-			for (var i = 0; i < _BARCODE_TYPES.length; i++){
+				for (var i = 0; i < _BARCODE_TYPES.length; i++){
 
-				el = $.Utils.createElement("div", {
-					"class": "barcode_generated",
-					"onclick": 'alert("selected barcode index ' + i + '");'
-				});
+					el = $.Utils.createElement("div", {
+						"class": "barcode_generated",
+						"onclick": 'alert("selected barcode index ' + i + '");'
+					});
 
-				document.getElementById($.Constants._DIV_BARCODES).appendChild(el);
+					document.getElementById($.Constants._DIV_BARCODES).appendChild(el);
 
-				JQuery(el).barcode(code, _BARCODE_TYPES[i], _barcode_options);
+					JQuery(el).barcode(code, _BARCODE_TYPES[i], _barcode_options);
 
 				}
 
@@ -48,12 +48,8 @@
 
 		},
 
-		clear: function (){
-			document.getElementById($.Constants._DIV_BARCODES.replace("#","")).innerHTML = "";
-		},
-
 		loading: function(){
-			$.UI.loadView("<strong>loading...</strong>");
+			$.UI.loadView('<div class="ajax_loader"></div>');
 		}
 
 	};

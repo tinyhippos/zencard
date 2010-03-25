@@ -8,9 +8,7 @@
 	var _buffer = "",
 			_options = {
 			"append": "append"
-		},
-		// Opera fix for ReferenceError on console;
-		console = null;
+		};
 
 	return {
 

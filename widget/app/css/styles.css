@@ -8,7 +8,6 @@ html, body{
 	border: 0;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
 }
 body{ font: 0.81em Helvetica, Verdana, Sans-serif; }
 
@@ -67,7 +66,6 @@ h3{ font-size: 1.00em; }
 .layout{
 	width: 100%;
 	height: 100%;
-    margin: 0 auto;
     position: relative;
     background: #FFFFFF;
 }
@@ -85,6 +83,7 @@ h3{ font-size: 1.00em; }
 	position: absolute;
 	height: 5em;
     width: 100%;
+    z-index: 100;
 }
 
 .layout .header h1{
@@ -103,12 +102,12 @@ h3{ font-size: 1.00em; }
 	color: #000000;
 	-webkit-border-radius: 5px;
 	text-decoration: none;
+	padding: 1em;
+	text-align: center;
 }
 
 .layout .header a#nav_left{
 	float: left;
-	padding: 1em;
-	width: auto;
 	margin: 0.75em 0 0 0.75em;
 }
 
@@ -121,8 +120,6 @@ h3{ font-size: 1.00em; }
 
 .layout .header a#nav_right{
 	float: right;
-	padding: 1em;
-	width: auto;
 	margin: 0.75em 0.75em 0 0;
 }
 
@@ -132,11 +129,11 @@ h3{ font-size: 1.00em; }
 
 .layout .view{
 	padding: 5em 0 0 0;
-	position: relative;
-	overflow-y: hidden;
-	overflow-x: auto;
+	overflow: auto;
     color: #000000;
-
+    z-index: 60;
+    overflow: auto;
+    background: #FFFFFF;
 }
 
 /*
@@ -164,6 +161,12 @@ h3{ font-size: 1.00em; }
     overflow: hidden;
 }
 
+#hack_test{
+	position: absolute;
+	top: -5px;
+	background: black;
+}
+
 /*
  * list view
  */
@@ -173,4 +176,16 @@ h3{ font-size: 1.00em; }
 	font-weight: bold;
 	font-size: 1.17em;
 	/* TODO : added arrors in right part as bg image */
+}
+
+
+/*
+ * Ajax Loader
+ */
+.ajax_loader{
+	background: url('../images/loader_ajax.gif') no-repeat;
+	width: 35px;
+	height: 35px;
+	margin: 50% auto;
+	position: relative;
 }

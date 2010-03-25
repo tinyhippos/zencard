@@ -4,6 +4,6 @@ var ZenCard = {};
 
 window.addEventListener("load", function (){
 
-	ZenCard.Main.navigate("index.html");
+	ZenCard.Routes.navigate("index.html");
 
 }, false);
