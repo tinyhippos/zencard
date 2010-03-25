@@ -5,5 +5,5 @@ configure do
 end
 
 get '/' do
-	redirect '/clock.html'
+	redirect '/widget/index.html'
 end
