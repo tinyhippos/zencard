@@ -10,6 +10,8 @@
 		return {
 
 			eventTypes: {
+                storageUpdated: "storageUpdated",
+                ApplicationState:"ApplicationState"
 			},
 
 			on: function (eventType, listener, scope) {

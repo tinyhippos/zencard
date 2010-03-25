@@ -23,8 +23,8 @@
 			$.Utils.validateMultipleArgumentTypes(arguments, ['object', 'boolean']);
 
 			var eMsg = exception.message || "exception caught!",
-				msg = eMsg+"\n\n"+(exception.stack || "*no stack provided*")+"\n\n",
-				smallMsg;
+				msg = eMsg+"\n\n"+(exception.stack || "*no stack provided*")+"\n\n";
+
 
 			// TODO: make this more robust (i.e. catch errors that could mangle logging an error to non-existence console or markup), also log Exception name
 			if($.Console.isAvailable()){

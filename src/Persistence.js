@@ -25,7 +25,7 @@
 
 			localStorage[_validateAndSetPrefix(prefix)+key] = value;
 
-			$.Event.trigger($.Event.eventTypes.storageUpdatedEvent);
+			$.Event.trigger($.Event.eventTypes.storageUpdated);
 		},
 
 		saveObject: function (key, obj, prefix){
@@ -37,7 +37,7 @@
 
 			localStorage[_validateAndSetPrefix(prefix)+key] = JSON.stringify(obj);
 
-			$.Event.trigger($.Event.eventTypes.storageUpdatedEvent);
+			$.Event.trigger($.Event.eventTypes.storageUpdated);
 		},
 
 		retrieve: function (key, prefix){
@@ -59,7 +59,7 @@
 			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
 			$.Utils.validateArgumentType(key, "string", null, "Persistence.remove");
 
-			$.Event.trigger($.Event.eventTypes.storageUpdatedEvent);
+			$.Event.trigger($.Event.eventTypes.storageUpdated);
 
 			return localStorage.removeItem(_validateAndSetPrefix(prefix)+key);
 		},
@@ -76,7 +76,7 @@
 				}
 			}
 
-			$.Event.trigger($.Event.eventTypes.storageUpdatedEvent);
+			$.Event.trigger($.Event.eventTypes.storageUpdated);
 		}
 	};
 }(ZenCard));

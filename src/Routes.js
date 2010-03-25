@@ -62,7 +62,7 @@
 			"cards/barcode_select.html": function(){
 
 				$.UI.setLeftNav("Edit Code", "cards/edit.html");
-				$.UI.setRighttNav("Home", $.Constants.common.defaultView);
+				$.UI.setRightNav("Home", $.Constants.common.defaultView);
 
 			}
 
@@ -96,7 +96,7 @@
 
 				// TODO: do really better
 				if(view === ""){
-					_history.pop()
+					_history.pop();
 					tempHistoryItem = _history.pop();
 					view = ((tempHistoryItem && tempHistoryItem[0]) || $.Constants.common.defaultView);
 					goingBackInTime = true;
