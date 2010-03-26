@@ -112,40 +112,42 @@ h3{ font-size: 1.00em; }
         width: 2.62em;
     }
 
-    .layout .header div.nav_left a#nav_left, .layout .header div.nav_right a#nav_right{
-        display: block;
-        cursor: pointer;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        font-size: 1.22em;
-        color: #FFFFFF;
-        text-shadow: gray 1px 1px 1px;
-        text-decoration: none;
-    }
-
-    .layout .header div a#nav_left div, .layout .header div a#nav_right div{
-        display: block;
-        position: relative;
-        z-index: 880;
-        width: 100%;
-        top: 20%;
-        height: 80%;
-    }
-
-    .layout .header div a#nav_left div{
-        left: 0.25em;
-    }
-
-    .layout .header div a#nav_left img, .layout .header div a#nav_right img{
+    .header div.nav_left div.link, .header div.nav_right div.link{
         position: absolute;
         width: 100%;
         height: 100%;
-        left: 0;
-        top: 0;
-        z-index: 800;
+        z-index: 880;
     }
 
+    .header div.nav_left div a#nav_left, .header div.nav_right div a#nav_right{
+        display: block;
+        cursor: pointer;
+        width: 100%;
+        padding-top: 0.4em;
+        padding-bottom: 0.4em;
+        text-align: center;
+        font-size: 1.22em;
+        color: #FFFFFF;
+        text-shadow: gray 1px 1px 1px;  
+        text-decoration: none;
+    }
+
+    .header div.nav_left div a#nav_left{
+        padding-left: 0.2em;
+    }
+
+    .header div a#nav_left div.link a, .header div a#nav_right div.link a{
+        display: block;
+        position: relative;
+        width: 100%;
+    }
+
+    .header .nav_left .image, .header .nav_right .image{
+        width: 100%;
+        height: 100%;
+        z-index: 800;
+        position: absolute;
+    }
 
 
 /*

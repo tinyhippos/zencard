@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.jil.org/ns/widgets"
+        id="c27e1dec-17b9-4abb-96e5-42e0f250f6ae"
+        version="01.00.beta"
+        height="684"
+         width="480">
+    <name>ZenCard</name>
+    <description>This is my first Widget.</description>
+    <content src="index.html" />
+    <icon src="Icon.svg" />
+    <author email="myname@host">myname</author>
+    <license href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache v2</license>
+    <access network="true" localfs="true" remote_scripts="false"/>
+    <update href="http://www.jil.org/widgets/" period="2"/>
+    <maximum_display_mode height="684" width="480"/>
+    <billing required="false"/>
+</widget>

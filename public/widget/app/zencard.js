@@ -20,11 +20,11 @@
 // ----------------- Main ----------------- \\
 (ZenCard.UI = function ($, JQuery){
 
-    function _setNav(id, text, view){
-        var el = document.getElementById(id);
+    function _setNav(el, text, view){
+
+        el.innerHTML = text;
         // TODO: dont do this..
         el.setAttribute("onclick", "ZenCard.Routes.navigate('" + view + "')");
-        JQuery("#" + id + " div").html(text);
     }
 
     return {
@@ -35,11 +35,11 @@
 
         // TODO; allow custom callbacks
         setLeftNav: function(text, view, callback){
-            _setNav($.Constants.common.navLeft, text, view);
+            _setNav(document.getElementById($.Constants.common.navLeft), text, view);
         },
 
         setRightNav: function(text, view, callback){
-            _setNav($.Constants.common.navRight, text, view);
+            _setNav(document.getElementById($.Constants.common.navRight), text, view);
 
         },
 
