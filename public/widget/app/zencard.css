@@ -130,6 +130,7 @@ h3{ font-size: 1.00em; }
         z-index: 880;
         width: 100%;
         top: 20%;
+        height: 80%;
     }
 
     .layout .header div a#nav_left span{

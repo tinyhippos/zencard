@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget  xmlns="http://www.jil.org/ns/widgets"
          xmlns:its="http://www.w3.org/2005/11/its"
-         id="http://example.org/JILifiedUnitTester"
-         version="1.0.Beta"
+         id="http://jil.org/wid/8a6615320f0b811aad0d812944bf74bcc969d1700390406600636cbe5d7308e3/ZenCard"
+         version="1.0-dev"
          height="684"
          width="480">
     <maximum_display_mode height="684" width="480"/>
@@ -13,7 +13,8 @@
     <content src="index.html" type="text/html"/>
     <feature name="http://jil.org/jil/api/1.1/xmlHttpRequest"/>
     <name>ZenCard</name>
-    <description>A widget</description>
-    <license href="http://license.example.org/">Example license Copyright (c) 2008.</license>
-    <author email="myname@host">zencard</author>
+    <description>May all your cards be one.</description>
+    <description>M</description>
+    <license  href="http://license.example.org/">Copyright  2010 tinyHippos/CuteGcko (MIT)</license>
+    <author  email="myname@host">zencard</author>
 </widget>
