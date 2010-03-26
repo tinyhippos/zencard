@@ -1,5 +1,22 @@
 /* 
-  Zencard :: www.zencard.com
+  Zencard :: zencard.mobi 
+
+  --> Licensed Under
+  
+  The MIT License
+  http://www.opensource.org/licenses/mit-license.php
+  
+  Copyright (c) 2010 all contributors:
+  
+  tinyHippos Inc.
+  	Dan Silivestru
+  	Brent Lintner
+  
+  CuteGecko 
+  	Karl Allen-Muncey
+  	Amy Vandenberg
+  
+*/
 // ----------------- Main ----------------- \\
 (ZenCard.UI = function ($, JQuery){
 

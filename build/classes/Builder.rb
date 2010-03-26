@@ -149,7 +149,7 @@ class Builder
     end
 
     def author_stamp
-        stamp = "/* \n  " + self.config("APPNAME") + "\n"
+        stamp = "/* \n  " + self.config("APPNAME") + " \n\n" +
             (self.read_in_file(self.config("LICENSE")) do |line|
                 "  #{line}"
             end) + 
