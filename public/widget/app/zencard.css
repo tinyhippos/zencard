@@ -183,7 +183,7 @@ h3{ font-size: 1.00em; }
  * Ajax Loader
  */
 .ajax_loader{
-	background: url('../images/loader_ajax.gif') no-repeat;
+	background: url("'images/loader_ajax.gif'") no-repeat;
 	width: 35px;
 	height: 35px;
 	margin: 50% auto;

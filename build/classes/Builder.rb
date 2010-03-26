@@ -46,7 +46,7 @@ class Builder
 
 				self.log("--> Beginning Build...\n") if @options.verbose
 
-				FileUtils.mkdir self.config("APPLICATION_LIB_DIRECTORY") if !File.directory? self.config("APPLICATION_LIB_DIRECTORY")
+				#FileUtils.mkdir self.config("APPLICATION_LIB_DIRECTORY") if !File.directory? self.config("APPLICATION_LIB_DIRECTORY")
 
 				#self.continue?("--> Creating build directory...\n") do
 					#FileUtils.mkdir self.config("BUILD_DIRECTORY") if !File.directory? self.config("BUILD_DIRECTORY")
