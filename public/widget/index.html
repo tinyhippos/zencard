@@ -14,7 +14,20 @@
         <script type="text/javascript" src="app/thirdparty/jquery-1.4.2.js"></script>
         <script type="text/javascript" src="app/thirdparty/jquery-barcode-1.3.3.min.js"></script>
 
-        <script type="text/javascript" src="app/init.js"></script>
+        <script type="text/javascript">
+
+            var ZenCard = {};
+
+            // ----------------- Initializations ----------------- \\
+
+            window.addEventListener("load", function (){
+            
+                ZenCard.Routes.navigate("index.html");
+
+            }, false);
+
+        </script>
+
         <script type="text/javascript" src="app/lib/zencard.js"></script>
     </head>
     <body>
