@@ -1,5 +1,5 @@
 /* 
-  Zencard :: www.zencard.com :: Built On Thu Mar 25 23:43:44 -0400 2010
+  Zencard :: www.zencard.com :: Built On Fri Mar 26 01:25:24 -0400 2010
 
   ** Licensed Under **
   
@@ -557,7 +557,7 @@
 			"cards/add.html": function(){
 
 				$.UI.setLeftNav("Back", $.Routes.back());
-				$.UI.setRightNav("Home", $.Constants.common.defaultView);
+				$.UI.setRightNav("?", "help.html");
 
 				// bind to Forms submit here
 				JQuery("#cards_add_form button").click(function (){

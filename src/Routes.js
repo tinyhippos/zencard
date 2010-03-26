@@ -36,7 +36,7 @@
 			"cards/add.html": function(){
 
 				$.UI.setLeftNav("Back", $.Routes.back());
-				$.UI.setRightNav("Home", $.Constants.common.defaultView);
+				$.UI.setRightNav("?", "help.html");
 
 				// bind to Forms submit here
 				JQuery("#cards_add_form button").click(function (){
