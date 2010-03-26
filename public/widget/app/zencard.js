@@ -1,22 +1,5 @@
 /* 
-  Zencard :: www.zencard.com :: Built On Fri Mar 26 11:37:15 -0400 2010
-
-  ** Licensed Under **
-  
-  The MIT License
-  http://www.opensource.org/licenses/mit-license.php
-  
-  Copyright (c) 2010 all contributors:
-  
-  tinyHippos Inc.
-  	Dan Silivestru
-  	Brent Lintner
-  
-  CuteGecko 
-  	Karl Allen-Muncey
-  	Amy Vandenberg
-  
-*/
+  Zencard :: www.zencard.com
 // ----------------- Main ----------------- \\
 (ZenCard.UI = function ($, JQuery){
 

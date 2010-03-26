@@ -76,10 +76,10 @@ h3{ font-size: 1.00em; }
 .layout .header{
 	/*background: -webkit-gradient(linear, 0% -50%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(0, 0, 0)));*/
     background: url('images/greyheadinggradient.png') repeat-x center;
-	position: absolute;
 	height: 5em;
     width: 100%;
     z-index: 100;
+    position: relative;
 }
 
     .layout .header h1{
@@ -152,7 +152,7 @@ h3{ font-size: 1.00em; }
  */
 
 .layout .view{
-	padding: 5em 0 0 0;
+	padding: 0;
 	overflow: auto;
     color: #000000;
     z-index: 60;
