@@ -33,18 +33,15 @@ input:hover, textarea:hover, select:hover, button:hover{
 	cursor: pointer;
 }
 
-button, a{
-    background: #E9EDE7;
-	border: 1px #CCCCCC solid;
-	color: #000000;
-}
-
 textarea, input, button, select{
 	background: #EEEEEE;
 	color: #1E1E1E;
 	padding: 0.1em 0.4em;
 	border: 1px solid #CCCCCC;
 	font-size: 1em;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
 h1, h2, h3, p{ margin: 0 0 1em 0; }
@@ -77,9 +74,8 @@ h3{ font-size: 1.00em; }
  */
 
 .layout .header{
-	/* TODO: use image */
-	background: #000000;
-	background: -webkit-gradient(linear, 0% -50%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(0, 0, 0)));
+	/*background: -webkit-gradient(linear, 0% -50%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(0, 0, 0)));*/
+    background: url('images/greyheadinggradient.png') repeat-x center;
 	position: absolute;
 	height: 5em;
     width: 100%;
@@ -91,37 +87,56 @@ h3{ font-size: 1.00em; }
 	text-align: center;
 	position: relative;
 	z-index: 100;
-    top: 30%;
+    top: 1em;
 }
 
-.layout .header a{
+.layout .header div.nav_left, .layout .header div.nav_right{
 	position: relative;
 	z-index: 101;
-	background: #E9EDE7;
-	border: 1px #CCCCCC solid;
-	color: #000000;
-	-webkit-border-radius: 5px;
+	color: #FFFFFF;
+    text-shadow: gray 1px 1px 1px;
 	text-decoration: none;
-	padding: 1em;
 	text-align: center;
+    font-weight: bold;
+    top: 1em;
+    height: 2.31em;
 }
 
-.layout .header a#nav_left{
-	float: left;
-	margin: 0.75em 0 0 0.75em;
+.layout .header div.nav_left{
+    float: left;
+    margin: 0 0 0 1em;
 }
 
-/*
-.layout .header a#nav_left:hover {
-	padding-right: 25px;
-	background: inherit url('../images/loader.gif') no-repeat center right;
+.layout .header div.nav_right{
+    float: right;
+    margin: 0 1em 0 0;
 }
-*/
 
-.layout .header a#nav_right{
-	float: right;
-	margin: 0.75em 0.75em 0 0;
+.layout .header div.nav_left div#nav_left, .layout .header div.nav_right div#nav_right{
+    position: absolute;
+    z-index: 880;
+    cursor: pointer;
+    width: 100%;
+    height: 1.73em;
+    text-align: center;
+    padding-top: 0.5em;
 }
+
+.layout .header div.nav_left img{
+	position: relative;
+    z-index: 800;
+    width: 6.62em;
+    height: 2.31em;
+}
+
+.layout .header div.nav_right img{
+    position: relative;
+    z-index: 800;
+    width: 2.62em;
+    height: 2.23em;
+}
+
+
 
 /*
  * Views
@@ -175,7 +190,6 @@ h3{ font-size: 1.00em; }
 	border-bottom: 1px solid #CCCCCC;
 	font-weight: bold;
 	font-size: 1.17em;
-	/* TODO : added arrors in right part as bg image */
 }
 
 
@@ -183,9 +197,26 @@ h3{ font-size: 1.00em; }
  * Ajax Loader
  */
 .ajax_loader{
-	background: url("'images/loader_ajax.gif'") no-repeat;
+	background: url('images/loader_ajax.gif') no-repeat;
 	width: 35px;
 	height: 35px;
 	margin: 50% auto;
 	position: relative;
+}
+
+/*
+ * Home View
+ */
+.home_bg{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    overflow: hidden;
+    text-align: center;
+    background: #000000;
+}
+
+.home_bg img{
+    height: 100%;
 }

@@ -101,8 +101,6 @@
 					view = ((tempHistoryItem && tempHistoryItem[0]) || $.Constants.common.defaultView);
 					goingBackInTime = true;
 				}	
-
-				console.log("view --> " + view);
 				
 				// TODO: save callback to history (and call it) only if its a custom one (and not Routes)
 
