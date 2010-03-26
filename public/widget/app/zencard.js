@@ -227,7 +227,7 @@
 		"viewDirectory": "app/views/",
 		"navLeft": "nav_left",
 		"navRight": "nav_right",
-		"defaultView": "index.html",
+		"defaultView": "cards/list.html",
 		"headerTitle": ".header h1"
 	}
 
@@ -652,8 +652,14 @@
 
 				// TODO: do really better
 				if(view === ""){
-					_history.pop();
-					tempHistoryItem = _history.pop();
+					var test = _history.pop();
+
+                    tempHistoryItem = _history.pop();
+
+                    if(test[0] === view){
+                        _history.push(test);
+                    }
+
 					view = ((tempHistoryItem && tempHistoryItem[0]) || $.Constants.common.defaultView);
 					goingBackInTime = true;
 				}	

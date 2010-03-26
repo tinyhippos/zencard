@@ -14,7 +14,6 @@
     <feature name="http://jil.org/jil/api/1.1/xmlHttpRequest"/>
     <name>ZenCard</name>
     <description>May all your cards be one.</description>
-    <description>M</description>
-    <license  href="http://license.example.org/">Copyright  2010 tinyHippos/CuteGcko (MIT)</license>
-    <author  email="myname@host">zencard</author>
+    <license href="http://license.example.org/">Copyright  2010 tinyHippos/CuteGcko (MIT)</license>
+    <author email="myname@host">zencard</author>
 </widget>

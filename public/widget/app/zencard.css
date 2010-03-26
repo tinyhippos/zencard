@@ -149,6 +149,11 @@ h3{ font-size: 1.00em; }
         position: absolute;
     }
 
+    .header div .image img{
+        height: 100%;
+        position: absolute;
+    }
+
 
 /*
  * Views
