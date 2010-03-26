@@ -5,7 +5,7 @@
         var el = document.getElementById(id);
         // TODO: dont do this..
         el.setAttribute("onclick", "ZenCard.Routes.navigate('" + view + "')");
-        JQuery("#" + id + " span").html(text);
+        JQuery("#" + id + " div").html(text);
     }
 
     return {

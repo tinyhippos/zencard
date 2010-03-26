@@ -124,7 +124,7 @@ h3{ font-size: 1.00em; }
         text-decoration: none;
     }
 
-    .layout .header div a#nav_left span, .layout .header div a#nav_right span{
+    .layout .header div a#nav_left div, .layout .header div a#nav_right div{
         display: block;
         position: relative;
         z-index: 880;
@@ -133,7 +133,7 @@ h3{ font-size: 1.00em; }
         height: 80%;
     }
 
-    .layout .header div a#nav_left span{
+    .layout .header div a#nav_left div{
         left: 0.25em;
     }
 
