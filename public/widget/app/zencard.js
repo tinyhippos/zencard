@@ -1,5 +1,5 @@
 /* 
-  Zencard :: www.zencard.com :: Built On Fri Mar 26 01:25:24 -0400 2010
+  Zencard :: www.zencard.com :: Built On Fri Mar 26 11:37:15 -0400 2010
 
   ** Licensed Under **
   
@@ -17,6 +17,149 @@
   	Amy Vandenberg
   
 */
+// ----------------- Main ----------------- \\
+(ZenCard.UI = function ($, JQuery){
+
+    function _setNav(id, text, view){
+        var el = document.getElementById(id);
+        // TODO: dont do this..
+        el.setAttribute("onclick", "ZenCard.Routes.navigate('" + view + "')");
+        JQuery("#" + id + " span").html(text);
+    }
+
+    return {
+
+        loadView: function(str){
+            JQuery($.Constants.common.view).html(str);
+        },
+
+        // TODO; allow custom callbacks
+        setLeftNav: function(text, view, callback){
+            _setNav($.Constants.common.navLeft, text, view);
+        },
+
+        setRightNav: function(text, view, callback){
+            _setNav($.Constants.common.navRight, text, view);
+
+        },
+
+        setTitle: function (text){
+            JQuery($.Constants.common.headerTitle).html(text);
+        }
+		
+
+    };
+
+}(ZenCard, $));
+/*
+ * Class: Console
+ * Purpose: Perform various functions with the browser javasript console
+ */
+(ZenCard.Console = function ($) {
+
+
+	var _buffer = "",
+			_options = {
+			"append": "append"
+		};
+
+	return {
+
+		isAvailable: function(){
+			return console ? true : false;
+		},
+
+		/*
+		 * Public Method: returns all available logging options (only supports append at this time)
+		 * Purpose:
+		 */
+		getOptions: function (){
+			return $.Copy(_options);
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		bufferLog: function(msg, options, method){
+
+			if(!console){ $.Exception.raise($.Exception.types.ConsoleNotFound, "console was not found or is falsy."); }
+			if(!console[method]){ $.Exception.raise($.Exception.types.ConsoleMethodNotFound, "console method "+method+" was not found or is falsy."); }
+
+			options = options || {};
+
+			_buffer += msg;
+
+			if (options !== _options.append){
+				console[method](_buffer);
+				_buffer = "";
+			}
+
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		log: function (msg, options) {
+			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
+			this.bufferLog(msg, options, "log");
+		},
+
+         /*
+		 * Public Method:
+		 * Purpose:
+		 */
+		logObj: function (obj) {
+			$.Utils.validateNumberOfArguments(1, 1, arguments.length);
+			console.log(obj);
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		warn: function(msg, options){
+			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
+			this.bufferLog(msg, options, "warn");
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		error: function(msg, options){
+			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
+			this.bufferLog(msg, options, "error");
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		clear: function(){
+			console.clear();
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		transactionBegin: function(title){
+			console.group(title);
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		transactionEnd: function(){
+			console.groupEnd();
+		}
+
+	};
+
+}(ZenCard));
 // ----------------- Main ----------------- \\
 (ZenCard.Main = function ($, JQuery){
 
@@ -89,7 +232,93 @@
 	}
 
 });
+// ----------------- Utils ----------------- \\
+(ZenCard.Utils = function ($){
 
+	return {
+
+		createElement: function(elementType, attributes){
+
+			attributes = attributes || {};
+
+			this.validateNumberOfArguments(1, 2, arguments.length);
+
+			var d = document.createElement(elementType);
+
+			for (var attr in attributes){
+
+				if(attributes.hasOwnProperty(attr)){
+					
+					switch (attr.toLowerCase()){
+
+						case "innerhtml":
+						d.innerHTML = attributes[attr];
+						break;
+
+						case "innertext":
+						d.innerText = attributes[attr];
+						break;
+
+						default:
+						d.setAttribute(attr,attributes[attr]);
+						
+					}
+					
+				}
+
+			}
+
+			return d;
+		},
+
+		validateNumberOfArguments: function (lowerBound, upperBound, numberOfArguments){
+
+			if (arguments.length < 3 || arguments.length > 3) {
+				$.Exception.raise($.Exception.types.Argument, "Wrong number of arguments when calling: tinyHippos.Utils.validateNumberOfArguments()");
+			}
+
+			if (isNaN(lowerBound) && isNaN(upperBound) && isNaN(numberOfArguments)) {
+				$.Exception.raise($.Exception.types.ArgumentType, "Arguments are not numbers");
+			}
+
+			lowerBound = parseInt(lowerBound, 10);
+			upperBound = parseInt(upperBound, 10);
+			numberOfArguments = parseInt(numberOfArguments, 10);
+
+			if (numberOfArguments < lowerBound || numberOfArguments > upperBound) {
+				$.Exception.raise($.Exception.types.ArgumentLength, "Wrong number of arguments");
+			}
+
+		},
+
+		validateArgumentType: function (arg, argType){
+			var invalidArg = false;
+			
+			switch (argType) {
+				case "array":
+					if (!arg instanceof Array){ invalidArg = true; }
+					break;
+				case "date":
+					if (!arg instanceof Date){ invalidArg = true; }
+					break;
+				default:
+					if (typeof arg !== argType){ invalidArg = true; }
+				break;
+			}
+			if(invalidArg) {
+				$.Exception.raise($.Exception.types.ArgumentType, "Invalid Argument type. argument: " + arg + " ==> was expected to be of type: " + argType);
+			}
+		},
+
+		validateMultipleArgumentTypes: function (argArray, argTypeArray){
+			for (var i = 0; i < argArray.length; i+=1){
+				this.validateArgumentType(argArray[i], argTypeArray[i]);
+			}
+		}
+
+	};
+
+}(ZenCard));
 (ZenCard.Exception = function ($){
 
 	return {
@@ -231,6 +460,40 @@
 		}
 	};
 }(ZenCard));
+// clone code courtesy of: http://my.opera.com/GreyWyvern/blog/show.dml/1725165
+// but modified and tightened by Dan Silivestru, Brent Lintner
+(ZenCard.Copy = function($){
+    return (function(obj) {
+
+        var i,
+            newObj = (obj instanceof Array) ? [] : {};
+        if( typeof obj === 'number' || typeof obj === 'string' || typeof obj === 'boolean'){
+            return obj;
+        }
+
+        if(obj instanceof Date){
+            newObj = new Date(obj);
+            return newObj;
+        }
+
+        for (i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                if (obj[i] && typeof obj[i] === "object") {
+                    if (obj[i] instanceof Date) {
+                        newObj[i] = obj[i];
+                    }
+                    else {
+                        newObj[i] = $.Copy(obj[i]);
+                    }
+                } else { newObj[i] = obj[i]; }
+            }
+        }
+
+
+        return newObj;
+    });
+}(ZenCard));
+
 /*
  * Class: Event
  * Purpose: publish-subscribe Event class for DOM based and non-DOM based event facilitation
@@ -290,235 +553,7 @@
     };
 
 }(ZenCard));
-// ----------------- Main ----------------- \\
-(ZenCard.UI = function ($, JQuery){
 
-    function _setNav(el, text, view){
-
-        el.innerHTML = text;
-        // TODO: dont do this..
-        el.setAttribute("onclick", "ZenCard.Routes.navigate('" + view + "')");
-    }
-
-    return {
-
-        loadView: function(str){
-            JQuery($.Constants.common.view).html(str);
-        },
-
-        setLeftNav: function(text, view, callback){
-            _setNav(document.getElementById($.Constants.common.navLeft), text, view);
-        },
-
-        setRightNav: function(text, view, callback){
-            _setNav(document.getElementById($.Constants.common.navRight), text, view);
-
-        },
-
-        setTitle: function (text){
-            JQuery($.Constants.common.headerTitle).html(text);
-        }
-		
-
-    };
-
-}(ZenCard, $));
-// ----------------- Utils ----------------- \\
-(ZenCard.Utils = function ($){
-
-	return {
-
-		createElement: function(elementType, attributes){
-
-			attributes = attributes || {};
-
-			this.validateNumberOfArguments(1, 2, arguments.length);
-
-			var d = document.createElement(elementType);
-
-			for (var attr in attributes){
-
-				if(attributes.hasOwnProperty(attr)){
-					
-					switch (attr.toLowerCase()){
-
-						case "innerhtml":
-						d.innerHTML = attributes[attr];
-						break;
-
-						case "innertext":
-						d.innerText = attributes[attr];
-						break;
-
-						default:
-						d.setAttribute(attr,attributes[attr]);
-						
-					}
-					
-				}
-
-			}
-
-			return d;
-		},
-
-		validateNumberOfArguments: function (lowerBound, upperBound, numberOfArguments){
-
-			if (arguments.length < 3 || arguments.length > 3) {
-				$.Exception.raise($.Exception.types.Argument, "Wrong number of arguments when calling: tinyHippos.Utils.validateNumberOfArguments()");
-			}
-
-			if (isNaN(lowerBound) && isNaN(upperBound) && isNaN(numberOfArguments)) {
-				$.Exception.raise($.Exception.types.ArgumentType, "Arguments are not numbers");
-			}
-
-			lowerBound = parseInt(lowerBound, 10);
-			upperBound = parseInt(upperBound, 10);
-			numberOfArguments = parseInt(numberOfArguments, 10);
-
-			if (numberOfArguments < lowerBound || numberOfArguments > upperBound) {
-				$.Exception.raise($.Exception.types.ArgumentLength, "Wrong number of arguments");
-			}
-
-		},
-
-		validateArgumentType: function (arg, argType){
-			var invalidArg = false;
-			
-			switch (argType) {
-				case "array":
-					if (!arg instanceof Array){ invalidArg = true; }
-					break;
-				case "date":
-					if (!arg instanceof Date){ invalidArg = true; }
-					break;
-				default:
-					if (typeof arg !== argType){ invalidArg = true; }
-				break;
-			}
-			if(invalidArg) {
-				$.Exception.raise($.Exception.types.ArgumentType, "Invalid Argument type. argument: " + arg + " ==> was expected to be of type: " + argType);
-			}
-		},
-
-		validateMultipleArgumentTypes: function (argArray, argTypeArray){
-			for (var i = 0; i < argArray.length; i+=1){
-				this.validateArgumentType(argArray[i], argTypeArray[i]);
-			}
-		}
-
-	};
-
-}(ZenCard));
-/*
- * Class: Console
- * Purpose: Perform various functions with the browser javasript console
- */
-(ZenCard.Console = function ($) {
-
-
-	var _buffer = "",
-			_options = {
-			"append": "append"
-		};
-
-	return {
-
-		isAvailable: function(){
-			return console ? true : false;
-		},
-
-		/*
-		 * Public Method: returns all available logging options (only supports append at this time)
-		 * Purpose:
-		 */
-		getOptions: function (){
-			return $.Copy(_options);
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		bufferLog: function(msg, options, method){
-
-			if(!console){ $.Exception.raise($.Exception.types.ConsoleNotFound, "console was not found or is falsy."); }
-			if(!console[method]){ $.Exception.raise($.Exception.types.ConsoleMethodNotFound, "console method "+method+" was not found or is falsy."); }
-
-			options = options || {};
-
-			_buffer += msg;
-
-			if (options !== _options.append){
-				console[method](_buffer);
-				_buffer = "";
-			}
-
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		log: function (msg, options) {
-			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
-			this.bufferLog(msg, options, "log");
-		},
-
-         /*
-		 * Public Method:
-		 * Purpose:
-		 */
-		logObj: function (obj) {
-			$.Utils.validateNumberOfArguments(1, 1, arguments.length);
-			console.log(obj);
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		warn: function(msg, options){
-			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
-			this.bufferLog(msg, options, "warn");
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		error: function(msg, options){
-			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
-			this.bufferLog(msg, options, "error");
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		clear: function(){
-			console.clear();
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		transactionBegin: function(title){
-			console.group(title);
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		transactionEnd: function(){
-			console.groupEnd();
-		}
-
-	};
-
-}(ZenCard));
 (ZenCard.Routes = function($, JQuery){
 
 	var _history = [],
@@ -674,37 +709,3 @@
 	};
 
 }(ZenCard, $));
-// clone code courtesy of: http://my.opera.com/GreyWyvern/blog/show.dml/1725165
-// but modified and tightened by Dan Silivestru, Brent Lintner
-(ZenCard.Copy = function($){
-    return (function(obj) {
-
-        var i,
-            newObj = (obj instanceof Array) ? [] : {};
-        if( typeof obj === 'number' || typeof obj === 'string' || typeof obj === 'boolean'){
-            return obj;
-        }
-
-        if(obj instanceof Date){
-            newObj = new Date(obj);
-            return newObj;
-        }
-
-        for (i in obj) {
-            if (obj.hasOwnProperty(i)) {
-                if (obj[i] && typeof obj[i] === "object") {
-                    if (obj[i] instanceof Date) {
-                        newObj[i] = obj[i];
-                    }
-                    else {
-                        newObj[i] = $.Copy(obj[i]);
-                    }
-                } else { newObj[i] = obj[i]; }
-            }
-        }
-
-
-        return newObj;
-    });
-}(ZenCard));
-
