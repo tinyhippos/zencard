@@ -241,9 +241,8 @@ h3{ font-size: 1.00em; }
     top: 0;
     overflow: hidden;
     text-align: center;
-    background: #000000;
+    background: #141414;
 }
 
 .home_bg img{
-    height: 100%;
 }

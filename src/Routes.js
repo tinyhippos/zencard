@@ -7,17 +7,23 @@
 
 				$.Routes.clearHistory();
 
-				$.UI.setLeftNav("Cards", "cards/list.html");
-				$.UI.setTitle();
-				$.UI.setRightNav("?", "help.html");
+				$.UI.hideHeader();
 
-				//$.Main.loadOptions();
+//                setTimeout(function() {
+//                    $.Routes.navigate("cards/list.html");
+//                }, 2000)
 
 			},
 
 			"help.html": function(){
 
-				$.UI.setLeftNav("Back", $.Routes.back());
+				$.UI.setLeftNav("Back");
+
+			},
+            
+			"about.html": function(){
+
+				$.UI.setLeftNav("Back");
 
 			},
 
@@ -25,7 +31,8 @@
 
 			"cards/list.html": function(){
 
-				$.UI.setLeftNav("Back", $.Routes.back());
+//                $.UI.showHeader();
+				$.UI.setLeftNav("About", "about.html");
 				$.UI.setTitle("Cards");				
 				$.UI.setRightNav("+", "cards/add.html");
 
@@ -36,7 +43,7 @@
 
 			"cards/add.html": function(){
 
-				$.UI.setLeftNav("Back", $.Routes.back());
+				$.UI.setLeftNav("Back");
 				$.UI.setTitle("Add");
 				$.UI.setRightNav("?", "help.html");
 
@@ -50,7 +57,7 @@
 
 			"cards/edit.html": function(){
 
-				$.UI.setLeftNav("Back", $.Routes.back());
+				$.UI.setLeftNav("Back");
 				$.UI.setTitle("Edit");
 				$.UI.setLeftNav("Home", $.Constants.common.defaultView);
 
@@ -84,19 +91,13 @@
 			_history = [];
 		},
 
-		back: function (){
-			//TODO : hack for now
-			return "";
-		},
-
 		// TODO: add other callback in case callee wants to pass a custom callback not in Routes.
 		// Note: if view is BACK or default view (hack for now) will default to last history item
 		navigate: function (view){
 
 			try{
 
-				// TODO: do really better
-				if(!view || view === ""){
+				if(!view){
 
                     // if im going back I need to remove myself first
 					_history.pop();
@@ -108,7 +109,6 @@
 				}
 				
 				// TODO: save callback to history (and call it) only if its a custom one (and not Routes)
-
 				$.Main.loading();
 
 				var xhr = new XMLHttpRequest(),

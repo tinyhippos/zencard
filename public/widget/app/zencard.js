@@ -18,424 +18,12 @@
   
 */
 // ----------------- Main ----------------- \\
-(ZenCard.Main = function ($, JQuery){
-
-	var _barcode_options = {
-			"barWidth": 1,
-			"barHeight": 30,
-			"output": "svg",
-			"showHRI": false
-		};
-
-	return {
-
-        initialize: function(){
-            $.Routes.navigate($.Constants.common.defaultView);
-        },
-
-		generate: function (code){
-		
-			var el;
-
-			try{
-
-				for (var i = 0; i < $.Constants.BARCODE_TYPES.length; i++){
-
-					el = $.Utils.createElement("div", {
-						"class": "barcode_generated",
-						"onclick": 'alert("selected barcode index ' + i + '");'
-					});
-
-					document.getElementById($.Constants.DIV_BARCODES).appendChild(el);
-
-					JQuery(el).barcode(code, $.Constants.BARCODE_TYPES[i], _barcode_options);
-
-				}
-
-			}
-			catch (e){ $.Exception.handle(e); }
-		},
-
-		loadOptions: function (){
-			var select = document.getElementById($.Constants.SELECT_BARCODES),
-				i;
-
-			for (i = 0; i < $.Constants.BARCODE_TYPES.length; i+=1){
-				select.appendChild($.Utils.createElement("option", {
-					"value": $.Constants.BARCODE_TYPES[i],
-					innerHTML: $.Constants.BARCODE_TYPES[i]
-				}));
-			}
-
-		},
-
-		loading: function(){
-			$.UI.loadView('<div class="ajax_loader"></div>');
-		}
-
-	};
-
-}(ZenCard, $));
-(ZenCard.Constants = {
-	
-	"DIV_BARCODES": "barcodes",
-
-	"common": {
-		"prefix": "zencard-",
-		"view": ".view",
-		"viewDirectory": "app/views/",
-		"navLeft": "nav_left",
-		"navRight": "nav_right",
-		"defaultView": "index.html",
-		"headerTitle": ".header h1"
-	},
-
-    "SELECT_BARCODES": "barcode_type",
-    "BARCODE_TYPES": ["ean13", "ean9", "code11", "code39", "code128", "codabar", "std25", "int25", "code93", "msi"]
-
-});
-
-(ZenCard.Exception = function ($){
-
-	return {
-
-		types: {
-			ArgumentLength: "ArgumentLength",
-			ArgumentType: "ArgumentType",
-			Argument: "Argument", 
-			DomObjectNotFound: "DomObjectNotFound",
-			MethodNotImplemented: "MethodNotImplemented",
-			InvalidState: "InvalidState",
-			TestSuite: "TestSuiteException",
-			ConsoleNotFound: "ConsoleNotFound",
-			ConsoleMethodNotFound: "ConsoleMethodNotFound",
-            UnknownPersistence: "UnknownPersistence"
-		},
-
-		handle: function(exception, reThrow){
-			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
-
-			reThrow = reThrow || false;
-
-            // TODO: find out why jsUnity stops running if line below is deleted
-			$.Utils.validateMultipleArgumentTypes(arguments, ['object', 'boolean']);
-
-			var eMsg = exception.message || "exception caught!",
-				msg = eMsg+"\n\n"+(exception.stack || "*no stack provided*")+"\n\n";
-
-
-			// TODO: make this more robust (i.e. catch errors that could mangle logging an error to non-existence console or markup), also log Exception name
-			if($.Console.isAvailable()){
-				$.Console.error(msg);
-			}
-
-			if (reThrow){
-				throw exception;
-			}
-		},
-
-		raise: function(exceptionType, message, customExceptionObject){
-			$.Utils.validateNumberOfArguments(1, 3, arguments.length);
-
-			var obj = customExceptionObject || {};
-			message = message || "";
-
-			$.Utils.validateMultipleArgumentTypes([exceptionType, message, obj], ['string', 'string', 'object']);
-
-			obj.name = exceptionType;
-			obj.type = exceptionType;
-			obj.message = message;
-
-			if($.Console.isAvailable()){ $.Console.error(obj); }
-
-			throw obj;
-		}
-
-
-	};
-
-}(ZenCard));
-(ZenCard.Persistence = function($){
-
-	var _persistenceTypes = {
-            "Widget": "Widget",
-            "widget": "widget",
-            "localstorage": "localstorage"
-        },
-		_currentPersistence;
-
-    function _isValidPreferenceValue(value){
-        return !(value === null || value === 'undefined' || value === 'null' || value === '');
-    }
-
-    // attempt to detect persistence
-	function _detect(){
-        _currentPersistence = _persistenceTypes.localstorage;
-
-//        if(window && window.localStorage){
-//            _currentPersistence = _persistenceTypes.localstorage;
-//        }
-//        else if(window && window.Widget){
-//            _currentPersistence = _persistenceTypes.Widget;
-//        }
-//        else if(window && window.widget){
-//            _currentPersistence = _persistenceTypes.widget;
-//        }
-//        else{
-//            $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
-//        }
-	}
-
-    function _invokeSave(key, value, prefix){
-
-        prefix = _validateAndSetPrefix(prefix);
-
-        switch(_currentPersistence){
-            case _persistenceTypes.localstorage:
-                localStorage[prefix+key] = value;
-            break;
-
-            case _persistenceTypes.Widget:
-                Widget.setPreferenceForKey(value, prefix+key);
-            break;
-
-            case _persistenceTypes.widget:
-                widget.setPreferenceForKey(value, prefix+key);
-            break;
-
-            default:
-                alert("test!");
-
-        }
-
-    }
-
-    function _invokeRetrieve(key, prefix){
-
-        var result;
-
-        prefix = _validateAndSetPrefix(prefix);
-
-        switch(_currentPersistence){
-            case _persistenceTypes.localstorage:
-                result = localStorage[prefix + key];
-            break;
-
-            case _persistenceTypes.Widget:
-                result = Widget.preferenceForKey(prefix + key);
-            break;
-
-            case _persistenceTypes.widget:
-                result = widget.preferenceForKey(prefix + key);
-            break;
-
-            default:
-                $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
-
-        }
-
-        return result;
-    }
-
-    function _invokeRemove(key, prefix){
-
-        var result;
-
-        prefix = _validateAndSetPrefix(prefix);
-
-        switch(_currentPersistence){
-            case _persistenceTypes.localstorage:
-                result = localStorage.removeItem(prefix + key);
-            break;
-
-            case _persistenceTypes.Widget:
-                result = Widget.setPreferenceForKey(null, prefix + key);
-            break;
-
-            case _persistenceTypes.widget:
-                result = widget.setPreferenceForKey(null, prefix + key);
-            break;
-
-            default:
-                $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
-
-        }
-
-        return result;
-    }
-
-	function _validateAndSetPrefix(prefix) {
-		if (prefix) {
-			$.Utils.validateArgumentType(prefix, "string");
-		}
-
-		return prefix || $.Constants.common.prefix;
-	}
-
-    // DETECT persistence
-    _detect();
-
-    // Public properties/methods
-	return {
-        currentPersistence: function(){
-            return $.Copy(_persistenceTypes[_currentPersistence]);
-        },
-
-        set: function(persistenceType){
-            $.Utils.validateNumberOfArguments(1, 1, arguments.length);
-			$.Utils.validateArgumentType(persistenceType, "string", null, "Persistence.set");
-
-            _currentPersistence = persistenceType;
-        },
-
-		save: function (key, value, prefix){
-			$.Utils.validateNumberOfArguments(2, 3, arguments.length);
-			$.Utils.validateArgumentType(key, "string", null, "Persistence.save");
-			
-			if (value) {
-				$.Utils.validateArgumentType(value, "string");
-			}
-
-            _invokeSave(key, value, prefix);
-
-			$.Event.trigger($.Event.eventTypes.storageUpdated);
-		},
-
-		saveObject: function (key, obj, prefix){
-			$.Utils.validateNumberOfArguments(2, 3, arguments.length);
-			$.Utils.validateArgumentType(key, "string", null, "Persistence.saveObject");
-			if (obj) {
-				$.Utils.validateArgumentType(obj, "object");
-			}
-
-            _invokeSave(key, JSON.stringify(obj), prefix);
-
-			$.Event.trigger($.Event.eventTypes.storageUpdated);
-		},
-
-		retrieve: function (key, prefix){
-			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
-			$.Utils.validateArgumentType(key, "string", null, "Persistence.retrieve");
-
-			return _invokeRetrieve(key, prefix);
-		},
-
-		retrieveObject: function (key, prefix){
-			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
-			$.Utils.validateArgumentType(key, "string");
-
-			var retrievedValue = _invokeRetrieve(key, prefix);
-			return retrievedValue ? JSON.parse(retrievedValue) : retrievedValue;
-		},
-
-		remove: function (key, prefix){
-			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
-			$.Utils.validateArgumentType(key, "string", null, "Persistence.remove");
-
-			$.Event.trigger($.Event.eventTypes.storageUpdated);
-
-			return _invokeRemove(key, prefix);
-		},
-
-		removeAllLocalStorage: function (prefix) {
-			$.Utils.validateNumberOfArguments(0, 1, arguments.length);
-
-			prefix = _validateAndSetPrefix(prefix);
-
-			// loop over keys and regex out the ones that have our prefix and delete them
-			for (var key in localStorage) {
-				if (key.match("^"+prefix)) {
-					localStorage.removeItem(key);
-				}
-			}
-
-			$.Event.trigger($.Event.eventTypes.storageUpdated);
-		}
-
-//        saveArray: function(keys, values){
-//
-//            var i,
-//                passed = true;
-//
-//            for (i = 0; i < keys.length; i++){
-//                if (!save(keys[i], values[i])){
-//                    passed = false;
-//                }
-//            }
-//
-//            return passed;
-//
-//        }
-
-	};
-}(ZenCard));
-/*
- * Class: Event
- * Purpose: publish-subscribe Event class for DOM based and non-DOM based event facilitation
- * kudos: http://blog.jcoglan.com/2010/02/21/events-theyre-not-just-for-the-dom-you-know/
- */
-(ZenCard.Event = function ($){
-
-		var _listeners = {};
-
-		return {
-
-			eventTypes: {
-                storageUpdated: "storageUpdated",
-                ApplicationState:"ApplicationState"
-			},
-
-			on: function (eventType, listener, scope) {
-				$.Utils.validateNumberOfArguments(2, 3, arguments.length);
-				$.Utils.validateMultipleArgumentTypes(arguments, ["string", "function", "object"]);
-				var listenerList = _listeners[eventType] = _listeners[eventType] || [];
-				listenerList.push([listener, scope]);
-			},
-
-			trigger: function (eventType, args) {
-				args = args || [];
-				$.Utils.validateNumberOfArguments(1, 2, arguments.length);
-				$.Utils.validateMultipleArgumentTypes(arguments, ["string", "array"]);
-
-				if (!_listeners || !_listeners[eventType]) {
-					return;
-				}
-
-				var i, listenerList = _listeners[eventType];
-
-				for (i = 0; i < listenerList.length; i+=1) {
-					try {
-						listenerList[i][0].apply(listenerList[i][1], args);
-					}
-					catch (e) {
-						$.Exception.handle(e);
-					}
-				}
-			},
-
-			eventHasSubscriber: function (eventType){
-				$.Utils.validateNumberOfArguments(1, 1, arguments.length);
-				$.Utils.validateArgumentType(eventType, "string");
-				return _listeners[eventType] ? true : false;
-			},
-
-			getEventSubscribers: function (eventType) {
-				$.Utils.validateNumberOfArguments(1, 1, arguments.length);
-				$.Utils.validateArgumentType(eventType, "string");
-				return $.Copy(_listeners[eventType]) || [];
-			}
-
-    };
-
-}(ZenCard));
-// ----------------- Main ----------------- \\
 (ZenCard.UI = function ($, JQuery){
 
     function _setNav(el, text, view){
-
         el.innerHTML = text;
-        // TODO: dont do this..
-        el.setAttribute("onclick", "ZenCard.Routes.navigate('" + view + "')");
+
+        el.setAttribute("onmousedown", "ZenCard.Routes.navigate(" + (view ? "'" + view + "'" : "") + ")");
     }
 
     return {
@@ -456,99 +44,21 @@
 
         setTitle: function (text){
             JQuery($.Constants.common.headerTitle).html((text === "" || !text) ? "&nbsp;" : text);
+        },
+
+        hideHeader: function () {
+            JQuery($.Constants.common.header).addClass($.Constants.css.irrelevant);
+        },
+
+        showHeader: function () {
+            JQuery($.Constants.common.header).removeClass($.Constants.css.irrelevant);
+            this.setTitle();
         }
-		
+
 
     };
 
 }(ZenCard, $));
-// ----------------- Utils ----------------- \\
-(ZenCard.Utils = function ($){
-
-	return {
-
-		createElement: function(elementType, attributes){
-
-			attributes = attributes || {};
-
-			this.validateNumberOfArguments(1, 2, arguments.length);
-
-			var d = document.createElement(elementType);
-
-			for (var attr in attributes){
-
-				if(attributes.hasOwnProperty(attr)){
-					
-					switch (attr.toLowerCase()){
-
-						case "innerhtml":
-						d.innerHTML = attributes[attr];
-						break;
-
-						case "innertext":
-						d.innerText = attributes[attr];
-						break;
-
-						default:
-						d.setAttribute(attr,attributes[attr]);
-						
-					}
-					
-				}
-
-			}
-
-			return d;
-		},
-
-		validateNumberOfArguments: function (lowerBound, upperBound, numberOfArguments){
-
-			if (arguments.length < 3 || arguments.length > 3) {
-				$.Exception.raise($.Exception.types.Argument, "Wrong number of arguments when calling: tinyHippos.Utils.validateNumberOfArguments()");
-			}
-
-			if (isNaN(lowerBound) && isNaN(upperBound) && isNaN(numberOfArguments)) {
-				$.Exception.raise($.Exception.types.ArgumentType, "Arguments are not numbers");
-			}
-
-			lowerBound = parseInt(lowerBound, 10);
-			upperBound = parseInt(upperBound, 10);
-			numberOfArguments = parseInt(numberOfArguments, 10);
-
-			if (numberOfArguments < lowerBound || numberOfArguments > upperBound) {
-				$.Exception.raise($.Exception.types.ArgumentLength, "Wrong number of arguments");
-			}
-
-		},
-
-		validateArgumentType: function (arg, argType){
-			var invalidArg = false;
-			
-			switch (argType) {
-				case "array":
-					if (!arg instanceof Array){ invalidArg = true; }
-					break;
-				case "date":
-					if (!arg instanceof Date){ invalidArg = true; }
-					break;
-				default:
-					if (typeof arg !== argType){ invalidArg = true; }
-				break;
-			}
-			if(invalidArg) {
-				$.Exception.raise($.Exception.types.ArgumentType, "Invalid Argument type. argument: " + arg + " ==> was expected to be of type: " + argType);
-			}
-		},
-
-		validateMultipleArgumentTypes: function (argArray, argTypeArray){
-			for (var i = 0; i < argArray.length; i+=1){
-				this.validateArgumentType(argArray[i], argTypeArray[i]);
-			}
-		}
-
-	};
-
-}(ZenCard));
 /*
  * Class: Console
  * Purpose: Perform various functions with the browser javasript console
@@ -564,7 +74,7 @@
 	return {
 
 		isAvailable: function(){
-			return console ? true : false;
+			return window && window.console ? true : false;
 		},
 
 		/*
@@ -658,163 +168,506 @@
 	};
 
 }(ZenCard));
-(ZenCard.Routes = function($, JQuery){
+// ----------------- Main ----------------- \\
+(ZenCard.Main = function ($, JQuery){
 
-	var _history = [],
-		_routes = {
-
-			"index.html": function(){
-
-				$.Routes.clearHistory();
-
-				$.UI.setLeftNav("Cards", "cards/list.html");
-				$.UI.setTitle();
-				$.UI.setRightNav("?", "help.html");
-
-				//$.Main.loadOptions();
-
-			},
-
-			"help.html": function(){
-
-				$.UI.setLeftNav("Back", $.Routes.back());
-
-			},
-
-			// Card Specific Routes
-
-			"cards/list.html": function(){
-
-				$.UI.setLeftNav("Back", $.Routes.back());
-                $.UI.setTitle("Cards");
-				$.UI.setRightNav("+", "cards/add.html");
-
-				// TODO: abstract into a class
-				//var cards = $.Persistence.
-
-			},
-
-			"cards/add.html": function(){
-
-				$.UI.setLeftNav("Back", $.Routes.back());
-                $.UI.setTitle("Add");
-				$.UI.setRightNav("?", "help.html");
-
-				// bind to Forms submit here
-				JQuery("#cards_add_form button").click(function (){
-					console.log(JQuery("#cards_add_company_name")[0].value);
-					console.log(JQuery("#cards_add_code")[0].value);
-				});
-
-			},
-
-			"cards/edit.html": function(){
-
-				$.UI.setLeftNav("Back", $.Routes.back());
-                $.UI.setTitle("Edit");
-				$.UI.setLeftNav("Home", $.Constants.common.defaultView);
-
-				// bind to Forms submit here
-				JQuery("#cards_edit_form button").click(function (){
-					console.log(JQuery("#cards_edit_company_name")[0].value);
-					console.log(JQuery("#cards_edit_code")[0].value);
-				});
-
-			},
-
-			"cards/barcode_select.html": function(){
-
-				$.UI.setLeftNav("Edit Code", "cards/edit.html");
-                $.UI.setTitle("Codes");
-				$.UI.setRightNav("Home", $.Constants.common.defaultView);
-
-			}
-
+	var _barcode_options = {
+			"barWidth": 1,
+			"barHeight": 30,
+			"output": "svg",
+			"showHRI": false
 		};
 
 	return {
 
-		load: function(view){
-
-			return _routes[view] || null;
-
+		initialize: function(){
+            if ($.Persistence.retrieve($.Constants.persistence.cardKeys)) {
+                $.Routes.navigate("cards/list.html");
+            }
+            else {
+                $.Routes.navigate($.Constants.common.defaultView);
+            }
 		},
 
-		clearHistory: function (){
-			_history = [];
-		},
+		generate: function (code){
 
-		back: function (){
-			//TODO : hack for now
-			return "";
-		},
-
-		// TODO: add other callback in case callee wants to pass a custom callback not in Routes.
-		// Note: if view is BACK or default view (hack for now) will default to last history item
-		navigate: function (view){
+			var el;
 
 			try{
 
-				// TODO: do really better
-				if(!view || view === ""){
+				for (var i = 0; i < $.Constants.BARCODE_TYPES.length; i++){
 
-                    // if im going back I need to remove myself first
-                    _history.pop();
+					el = $.Utils.createElement("div", {
+						"class": "barcode_generated",
+						"onclick": 'alert("selected barcode index ' + i + '");'
+					});
 
-                    var lastView = _history.pop();
+					document.getElementById($.Constants.DIV_BARCODES).appendChild(el);
 
-					view = (lastView && lastView[0]) || $.Constants.common.defaultView;
+					JQuery(el).barcode(code, $.Constants.BARCODE_TYPES[i], _barcode_options);
 
 				}
-				
-				// TODO: save callback to history (and call it) only if its a custom one (and not Routes)
 
-				$.Main.loading();
-
-				var xhr = new XMLHttpRequest(),
-					callback;
-
-				xhr.onreadystatechange = function (){
-
-					if(this.readyState === 4){
-						
-						try{
-
-							$.UI.loadView(this.responseText);
-
-							callback = $.Routes.load(view);
-
-							if (callback){
-								callback.call(null);
-							}
-
-                            $.Routes.historyChanged(view, callback);
-							
-						}
-						catch (e){
-							$.Exception.handle(e);
-						}
-
-					}
-
-				};
-
-				xhr.open("GET", $.Constants.common.viewDirectory + view);
-
-				xhr.send(null);
 			}
-			catch (e){
-				$.Exception.handle(e);
+			catch (e){ $.Exception.handle(e); }
+		},
+
+		loadOptions: function (){
+			var select = document.getElementById($.Constants.SELECT_BARCODES),
+				i;
+
+			for (i = 0; i < $.Constants.BARCODE_TYPES.length; i+=1){
+				select.appendChild($.Utils.createElement("option", {
+					"value": $.Constants.BARCODE_TYPES[i],
+					innerHTML: $.Constants.BARCODE_TYPES[i]
+				}));
 			}
 
 		},
-		
-		historyChanged: function(view, callback){
-			_history.push([view, callback]);
+
+		loading: function(){
+			$.UI.loadView('<div class="ajax_loader"></div>');
 		}
 
 	};
 
+}(ZenCard, $));
+(ZenCard.Constants = {
+	
+	"DIV_BARCODES": "barcodes",
+
+    "css": {
+        "irrelevant": "irrelevant"
+    },
+
+	"common": {
+		"view": ".view",
+		"viewDirectory": "app/views/",
+		"navLeft": "nav_left",
+		"navRight": "nav_right",
+		"defaultView": "index.html",
+		"headerTitle": ".header h1",
+		"header": ".header"
+	},
+
+    "persistence" : {
+        "prefix": "zencard-",
+        "cardKeys": "cardKeys"
+    },
+
+	"SELECT_BARCODES": "barcode_type",
+	"BARCODE_TYPES": ["ean13", "ean9", "code11", "code39", "code128", "codabar", "std25", "int25", "code93", "msi"]
+
+});
+
+// ----------------- Utils ----------------- \\
+(ZenCard.Utils = function ($){
+
+	return {
+
+		createElement: function(elementType, attributes){
+
+			attributes = attributes || {};
+
+			this.validateNumberOfArguments(1, 2, arguments.length);
+
+			var d = document.createElement(elementType);
+
+			for (var attr in attributes){
+
+				if(attributes.hasOwnProperty(attr)){
+					
+					switch (attr.toLowerCase()){
+
+						case "innerhtml":
+						d.innerHTML = attributes[attr];
+						break;
+
+						case "innertext":
+						d.innerText = attributes[attr];
+						break;
+
+						default:
+						d.setAttribute(attr,attributes[attr]);
+						
+					}
+					
+				}
+
+			}
+
+			return d;
+		},
+
+		validateNumberOfArguments: function (lowerBound, upperBound, numberOfArguments){
+
+			if (arguments.length < 3 || arguments.length > 3) {
+				$.Exception.raise($.Exception.types.Argument, "Wrong number of arguments when calling: tinyHippos.Utils.validateNumberOfArguments()");
+			}
+
+			if (isNaN(lowerBound) && isNaN(upperBound) && isNaN(numberOfArguments)) {
+				$.Exception.raise($.Exception.types.ArgumentType, "Arguments are not numbers");
+			}
+
+			lowerBound = parseInt(lowerBound, 10);
+			upperBound = parseInt(upperBound, 10);
+			numberOfArguments = parseInt(numberOfArguments, 10);
+
+			if (numberOfArguments < lowerBound || numberOfArguments > upperBound) {
+				$.Exception.raise($.Exception.types.ArgumentLength, "Wrong number of arguments");
+			}
+
+		},
+
+		validateArgumentType: function (arg, argType){
+			var invalidArg = false;
+			
+			switch (argType) {
+				case "array":
+					if (!arg instanceof Array){ invalidArg = true; }
+					break;
+				case "date":
+					if (!arg instanceof Date){ invalidArg = true; }
+					break;
+				default:
+					if (typeof arg !== argType){ invalidArg = true; }
+				break;
+			}
+			if(invalidArg) {
+				$.Exception.raise($.Exception.types.ArgumentType, "Invalid Argument type. argument: " + arg + " ==> was expected to be of type: " + argType);
+			}
+		},
+
+		validateMultipleArgumentTypes: function (argArray, argTypeArray){
+			for (var i = 0; i < argArray.length; i+=1){
+				this.validateArgumentType(argArray[i], argTypeArray[i]);
+			}
+		}
+
+	};
+
+}(ZenCard));
+(ZenCard.Exception = function ($){
+
+	return {
+
+		types: {
+			ArgumentLength: "ArgumentLength",
+			ArgumentType: "ArgumentType",
+			Argument: "Argument", 
+			DomObjectNotFound: "DomObjectNotFound",
+			MethodNotImplemented: "MethodNotImplemented",
+			InvalidState: "InvalidState",
+			TestSuite: "TestSuiteException",
+			ConsoleNotFound: "ConsoleNotFound",
+			ConsoleMethodNotFound: "ConsoleMethodNotFound",
+			UnknownPersistence: "UnknownPersistence"
+		},
+
+		handle: function(exception, reThrow){
+			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
+
+			reThrow = reThrow || false;
+
+            // TODO: find out why jsUnity stops running if line below is deleted
+			$.Utils.validateMultipleArgumentTypes(arguments, ['object', 'boolean']);
+
+			var eMsg = exception.message || "exception caught!",
+				msg = eMsg+"\n\n"+(exception.stack || "*no stack provided*")+"\n\n";
+
+
+			// TODO: make this more robust (i.e. catch errors that could mangle logging an error to non-existence console or markup), also log Exception name
+			if($.Console.isAvailable()){
+				$.Console.error(msg);
+			}
+
+			if (reThrow){
+				throw exception;
+			}
+		},
+
+		raise: function(exceptionType, message, customExceptionObject){
+			$.Utils.validateNumberOfArguments(1, 3, arguments.length);
+
+			var obj = customExceptionObject || {};
+			message = message || "";
+
+			$.Utils.validateMultipleArgumentTypes([exceptionType, message, obj], ['string', 'string', 'object']);
+
+			obj.name = exceptionType;
+			obj.type = exceptionType;
+			obj.message = message;
+
+			if($.Console.isAvailable()){ $.Console.error(obj); }
+
+			throw obj;
+		}
+
+
+	};
+
+}(ZenCard));
+(ZenCard.Persistence = function($, JQuery){
+
+	var _persistenceTypes = {
+		"Widget_1_0": "Widget_1_0",
+		"Widget_1_2_1": "Widget_1_2_1",
+		"widget": "widget",
+		"localstorage": "localstorage",
+        "cookie": "cookie"
+	},
+	_currentPersistence;
+
+	function _sanitizeReturnedValue(value){
+        //TODO: deal with nokia and empty string issue
+		if(value === null || value === undefined || value === ''){
+            return null;
+        }
+        else {
+            return value;
+        }
+    }
+
+	// attempt to detect persistence
+	function _detect(){
+        try {
+            if(window && window.localStorage){
+                _currentPersistence = _persistenceTypes.localstorage;
+            }
+            else if(window && window.Widget){
+                Widget.setPreferenceForKey("tinyHippos_key", "tinyHippos_value");
+
+                if(Widget.preferenceForKey("tinyHippos_key") = "tinyHippos_value"){
+                    _currentPersistence = _persistenceTypes.Widget_1_0;
+                }
+                else if (Widget.preferenceForKey("tinyHippos_value") = "tinyHippos_key") {
+                    _currentPersistence = _persistenceTypes.Widget_1_2_1;
+                }
+                else {
+                    $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism for Widget.");
+                }
+            }
+            else if(window && window.widget){
+                _currentPersistence = _persistenceTypes.widget;
+            }
+            else if (JQuery.cookie) {
+                _currentPersistence = _persistenceTypes.cookie;
+            }
+            else{
+                $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
+            }
+        }
+        catch(e) {
+            $.Exception.handle(e);
+        }
+	}
+
+	function _save(key, value, prefix){
+
+		prefix = _validateAndSetPrefix(prefix);
+
+		switch(_currentPersistence){
+			
+			case _persistenceTypes.localstorage:
+				localStorage[prefix+key] = value;
+				break;
+
+			case _persistenceTypes.Widget_1_0:
+				Widget.setPreferenceForKey(value, prefix+key);
+				break;
+
+			case _persistenceTypes.Widget_1_2_1:
+				Widget.setPreferenceForKey(prefix+key, value);
+				break;
+
+			case _persistenceTypes.widget:
+				widget.setPreferenceForKey(value, prefix+key);
+				break;
+            case _persistenceTypes.cookie:
+                JQuery.cookie(prefix+key, value);
+                break;
+
+			default:
+				$.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
+
+		}
+
+	}
+
+	function _retrieve(key, prefix){
+
+		var result;
+
+		prefix = _validateAndSetPrefix(prefix);
+
+		switch(_currentPersistence){
+			
+			case _persistenceTypes.localstorage:
+				result = localStorage[prefix + key];
+				break;
+
+			case _persistenceTypes.Widget_1_0:
+			case _persistenceTypes.Widget_1_2_1:
+				result = Widget.preferenceForKey(prefix + key);
+				break;
+
+			case _persistenceTypes.widget:
+				result = widget.preferenceForKey(prefix + key);
+				break;
+
+            case _persistenceTypes.cookie:
+                result = JQuery.cookie(prefix+key);
+                break;
+
+			default:
+				$.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
+
+		}
+
+		return _sanitizeReturnedValue(result);
+	}
+
+	function _remove(key, prefix){
+
+		var result;
+
+		prefix = _validateAndSetPrefix(prefix);
+
+		switch(_currentPersistence){
+			
+			case _persistenceTypes.localstorage:
+				result = localStorage.removeItem(prefix + key);
+				break;
+
+			case _persistenceTypes.Widget_1_0:
+				result = Widget.setPreferenceForKey(prefix + key, null);
+				break;
+
+			case _persistenceTypes.Widget_1_2_1:
+				result = Widget.setPreferenceForKey(null, prefix + key);
+				break;
+
+			case _persistenceTypes.widget:
+				result = widget.setPreferenceForKey(null, prefix + key);
+				break;
+
+            case _persistenceTypes.cookie:
+                result = JQuery.cookie(prefix+key, null);
+                break;
+
+			default:
+				$.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
+
+		}
+
+		return result;
+	}
+
+	function _validateAndSetPrefix(prefix) {
+		if (prefix) {
+			$.Utils.validateArgumentType(prefix, "string");
+		}
+
+		return prefix || $.Constants.common.prefix;
+	}
+
+	// DETECT persistence
+	_detect();
+
+	// Public properties/methods
+	return {
+		
+		currentPersistence: function(){
+			return $.Copy(_persistenceTypes[_currentPersistence]);
+		},
+
+		set: function(persistenceType){
+			$.Utils.validateNumberOfArguments(1, 1, arguments.length);
+			$.Utils.validateArgumentType(persistenceType, "string", null, "Persistence.set");
+
+			_currentPersistence = persistenceType;
+		},
+
+		save: function (key, value, prefix){
+			$.Utils.validateNumberOfArguments(2, 3, arguments.length);
+			$.Utils.validateArgumentType(key, "string", null, "Persistence.save");
+
+			if (value) {
+				$.Utils.validateArgumentType(value, "string");
+			}
+
+			_save(key, value, prefix);
+
+			$.Event.trigger($.Event.eventTypes.storageUpdated);
+		},
+
+		saveObject: function (key, obj, prefix){
+			$.Utils.validateNumberOfArguments(2, 3, arguments.length);
+			$.Utils.validateArgumentType(key, "string", null, "Persistence.saveObject");
+			if (obj) {
+				$.Utils.validateArgumentType(obj, "object");
+			}
+
+			_save(key, JSON.stringify(obj), prefix);
+
+			$.Event.trigger($.Event.eventTypes.storageUpdated);
+		},
+
+		retrieve: function (key, prefix){
+			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
+			$.Utils.validateArgumentType(key, "string", null, "Persistence.retrieve");
+
+			return _retrieve(key, prefix);
+		},
+
+		retrieveObject: function (key, prefix){
+			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
+			$.Utils.validateArgumentType(key, "string");
+
+			var retrievedValue = _retrieve(key, prefix);
+			return retrievedValue ? JSON.parse(retrievedValue) : retrievedValue;
+		},
+
+		remove: function (key, prefix){
+			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
+			$.Utils.validateArgumentType(key, "string", null, "Persistence.remove");
+
+			$.Event.trigger($.Event.eventTypes.storageUpdated);
+
+			return _remove(key, prefix);
+		},
+
+		removeAllLocalStorage: function (prefix) {
+			$.Utils.validateNumberOfArguments(0, 1, arguments.length);
+
+			prefix = _validateAndSetPrefix(prefix);
+
+			// loop over keys and regex out the ones that have our prefix and delete them
+			for (var key in localStorage) {
+				if (key.match("^"+prefix)) {
+					localStorage.removeItem(key);
+				}
+			}
+
+			$.Event.trigger($.Event.eventTypes.storageUpdated);
+		}
+
+        //saveArray: function(keys, values){
+
+            //var i,
+                //passed = true;
+
+            //for (i = 0; i < keys.length; i++){
+                //if (!save(keys[i], values[i])){
+                    //passed = false;
+                //}
+            //}
+
+            //return passed;
+
+        //}
+
+	};
 }(ZenCard, $));
 // clone code courtesy of: http://my.opera.com/GreyWyvern/blog/show.dml/1725165
 // but modified and tightened by Dan Silivestru, Brent Lintner
@@ -850,3 +703,221 @@
     });
 }(ZenCard));
 
+/*
+ * Class: Event
+ * Purpose: publish-subscribe Event class for DOM based and non-DOM based event facilitation
+ * kudos: http://blog.jcoglan.com/2010/02/21/events-theyre-not-just-for-the-dom-you-know/
+ */
+(ZenCard.Event = function ($){
+
+		var _listeners = {};
+
+		return {
+
+			eventTypes: {
+				storageUpdated: "storageUpdated",
+				ApplicationState:"ApplicationState"
+			},
+
+			on: function (eventType, listener, scope) {
+				$.Utils.validateNumberOfArguments(2, 3, arguments.length);
+				$.Utils.validateMultipleArgumentTypes(arguments, ["string", "function", "object"]);
+				var listenerList = _listeners[eventType] = _listeners[eventType] || [];
+				listenerList.push([listener, scope]);
+			},
+
+			trigger: function (eventType, args) {
+				args = args || [];
+				$.Utils.validateNumberOfArguments(1, 2, arguments.length);
+				$.Utils.validateMultipleArgumentTypes(arguments, ["string", "array"]);
+
+				if (!_listeners || !_listeners[eventType]) {
+					return;
+				}
+
+				var i, listenerList = _listeners[eventType];
+
+				for (i = 0; i < listenerList.length; i+=1) {
+					try {
+						listenerList[i][0].apply(listenerList[i][1], args);
+					}
+					catch (e) {
+						$.Exception.handle(e);
+					}
+				}
+			},
+
+			eventHasSubscriber: function (eventType){
+				$.Utils.validateNumberOfArguments(1, 1, arguments.length);
+				$.Utils.validateArgumentType(eventType, "string");
+				return _listeners[eventType] ? true : false;
+			},
+
+			getEventSubscribers: function (eventType) {
+				$.Utils.validateNumberOfArguments(1, 1, arguments.length);
+				$.Utils.validateArgumentType(eventType, "string");
+				return $.Copy(_listeners[eventType]) || [];
+			}
+
+    };
+
+}(ZenCard));
+
+(ZenCard.Routes = function($, JQuery){
+
+	var _history = [],
+		_routes = {
+
+			"index.html": function(){
+
+				$.Routes.clearHistory();
+
+				$.UI.hideHeader();
+
+//                setTimeout(function() {
+//                    $.Routes.navigate("cards/list.html");
+//                }, 2000)
+
+			},
+
+			"help.html": function(){
+
+				$.UI.setLeftNav("Back");
+
+			},
+            
+			"about.html": function(){
+
+				$.UI.setLeftNav("Back");
+
+			},
+
+			// Card Specific Routes
+
+			"cards/list.html": function(){
+
+//                $.UI.showHeader();
+				$.UI.setLeftNav("About", "about.html");
+				$.UI.setTitle("Cards");				
+				$.UI.setRightNav("+", "cards/add.html");
+
+				// TODO: abstract into a class
+				//var cards = $.Persistence.
+
+			},
+
+			"cards/add.html": function(){
+
+				$.UI.setLeftNav("Back");
+				$.UI.setTitle("Add");
+				$.UI.setRightNav("?", "help.html");
+
+				// bind to Forms submit here
+				JQuery("#cards_add_form button").click(function (){
+					console.log(JQuery("#cards_add_company_name")[0].value);
+					console.log(JQuery("#cards_add_code")[0].value);
+				});
+
+			},
+
+			"cards/edit.html": function(){
+
+				$.UI.setLeftNav("Back");
+				$.UI.setTitle("Edit");
+				$.UI.setLeftNav("Home", $.Constants.common.defaultView);
+
+				// bind to Forms submit here
+				JQuery("#cards_edit_form button").click(function (){
+					console.log(JQuery("#cards_edit_company_name")[0].value);
+					console.log(JQuery("#cards_edit_code")[0].value);
+				});
+
+			},
+
+			"cards/barcode_select.html": function(){
+
+				$.UI.setLeftNav("Edit Code", "cards/edit.html");
+				$.UI.setTitle("Codes");
+				$.UI.setRightNav("Home", $.Constants.common.defaultView);
+
+			}
+
+		};
+
+	return {
+
+		load: function(view){
+
+			return _routes[view] || null;
+
+		},
+
+		clearHistory: function (){
+			_history = [];
+		},
+
+		// TODO: add other callback in case callee wants to pass a custom callback not in Routes.
+		// Note: if view is BACK or default view (hack for now) will default to last history item
+		navigate: function (view){
+
+			try{
+
+				if(!view){
+
+                    // if im going back I need to remove myself first
+					_history.pop();
+
+					var lastView = _history.pop();
+
+					view = (lastView && lastView[0]) || $.Constants.common.defaultView;
+
+				}
+				
+				// TODO: save callback to history (and call it) only if its a custom one (and not Routes)
+				$.Main.loading();
+
+				var xhr = new XMLHttpRequest(),
+					callback;
+
+				xhr.onreadystatechange = function (){
+
+					if(this.readyState === 4){
+						
+						try{
+
+							$.UI.loadView(this.responseText);
+
+							callback = $.Routes.load(view);
+
+							if (callback){
+								callback.call(null);
+							}
+
+							$.Routes.historyChanged(view, callback);
+							
+						}
+						catch (e){
+							$.Exception.handle(e);
+						}
+
+					}
+
+				};
+
+				xhr.open("GET", $.Constants.common.viewDirectory + view);
+
+				xhr.send(null);
+			}
+			catch (e){
+				$.Exception.handle(e);
+			}
+
+		},
+		
+		historyChanged: function(view, callback){
+			_history.push([view, callback]);
+		}
+
+	};
+
+}(ZenCard, $));

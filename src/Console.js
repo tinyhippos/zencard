@@ -13,7 +13,7 @@
 	return {
 
 		isAvailable: function(){
-			return console ? true : false;
+			return window && window.console ? true : false;
 		},
 
 		/*

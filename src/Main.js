@@ -11,7 +11,12 @@
 	return {
 
 		initialize: function(){
-			$.Routes.navigate($.Constants.common.defaultView);
+            if ($.Persistence.retrieve($.Constants.persistence.cardKeys)) {
+                $.Routes.navigate("cards/list.html");
+            }
+            else {
+                $.Routes.navigate($.Constants.common.defaultView);
+            }
 		},
 
 		generate: function (code){

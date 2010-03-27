@@ -1,35 +1,59 @@
-(ZenCard.Persistence = function($){
+(ZenCard.Persistence = function($, JQuery){
 
 	var _persistenceTypes = {
-		"Widget": "Widget",
+		"Widget_1_0": "Widget_1_0",
+		"Widget_1_2_1": "Widget_1_2_1",
 		"widget": "widget",
-		"localstorage": "localstorage"
+		"localstorage": "localstorage",
+        "cookie": "cookie"
 	},
 	_currentPersistence;
 
-	function _isValidPreferenceValue(value){
-		return !(value === null || value === 'undefined' || value === 'null' || value === '');
-		}
+	function _sanitizeReturnedValue(value){
+        //TODO: deal with nokia and empty string issue
+		if(value === null || value === undefined || value === ''){
+            return null;
+        }
+        else {
+            return value;
+        }
+    }
 
 	// attempt to detect persistence
 	function _detect(){
-		_currentPersistence = _persistenceTypes.localstorage;
+        try {
+            if(window && window.localStorage){
+                _currentPersistence = _persistenceTypes.localstorage;
+            }
+            else if(window && window.Widget){
+                Widget.setPreferenceForKey("tinyHippos_key", "tinyHippos_value");
 
-		//        if(window && window.localStorage){
-		//            _currentPersistence = _persistenceTypes.localstorage;
-		//        }
-		//        else if(window && window.Widget){
-		//            _currentPersistence = _persistenceTypes.Widget;
-		//        }
-		//        else if(window && window.widget){
-		//            _currentPersistence = _persistenceTypes.widget;
-		//        }
-		//        else{
-		//            $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
-		//        }
+                if(Widget.preferenceForKey("tinyHippos_key") = "tinyHippos_value"){
+                    _currentPersistence = _persistenceTypes.Widget_1_0;
+                }
+                else if (Widget.preferenceForKey("tinyHippos_value") = "tinyHippos_key") {
+                    _currentPersistence = _persistenceTypes.Widget_1_2_1;
+                }
+                else {
+                    $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism for Widget.");
+                }
+            }
+            else if(window && window.widget){
+                _currentPersistence = _persistenceTypes.widget;
+            }
+            else if (JQuery.cookie) {
+                _currentPersistence = _persistenceTypes.cookie;
+            }
+            else{
+                $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
+            }
+        }
+        catch(e) {
+            $.Exception.handle(e);
+        }
 	}
 
-	function _invokeSave(key, value, prefix){
+	function _save(key, value, prefix){
 
 		prefix = _validateAndSetPrefix(prefix);
 
@@ -39,13 +63,20 @@
 				localStorage[prefix+key] = value;
 				break;
 
-			case _persistenceTypes.Widget:
+			case _persistenceTypes.Widget_1_0:
 				Widget.setPreferenceForKey(value, prefix+key);
+				break;
+
+			case _persistenceTypes.Widget_1_2_1:
+				Widget.setPreferenceForKey(prefix+key, value);
 				break;
 
 			case _persistenceTypes.widget:
 				widget.setPreferenceForKey(value, prefix+key);
 				break;
+            case _persistenceTypes.cookie:
+                JQuery.cookie(prefix+key, value);
+                break;
 
 			default:
 				$.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
@@ -54,7 +85,7 @@
 
 	}
 
-	function _invokeRetrieve(key, prefix){
+	function _retrieve(key, prefix){
 
 		var result;
 
@@ -66,7 +97,8 @@
 				result = localStorage[prefix + key];
 				break;
 
-			case _persistenceTypes.Widget:
+			case _persistenceTypes.Widget_1_0:
+			case _persistenceTypes.Widget_1_2_1:
 				result = Widget.preferenceForKey(prefix + key);
 				break;
 
@@ -74,15 +106,19 @@
 				result = widget.preferenceForKey(prefix + key);
 				break;
 
+            case _persistenceTypes.cookie:
+                result = JQuery.cookie(prefix+key);
+                break;
+
 			default:
 				$.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
 
 		}
 
-		return result;
+		return _sanitizeReturnedValue(result);
 	}
 
-	function _invokeRemove(key, prefix){
+	function _remove(key, prefix){
 
 		var result;
 
@@ -94,13 +130,21 @@
 				result = localStorage.removeItem(prefix + key);
 				break;
 
-			case _persistenceTypes.Widget:
+			case _persistenceTypes.Widget_1_0:
+				result = Widget.setPreferenceForKey(prefix + key, null);
+				break;
+
+			case _persistenceTypes.Widget_1_2_1:
 				result = Widget.setPreferenceForKey(null, prefix + key);
 				break;
 
 			case _persistenceTypes.widget:
 				result = widget.setPreferenceForKey(null, prefix + key);
 				break;
+
+            case _persistenceTypes.cookie:
+                result = JQuery.cookie(prefix+key, null);
+                break;
 
 			default:
 				$.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
@@ -143,7 +187,7 @@
 				$.Utils.validateArgumentType(value, "string");
 			}
 
-			_invokeSave(key, value, prefix);
+			_save(key, value, prefix);
 
 			$.Event.trigger($.Event.eventTypes.storageUpdated);
 		},
@@ -155,7 +199,7 @@
 				$.Utils.validateArgumentType(obj, "object");
 			}
 
-			_invokeSave(key, JSON.stringify(obj), prefix);
+			_save(key, JSON.stringify(obj), prefix);
 
 			$.Event.trigger($.Event.eventTypes.storageUpdated);
 		},
@@ -164,14 +208,14 @@
 			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
 			$.Utils.validateArgumentType(key, "string", null, "Persistence.retrieve");
 
-			return _invokeRetrieve(key, prefix);
+			return _retrieve(key, prefix);
 		},
 
 		retrieveObject: function (key, prefix){
 			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
 			$.Utils.validateArgumentType(key, "string");
 
-			var retrievedValue = _invokeRetrieve(key, prefix);
+			var retrievedValue = _retrieve(key, prefix);
 			return retrievedValue ? JSON.parse(retrievedValue) : retrievedValue;
 		},
 
@@ -181,7 +225,7 @@
 
 			$.Event.trigger($.Event.eventTypes.storageUpdated);
 
-			return _invokeRemove(key, prefix);
+			return _remove(key, prefix);
 		},
 
 		removeAllLocalStorage: function (prefix) {
@@ -215,4 +259,4 @@
         //}
 
 	};
-}(ZenCard));
+}(ZenCard, $));
