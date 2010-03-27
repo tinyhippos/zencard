@@ -12,7 +12,7 @@
 			TestSuite: "TestSuiteException",
 			ConsoleNotFound: "ConsoleNotFound",
 			ConsoleMethodNotFound: "ConsoleMethodNotFound",
-            UnknownPersistence: "UnknownPersistence"
+			UnknownPersistence: "UnknownPersistence"
 		},
 
 		handle: function(exception, reThrow){

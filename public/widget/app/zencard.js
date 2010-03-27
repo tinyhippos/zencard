@@ -455,7 +455,7 @@
         },
 
         setTitle: function (text){
-            JQuery($.Constants.common.headerTitle).html(text);
+            JQuery($.Constants.common.headerTitle).html((text === "" || !text) ? "&nbsp;" : text);
         }
 		
 
@@ -668,7 +668,7 @@
 				$.Routes.clearHistory();
 
 				$.UI.setLeftNav("Cards", "cards/list.html");
-				$.UI.setTitle("ZenCard");
+				$.UI.setTitle();
 				$.UI.setRightNav("?", "help.html");
 
 				//$.Main.loadOptions();
@@ -686,6 +686,7 @@
 			"cards/list.html": function(){
 
 				$.UI.setLeftNav("Back", $.Routes.back());
+                $.UI.setTitle("Cards");
 				$.UI.setRightNav("+", "cards/add.html");
 
 				// TODO: abstract into a class
@@ -696,6 +697,7 @@
 			"cards/add.html": function(){
 
 				$.UI.setLeftNav("Back", $.Routes.back());
+                $.UI.setTitle("Add");
 				$.UI.setRightNav("?", "help.html");
 
 				// bind to Forms submit here
@@ -709,6 +711,7 @@
 			"cards/edit.html": function(){
 
 				$.UI.setLeftNav("Back", $.Routes.back());
+                $.UI.setTitle("Edit");
 				$.UI.setLeftNav("Home", $.Constants.common.defaultView);
 
 				// bind to Forms submit here
@@ -722,6 +725,7 @@
 			"cards/barcode_select.html": function(){
 
 				$.UI.setLeftNav("Edit Code", "cards/edit.html");
+                $.UI.setTitle("Codes");
 				$.UI.setRightNav("Home", $.Constants.common.defaultView);
 
 			}

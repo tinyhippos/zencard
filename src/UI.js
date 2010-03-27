@@ -25,7 +25,7 @@
         },
 
         setTitle: function (text){
-            JQuery($.Constants.common.headerTitle).html(text);
+            JQuery($.Constants.common.headerTitle).html((text === "" || !text) ? "&nbsp;" : text);
         }
 		
 
