@@ -31,24 +31,24 @@
 
 	function _invokeSave(key, value, prefix){
 
-			prefix = _validateAndSetPrefix(prefix);
+		prefix = _validateAndSetPrefix(prefix);
 
-			switch(_currentPersistence){
-				
-				case _persistenceTypes.localstorage:
-					localStorage[prefix+key] = value;
-					break;
+		switch(_currentPersistence){
+			
+			case _persistenceTypes.localstorage:
+				localStorage[prefix+key] = value;
+				break;
 
-				case _persistenceTypes.Widget:
-					Widget.setPreferenceForKey(value, prefix+key);
-					break;
+			case _persistenceTypes.Widget:
+				Widget.setPreferenceForKey(value, prefix+key);
+				break;
 
-				case _persistenceTypes.widget:
-					widget.setPreferenceForKey(value, prefix+key);
-					break;
+			case _persistenceTypes.widget:
+				widget.setPreferenceForKey(value, prefix+key);
+				break;
 
-				default:
-					$.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
+			default:
+				$.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
 
 		}
 
