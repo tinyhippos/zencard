@@ -11,7 +11,8 @@
 			InvalidState: "InvalidState",
 			TestSuite: "TestSuiteException",
 			ConsoleNotFound: "ConsoleNotFound",
-			ConsoleMethodNotFound: "ConsoleMethodNotFound"
+			ConsoleMethodNotFound: "ConsoleMethodNotFound",
+            UnknownPersistence: "UnknownPersistence"
 		},
 
 		handle: function(exception, reThrow){
