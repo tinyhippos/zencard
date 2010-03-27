@@ -20,9 +20,7 @@
 // ----------------- Main ----------------- \\
 (ZenCard.Main = function ($, JQuery){
 
-	var _SELECT_BARCODES = "barcode_type",
-		_BARCODE_TYPES = ["ean13", "ean9", "code11", "code39", "code128", "codabar", "std25", "int25", "code93", "msi"],
-		_barcode_options = {
+	var _barcode_options = {
 			"barWidth": 1,
 			"barHeight": 30,
 			"output": "svg",
@@ -31,22 +29,26 @@
 
 	return {
 
+        initialize: function(){
+            $.Routes.navigate($.Constants.common.defaultView);
+        },
+
 		generate: function (code){
 		
 			var el;
 
 			try{
 
-				for (var i = 0; i < _BARCODE_TYPES.length; i++){
+				for (var i = 0; i < $.Constants.BARCODE_TYPES.length; i++){
 
 					el = $.Utils.createElement("div", {
 						"class": "barcode_generated",
 						"onclick": 'alert("selected barcode index ' + i + '");'
 					});
 
-					document.getElementById($.Constants._DIV_BARCODES).appendChild(el);
+					document.getElementById($.Constants.DIV_BARCODES).appendChild(el);
 
-					JQuery(el).barcode(code, _BARCODE_TYPES[i], _barcode_options);
+					JQuery(el).barcode(code, $.Constants.BARCODE_TYPES[i], _barcode_options);
 
 				}
 
@@ -55,13 +57,13 @@
 		},
 
 		loadOptions: function (){
-			var select = document.getElementById(_SELECT_BARCODES),
+			var select = document.getElementById($.Constants.SELECT_BARCODES),
 				i;
 
-			for (i = 0; i < _BARCODE_TYPES.length; i+=1){
+			for (i = 0; i < $.Constants.BARCODE_TYPES.length; i+=1){
 				select.appendChild($.Utils.createElement("option", {
-					"value": _BARCODE_TYPES[i],
-					innerHTML: _BARCODE_TYPES[i]
+					"value": $.Constants.BARCODE_TYPES[i],
+					innerHTML: $.Constants.BARCODE_TYPES[i]
 				}));
 			}
 
@@ -76,7 +78,7 @@
 }(ZenCard, $));
 (ZenCard.Constants = {
 	
-	"_DIV_BARCODES": "barcodes",
+	"DIV_BARCODES": "barcodes",
 
 	"common": {
 		"prefix": "zencard-",
@@ -86,7 +88,10 @@
 		"navRight": "nav_right",
 		"defaultView": "index.html",
 		"headerTitle": ".header h1"
-	}
+	},
+
+    "SELECT_BARCODES": "barcode_type",
+    "BARCODE_TYPES": ["ean13", "ean9", "code11", "code39", "code128", "codabar", "std25", "int25", "code93", "msi"]
 
 });
 
