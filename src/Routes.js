@@ -91,22 +91,17 @@
 
 			try{
 
-				var goingBackInTime = false,
-					tempHistoryItem;
-
 				// TODO: do really better
-				if(view === ""){
-					var test = _history.pop();
+				if(!view || view === ""){
 
-                    tempHistoryItem = _history.pop();
+                    // if im going back I need to remove myself first
+                    _history.pop();
 
-                    if(test[0] === view){
-                        _history.push(test);
-                    }
+                    var lastView = _history.pop();
 
-					view = ((tempHistoryItem && tempHistoryItem[0]) || $.Constants.common.defaultView);
-					goingBackInTime = true;
-				}	
+					view = (lastView && lastView[0]) || $.Constants.common.defaultView;
+
+				}
 				
 				// TODO: save callback to history (and call it) only if its a custom one (and not Routes)
 
@@ -129,9 +124,7 @@
 								callback.call(null);
 							}
 
-							if(!goingBackInTime){
-								$.Routes.historyChanged(view, callback);
-							}
+                            $.Routes.historyChanged(view, callback);
 							
 						}
 						catch (e){

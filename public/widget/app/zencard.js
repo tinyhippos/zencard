@@ -84,7 +84,7 @@
 		"viewDirectory": "app/views/",
 		"navLeft": "nav_left",
 		"navRight": "nav_right",
-		"defaultView": "cards/list.html",
+		"defaultView": "index.html",
 		"headerTitle": ".header h1"
 	}
 
@@ -165,18 +165,20 @@
 
     // attempt to detect persistence
 	function _detect(){
-        if(window && window.localStorage){
-            _currentPersistence = _persistenceTypes.localstorage;
-        }
-        else if(window && window.Widget){
-            _currentPersistence = _persistenceTypes.Widget;
-        }
-        else if(window && window.widget){
-            _currentPersistence = _persistenceTypes.widget;
-        }
-        else{
-            $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
-        }
+        _currentPersistence = _persistenceTypes.localstorage;
+
+//        if(window && window.localStorage){
+//            _currentPersistence = _persistenceTypes.localstorage;
+//        }
+//        else if(window && window.Widget){
+//            _currentPersistence = _persistenceTypes.Widget;
+//        }
+//        else if(window && window.widget){
+//            _currentPersistence = _persistenceTypes.widget;
+//        }
+//        else{
+//            $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
+//        }
 	}
 
     function _invokeSave(key, value, prefix){
@@ -197,7 +199,7 @@
             break;
 
             default:
-                $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
+                alert("test!");
 
         }
 
@@ -744,22 +746,17 @@
 
 			try{
 
-				var goingBackInTime = false,
-					tempHistoryItem;
-
 				// TODO: do really better
-				if(view === ""){
-					var test = _history.pop();
+				if(!view || view === ""){
 
-                    tempHistoryItem = _history.pop();
+                    // if im going back I need to remove myself first
+                    _history.pop();
 
-                    if(test[0] === view){
-                        _history.push(test);
-                    }
+                    var lastView = _history.pop();
 
-					view = ((tempHistoryItem && tempHistoryItem[0]) || $.Constants.common.defaultView);
-					goingBackInTime = true;
-				}	
+					view = (lastView && lastView[0]) || $.Constants.common.defaultView;
+
+				}
 				
 				// TODO: save callback to history (and call it) only if its a custom one (and not Routes)
 
@@ -782,9 +779,7 @@
 								callback.call(null);
 							}
 
-							if(!goingBackInTime){
-								$.Routes.historyChanged(view, callback);
-							}
+                            $.Routes.historyChanged(view, callback);
 							
 						}
 						catch (e){

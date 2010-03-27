@@ -8,7 +8,7 @@
 		"viewDirectory": "app/views/",
 		"navLeft": "nav_left",
 		"navRight": "nav_right",
-		"defaultView": "cards/list.html",
+		"defaultView": "index.html",
 		"headerTitle": ".header h1"
 	}
 
