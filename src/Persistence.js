@@ -13,18 +13,20 @@
 
     // attempt to detect persistence
 	function _detect(){
-        if(window && window.localStorage){
-            _currentPersistence = _persistenceTypes.localstorage;
-        }
-        else if(window && window.Widget){
-            _currentPersistence = _persistenceTypes.Widget;
-        }
-        else if(window && window.widget){
-            _currentPersistence = _persistenceTypes.widget;
-        }
-        else{
-            $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
-        }
+        _currentPersistence = _persistenceTypes.localstorage;
+
+//        if(window && window.localStorage){
+//            _currentPersistence = _persistenceTypes.localstorage;
+//        }
+//        else if(window && window.Widget){
+//            _currentPersistence = _persistenceTypes.Widget;
+//        }
+//        else if(window && window.widget){
+//            _currentPersistence = _persistenceTypes.widget;
+//        }
+//        else{
+//            $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
+//        }
 	}
 
     function _invokeSave(key, value, prefix){
@@ -45,7 +47,7 @@
             break;
 
             default:
-                $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
+                alert("test!");
 
         }
 
