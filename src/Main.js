@@ -11,21 +11,25 @@
 	return {
 
 		initialize: function(){
+            var waitTime = 2000;
+
             if ($.Persistence.retrieve($.Constants.persistence.cardKeys)) {
+                waitTime = 0;
+            }
+
+            setTimeout(function() {
                 $.Routes.navigate("cards/list.html");
-            }
-            else {
-                $.Routes.navigate($.Constants.common.defaultView);
-            }
+            }, waitTime);
 		},
 
 		generate: function (code){
 
-			var el;
+			var el,
+                i;
 
 			try{
 
-				for (var i = 0; i < $.Constants.BARCODE_TYPES.length; i++){
+				for (i = 0; i < $.Constants.BARCODE_TYPES.length; i++){
 
 					el = $.Utils.createElement("div", {
 						"class": "barcode_generated",
@@ -41,20 +45,7 @@
 			}
 			catch (e){ $.Exception.handle(e); }
 		},
-
-		loadOptions: function (){
-			var select = document.getElementById($.Constants.SELECT_BARCODES),
-				i;
-
-			for (i = 0; i < $.Constants.BARCODE_TYPES.length; i+=1){
-				select.appendChild($.Utils.createElement("option", {
-					"value": $.Constants.BARCODE_TYPES[i],
-					innerHTML: $.Constants.BARCODE_TYPES[i]
-				}));
-			}
-
-		},
-
+        
 		loading: function(){
 			$.UI.loadView('<div class="ajax_loader"></div>');
 		}

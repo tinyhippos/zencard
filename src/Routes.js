@@ -7,11 +7,6 @@
 
 				$.Routes.clearHistory();
 
-				$.UI.hideHeader();
-
-//                setTimeout(function() {
-//                    $.Routes.navigate("cards/list.html");
-//                }, 2000)
 
 			},
 
@@ -30,15 +25,29 @@
 			// Card Specific Routes
 
 			"cards/list.html": function(){
+                var cardNames,
+                    i,
+                    nameContainer = document.getElementById($.Constants.htmlElements.cardList);
 
-//                $.UI.showHeader();
+                $.UI.showHeader();
 				$.UI.setLeftNav("About", "about.html");
 				$.UI.setTitle("Cards");				
 				$.UI.setRightNav("+", "cards/add.html");
 
-				// TODO: abstract into a class
-				//var cards = $.Persistence.
-
+				cardNames = $.Cards.getAllCardNames();
+                if (cardNames) {
+                    for (i = 0; i < cardNames.length; i++) {
+                        nameContainer.appendChild(
+                                $.Utils.createElement("div",{
+                                    "class": "card_to_select",
+                                    "innerHTML": cardNames[i]
+                                })
+                        )
+                    }
+                }
+                else {
+                    $.UI.showPopup("Welcome to ZenCard!<br /><br /> Let's get started by adding a membership / loyalty card. Press the + button at the top right to start. <br /><br /> May all your cards be one...");
+                }
 			},
 
 			"cards/add.html": function(){
@@ -94,6 +103,8 @@
 		// TODO: add other callback in case callee wants to pass a custom callback not in Routes.
 		// Note: if view is BACK or default view (hack for now) will default to last history item
 		navigate: function (view){
+
+            $.UI.hidePopup();
 
 			try{
 

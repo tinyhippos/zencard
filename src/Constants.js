@@ -5,6 +5,9 @@
     "css": {
         "irrelevant": "irrelevant"
     },
+    "htmlElements": {
+        "cardList": "cards_list"
+    },
 
 	"common": {
 		"view": ".view",
@@ -17,6 +20,7 @@
 	},
 
     "persistence" : {
+        "keyDelimiter": "|",
         "prefix": "zencard-",
         "cardKeys": "cardKeys"
     },

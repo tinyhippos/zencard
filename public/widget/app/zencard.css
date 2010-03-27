@@ -9,7 +9,7 @@ html, body{
 	width: 100%;
 	height: 100%;
 }
-body{ font: 0.81em Helvetica, Verdana, Sans-serif; }
+body{ font: 1em Helvetica, Verdana, Sans-serif; }
 
 a{
 	outline: none;
@@ -76,7 +76,7 @@ h3{ font-size: 1.00em; }
 .layout .header{
 	/*background: -webkit-gradient(linear, 0% -50%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(0, 0, 0)));*/
     background: url('images/greyheadinggradient.png') repeat-x center;
-	height: 5em;
+	height: 70px;
     width: 100%;
     z-index: 100;
     position: relative;
@@ -170,7 +170,6 @@ h3{ font-size: 1.00em; }
 	overflow: auto;
     color: #000000;
     z-index: 60;
-    overflow: auto;
     background: #FFFFFF;
 }
 
@@ -242,7 +241,36 @@ h3{ font-size: 1.00em; }
     overflow: hidden;
     text-align: center;
     background: #141414;
+    color: #76A956;
+}
+.home_loader{
+    background: #272836 url('images/home-loader.gif') no-repeat;
+    height: 15px;
+    width: 128px;
+    margin: 20px auto 20px auto;
+}
+.home_bg img{
+    width: 11.54em;
+    margin: 20px auto 0 auto;
 }
 
-.home_bg img{
+
+
+/*
+ * popup
+ */
+
+#popup {
+    width: 70%;
+    overflow: auto;
+    z-index: 900;
+    position: relative;
+    margin: 2em auto;
+    padding: 1em;
+    background-color: #76A956;
+    color: #FFFFFF;
+    font-size: 1.38em;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }

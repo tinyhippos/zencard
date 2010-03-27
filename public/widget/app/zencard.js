@@ -53,6 +53,18 @@
         showHeader: function () {
             JQuery($.Constants.common.header).removeClass($.Constants.css.irrelevant);
             this.setTitle();
+        },
+
+        showPopup: function (text) {
+            var popupDiv = document.getElementById("popup");
+            popupDiv.attributes["class"].nodeValue = "";
+            popupDiv.innerHTML = text;
+        },
+
+        hidePopup: function () {
+            var popupDiv = document.getElementById("popup");
+            popupDiv.attributes["class"].nodeValue = "irrelevant";           
+            popupDiv.innerHTML = "";
         }
 
 
@@ -181,21 +193,25 @@
 	return {
 
 		initialize: function(){
+            var waitTime = 2000;
+
             if ($.Persistence.retrieve($.Constants.persistence.cardKeys)) {
+                waitTime = 0;
+            }
+
+            setTimeout(function() {
                 $.Routes.navigate("cards/list.html");
-            }
-            else {
-                $.Routes.navigate($.Constants.common.defaultView);
-            }
+            }, waitTime);
 		},
 
 		generate: function (code){
 
-			var el;
+			var el,
+                i;
 
 			try{
 
-				for (var i = 0; i < $.Constants.BARCODE_TYPES.length; i++){
+				for (i = 0; i < $.Constants.BARCODE_TYPES.length; i++){
 
 					el = $.Utils.createElement("div", {
 						"class": "barcode_generated",
@@ -211,20 +227,7 @@
 			}
 			catch (e){ $.Exception.handle(e); }
 		},
-
-		loadOptions: function (){
-			var select = document.getElementById($.Constants.SELECT_BARCODES),
-				i;
-
-			for (i = 0; i < $.Constants.BARCODE_TYPES.length; i+=1){
-				select.appendChild($.Utils.createElement("option", {
-					"value": $.Constants.BARCODE_TYPES[i],
-					innerHTML: $.Constants.BARCODE_TYPES[i]
-				}));
-			}
-
-		},
-
+        
 		loading: function(){
 			$.UI.loadView('<div class="ajax_loader"></div>');
 		}
@@ -239,6 +242,9 @@
     "css": {
         "irrelevant": "irrelevant"
     },
+    "htmlElements": {
+        "cardList": "cards_list"
+    },
 
 	"common": {
 		"view": ".view",
@@ -251,6 +257,7 @@
 	},
 
     "persistence" : {
+        "keyDelimiter": "|",
         "prefix": "zencard-",
         "cardKeys": "cardKeys"
     },
@@ -346,6 +353,18 @@
 
 	};
 
+}(ZenCard));
+(ZenCard.Cards = function($) {
+
+    return {
+        get: function(cardName){},
+
+        getAllCardNames: function(){
+            var namesRaw = $.Persistence.retrieve($.Constants.persistence.cardKeys);
+
+            return namesRaw ? namesRaw.split($.Constants.persistence.keyDelimiter) : null;
+        }
+    }
 }(ZenCard));
 (ZenCard.Exception = function ($){
 
@@ -772,11 +791,6 @@
 
 				$.Routes.clearHistory();
 
-				$.UI.hideHeader();
-
-//                setTimeout(function() {
-//                    $.Routes.navigate("cards/list.html");
-//                }, 2000)
 
 			},
 
@@ -795,15 +809,29 @@
 			// Card Specific Routes
 
 			"cards/list.html": function(){
+                var cardNames,
+                    i,
+                    nameContainer = document.getElementById($.Constants.htmlElements.cardList);
 
-//                $.UI.showHeader();
+                $.UI.showHeader();
 				$.UI.setLeftNav("About", "about.html");
 				$.UI.setTitle("Cards");				
 				$.UI.setRightNav("+", "cards/add.html");
 
-				// TODO: abstract into a class
-				//var cards = $.Persistence.
-
+				cardNames = $.Cards.getAllCardNames();
+                if (cardNames) {
+                    for (i = 0; i < cardNames.length; i++) {
+                        nameContainer.appendChild(
+                                $.Utils.createElement("div",{
+                                    "class": "card_to_select",
+                                    "innerHTML": cardNames[i]
+                                })
+                        )
+                    }
+                }
+                else {
+                    $.UI.showPopup("Welcome to ZenCard!<br /><br /> Let's get started by adding a membership / loyalty card. Press the + button at the top right to start. <br /><br /> May all your cards be one...");
+                }
 			},
 
 			"cards/add.html": function(){
@@ -859,6 +887,8 @@
 		// TODO: add other callback in case callee wants to pass a custom callback not in Routes.
 		// Note: if view is BACK or default view (hack for now) will default to last history item
 		navigate: function (view){
+
+            $.UI.hidePopup();
 
 			try{
 

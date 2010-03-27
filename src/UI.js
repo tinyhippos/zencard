@@ -34,6 +34,18 @@
         showHeader: function () {
             JQuery($.Constants.common.header).removeClass($.Constants.css.irrelevant);
             this.setTitle();
+        },
+
+        showPopup: function (text) {
+            var popupDiv = document.getElementById("popup");
+            popupDiv.attributes["class"].nodeValue = "";
+            popupDiv.innerHTML = text;
+        },
+
+        hidePopup: function () {
+            var popupDiv = document.getElementById("popup");
+            popupDiv.attributes["class"].nodeValue = "irrelevant";           
+            popupDiv.innerHTML = "";
         }
 
 
