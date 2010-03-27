@@ -1,111 +1,114 @@
 (ZenCard.Persistence = function($){
 
 	var _persistenceTypes = {
-            "Widget": "Widget",
-            "widget": "widget",
-            "localstorage": "localstorage"
-        },
-		_currentPersistence;
+		"Widget": "Widget",
+		"widget": "widget",
+		"localstorage": "localstorage"
+	},
+	_currentPersistence;
 
-    function _isValidPreferenceValue(value){
-        return !(value === null || value === 'undefined' || value === 'null' || value === '');
-    }
+	function _isValidPreferenceValue(value){
+		return !(value === null || value === 'undefined' || value === 'null' || value === '');
+		}
 
-    // attempt to detect persistence
+	// attempt to detect persistence
 	function _detect(){
-        _currentPersistence = _persistenceTypes.localstorage;
+		_currentPersistence = _persistenceTypes.localstorage;
 
-//        if(window && window.localStorage){
-//            _currentPersistence = _persistenceTypes.localstorage;
-//        }
-//        else if(window && window.Widget){
-//            _currentPersistence = _persistenceTypes.Widget;
-//        }
-//        else if(window && window.widget){
-//            _currentPersistence = _persistenceTypes.widget;
-//        }
-//        else{
-//            $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
-//        }
+		//        if(window && window.localStorage){
+		//            _currentPersistence = _persistenceTypes.localstorage;
+		//        }
+		//        else if(window && window.Widget){
+		//            _currentPersistence = _persistenceTypes.Widget;
+		//        }
+		//        else if(window && window.widget){
+		//            _currentPersistence = _persistenceTypes.widget;
+		//        }
+		//        else{
+		//            $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
+		//        }
 	}
 
-    function _invokeSave(key, value, prefix){
+	function _invokeSave(key, value, prefix){
 
-        prefix = _validateAndSetPrefix(prefix);
+			prefix = _validateAndSetPrefix(prefix);
 
-        switch(_currentPersistence){
-            case _persistenceTypes.localstorage:
-                localStorage[prefix+key] = value;
-            break;
+			switch(_currentPersistence){
+				
+				case _persistenceTypes.localstorage:
+					localStorage[prefix+key] = value;
+					break;
 
-            case _persistenceTypes.Widget:
-                Widget.setPreferenceForKey(value, prefix+key);
-            break;
+				case _persistenceTypes.Widget:
+					Widget.setPreferenceForKey(value, prefix+key);
+					break;
 
-            case _persistenceTypes.widget:
-                widget.setPreferenceForKey(value, prefix+key);
-            break;
+				case _persistenceTypes.widget:
+					widget.setPreferenceForKey(value, prefix+key);
+					break;
 
-            default:
-                alert("test!");
+				default:
+					$.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
 
-        }
+		}
 
-    }
+	}
 
-    function _invokeRetrieve(key, prefix){
+	function _invokeRetrieve(key, prefix){
 
-        var result;
+		var result;
 
-        prefix = _validateAndSetPrefix(prefix);
+		prefix = _validateAndSetPrefix(prefix);
 
-        switch(_currentPersistence){
-            case _persistenceTypes.localstorage:
-                result = localStorage[prefix + key];
-            break;
+		switch(_currentPersistence){
+			
+			case _persistenceTypes.localstorage:
+				result = localStorage[prefix + key];
+				break;
 
-            case _persistenceTypes.Widget:
-                result = Widget.preferenceForKey(prefix + key);
-            break;
+			case _persistenceTypes.Widget:
+				result = Widget.preferenceForKey(prefix + key);
+				break;
 
-            case _persistenceTypes.widget:
-                result = widget.preferenceForKey(prefix + key);
-            break;
+			case _persistenceTypes.widget:
+				result = widget.preferenceForKey(prefix + key);
+				break;
 
-            default:
-                $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
+			default:
+				$.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
 
-        }
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    function _invokeRemove(key, prefix){
+	function _invokeRemove(key, prefix){
 
-        var result;
+		var result;
 
-        prefix = _validateAndSetPrefix(prefix);
+		prefix = _validateAndSetPrefix(prefix);
 
-        switch(_currentPersistence){
-            case _persistenceTypes.localstorage:
-                result = localStorage.removeItem(prefix + key);
-            break;
+		switch(_currentPersistence){
+			
+			case _persistenceTypes.localstorage:
+				result = localStorage.removeItem(prefix + key);
+				break;
 
-            case _persistenceTypes.Widget:
-                result = Widget.setPreferenceForKey(null, prefix + key);
-            break;
+			case _persistenceTypes.Widget:
+				result = Widget.setPreferenceForKey(null, prefix + key);
+				break;
 
-            case _persistenceTypes.widget:
-                result = widget.setPreferenceForKey(null, prefix + key);
-            break;
+			case _persistenceTypes.widget:
+				result = widget.setPreferenceForKey(null, prefix + key);
+				break;
 
-            default:
-                $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
+			default:
+				$.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism when attempting to invoke storage call.");
 
-        }
+		}
 
-        return result;
-    }
+		return result;
+	}
 
 	function _validateAndSetPrefix(prefix) {
 		if (prefix) {
@@ -115,31 +118,32 @@
 		return prefix || $.Constants.common.prefix;
 	}
 
-    // DETECT persistence
-    _detect();
+	// DETECT persistence
+	_detect();
 
-    // Public properties/methods
+	// Public properties/methods
 	return {
-        currentPersistence: function(){
-            return $.Copy(_persistenceTypes[_currentPersistence]);
-        },
+		
+		currentPersistence: function(){
+			return $.Copy(_persistenceTypes[_currentPersistence]);
+		},
 
-        set: function(persistenceType){
-            $.Utils.validateNumberOfArguments(1, 1, arguments.length);
+		set: function(persistenceType){
+			$.Utils.validateNumberOfArguments(1, 1, arguments.length);
 			$.Utils.validateArgumentType(persistenceType, "string", null, "Persistence.set");
 
-            _currentPersistence = persistenceType;
-        },
+			_currentPersistence = persistenceType;
+		},
 
 		save: function (key, value, prefix){
 			$.Utils.validateNumberOfArguments(2, 3, arguments.length);
 			$.Utils.validateArgumentType(key, "string", null, "Persistence.save");
-			
+
 			if (value) {
 				$.Utils.validateArgumentType(value, "string");
 			}
 
-            _invokeSave(key, value, prefix);
+			_invokeSave(key, value, prefix);
 
 			$.Event.trigger($.Event.eventTypes.storageUpdated);
 		},
@@ -151,7 +155,7 @@
 				$.Utils.validateArgumentType(obj, "object");
 			}
 
-            _invokeSave(key, JSON.stringify(obj), prefix);
+			_invokeSave(key, JSON.stringify(obj), prefix);
 
 			$.Event.trigger($.Event.eventTypes.storageUpdated);
 		},
@@ -195,20 +199,20 @@
 			$.Event.trigger($.Event.eventTypes.storageUpdated);
 		}
 
-//        saveArray: function(keys, values){
-//
-//            var i,
-//                passed = true;
-//
-//            for (i = 0; i < keys.length; i++){
-//                if (!save(keys[i], values[i])){
-//                    passed = false;
-//                }
-//            }
-//
-//            return passed;
-//
-//        }
+        //saveArray: function(keys, values){
+
+            //var i,
+                //passed = true;
+
+            //for (i = 0; i < keys.length; i++){
+                //if (!save(keys[i], values[i])){
+                    //passed = false;
+                //}
+            //}
+
+            //return passed;
+
+        //}
 
 	};
 }(ZenCard));

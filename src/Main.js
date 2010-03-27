@@ -10,12 +10,12 @@
 
 	return {
 
-        initialize: function(){
-            $.Routes.navigate($.Constants.common.defaultView);
-        },
+		initialize: function(){
+			$.Routes.navigate($.Constants.common.defaultView);
+		},
 
 		generate: function (code){
-		
+
 			var el;
 
 			try{

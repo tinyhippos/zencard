@@ -26,7 +26,7 @@
 			"cards/list.html": function(){
 
 				$.UI.setLeftNav("Back", $.Routes.back());
-                $.UI.setTitle("Cards");
+				$.UI.setTitle("Cards");				
 				$.UI.setRightNav("+", "cards/add.html");
 
 				// TODO: abstract into a class
@@ -37,7 +37,7 @@
 			"cards/add.html": function(){
 
 				$.UI.setLeftNav("Back", $.Routes.back());
-                $.UI.setTitle("Add");
+				$.UI.setTitle("Add");
 				$.UI.setRightNav("?", "help.html");
 
 				// bind to Forms submit here
@@ -51,7 +51,7 @@
 			"cards/edit.html": function(){
 
 				$.UI.setLeftNav("Back", $.Routes.back());
-                $.UI.setTitle("Edit");
+				$.UI.setTitle("Edit");
 				$.UI.setLeftNav("Home", $.Constants.common.defaultView);
 
 				// bind to Forms submit here
@@ -65,7 +65,7 @@
 			"cards/barcode_select.html": function(){
 
 				$.UI.setLeftNav("Edit Code", "cards/edit.html");
-                $.UI.setTitle("Codes");
+				$.UI.setTitle("Codes");
 				$.UI.setRightNav("Home", $.Constants.common.defaultView);
 
 			}
@@ -99,9 +99,9 @@
 				if(!view || view === ""){
 
                     // if im going back I need to remove myself first
-                    _history.pop();
+					_history.pop();
 
-                    var lastView = _history.pop();
+					var lastView = _history.pop();
 
 					view = (lastView && lastView[0]) || $.Constants.common.defaultView;
 
@@ -128,7 +128,7 @@
 								callback.call(null);
 							}
 
-                            $.Routes.historyChanged(view, callback);
+							$.Routes.historyChanged(view, callback);
 							
 						}
 						catch (e){
