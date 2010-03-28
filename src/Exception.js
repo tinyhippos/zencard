@@ -32,6 +32,8 @@
 				$.Console.error(msg);
 			}
 
+            alert(msg);
+
 			if (reThrow){
 				throw exception;
 			}

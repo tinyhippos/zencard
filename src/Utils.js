@@ -100,7 +100,7 @@
                 potentialRemovalKeysString = $.Persistence.retrieve(categoryKey);
 
             try {
-                if (!potentialRemovalKeysString) {
+                if (potentialRemovalKeysString) {
                     potentialRemovalKeys = potentialRemovalKeysString.split(keyDelimiter);
                     for (i = 0; i < potentialRemovalKeys.length; i++){
                         if (potentialRemovalKeys[i] !== removalKey){
@@ -116,14 +116,12 @@
                     else {
                         cleanKeysString = cleanKeys.join(keyDelimiter);
                     }
-                    return $.Persistence.save(categoryKey, cleanKeysString);
-                }
-                else {
-                    return false;
+
+                    $.Persistence.save(categoryKey, cleanKeysString);
                 }
             }
-            catch(err) {
-                alert(err);
+            catch(e) {
+                $.Exception.handle(e);
                 return false;
             }
         }

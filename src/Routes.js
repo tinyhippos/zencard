@@ -27,22 +27,27 @@
 			"cards/list.html": function(){
                 var cardNames,
                     i,
-                    nameContainer = document.getElementById($.Constants.htmlElements.cardList);
+                    cardContainer;
+                    listContainer = document.getElementById($.Constants.htmlElements.cardList);
 
                 $.UI.showHeader();
 				$.UI.setLeftNav("About", "about.html");
-				$.UI.setTitle("Cards");				
+				$.UI.setTitle("ZenCards");				
 				$.UI.setRightNav("+", "cards/add.html");
 
 				cardNames = $.Cards.getAllCardNames();
                 if (cardNames) {
                     for (i = 0; i < cardNames.length; i++) {
-                        nameContainer.appendChild(
-                                $.Utils.createElement("div",{
-                                    "class": "card_to_select",
-                                    "innerHTML": cardNames[i]
-                                })
-                        )
+                        cardContainer = $.Utils.createElement("div",{
+                                            "class": "card_to_select"
+                                        });
+                        cardContainer.appendChild(
+                                    $.Utils.createElement("a",{
+                                        "onmousedown": "ZenCard.Routes.navigate('cards/barcode_select.html', ['" + cardNames[i] + "'])",
+                                        "innerHTML": cardNames[i]
+                                    })
+                                );
+                        listContainer.appendChild(cardContainer);
                     }
                 }
                 else {
@@ -64,11 +69,11 @@
                         msg = "";
 
                     if (name === "") {
-                        msg = "* Please enter a company/card name.<br /><br />";
+                        msg = "* Please enter a company/card name.\n\n";
                     }
                     else {
                         if (name.length > 50) {
-                            msg = "* Company/card name must be less then 50 characters long.<br /><br />";
+                            msg = "* Company/card name must be less then 50 characters long.\n\n";
                         }
                     }
 
@@ -81,7 +86,7 @@
                     }
                     else {
                         $.Cards.save(JQuery("#cards_add_company_name")[0].value, JQuery("#cards_add_code")[0].value);
-                        $.Routes.navigate("cards/barcode_select.html");
+                        $.Routes.navigate("cards/barcode_select.html", [name]);
                     }
 				});
 
@@ -101,11 +106,17 @@
 
 			},
 
-			"cards/barcode_select.html": function(){
+			"cards/barcode_select.html": function(cardName){
+                var card;
 
-				$.UI.setLeftNav("Edit Code", "cards/edit.html");
-				$.UI.setTitle("Codes");
-				$.UI.setRightNav("Home", $.Constants.common.defaultView);
+				$.UI.setLeftNav("Back");
+				$.UI.setTitle();
+				$.UI.setRightNav("?", "help.html");
+                card = $.Cards.get(cardName);
+
+                document.getElementById("cardName").innerHTML = cardName;
+
+                $.Main.generate(card.code);
 
 			}
 
@@ -125,7 +136,7 @@
 
 		// TODO: add other callback in case callee wants to pass a custom callback not in Routes.
 		// Note: if view is BACK or default view (hack for now) will default to last history item
-		navigate: function (view){
+		navigate: function (view, params){
 
             $.UI.hidePopup();
 
@@ -139,6 +150,7 @@
 					var lastView = _history.pop();
 
 					view = (lastView && lastView[0]) || $.Constants.common.defaultView;
+					params = (lastView && lastView[2]) || null;
 
 				}
 				
@@ -159,10 +171,10 @@
 							callback = $.Routes.load(view);
 
 							if (callback){
-								callback.call(null);
+								callback.apply(null, params);
 							}
 
-							$.Routes.historyChanged(view, callback);
+							$.Routes.historyChanged(view, callback, params);
 							
 						}
 						catch (e){
@@ -183,8 +195,8 @@
 
 		},
 		
-		historyChanged: function(view, callback){
-			_history.push([view, callback]);
+		historyChanged: function(view, callback, params){
+			_history.push([view, callback, params]);
 		}
 
 	};

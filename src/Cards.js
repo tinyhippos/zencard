@@ -6,7 +6,9 @@
     };
     
     return {
-        get: function(cardName){},
+        get: function(cardName){
+            return $.Persistence.retrieveObject(cardName);
+        },
 
         getAllCardNames: function(){
             var namesRaw = $.Persistence.retrieve($.Constants.persistence.cardKeys);
@@ -19,7 +21,7 @@
             card.name = name;
             card.code = code;
 
-            $.Utils.saveKeyToCategory($.Constants.persistence.cardKeys, name)
+            $.Utils.saveKeyToCategory($.Constants.persistence.cardKeys, name);
             $.Persistence.saveObject(name, card);
         }
     }

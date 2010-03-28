@@ -1,11 +1,20 @@
 // ----------------- Main ----------------- \\
 (ZenCard.Main = function ($, JQuery){
 
-	var _barcode_options = {
-			"barWidth": 1,
-			"barHeight": 30,
-			"output": "svg",
-			"showHRI": false
+//	var _barcode_options = {
+//			"barWidth": 2,
+//			"barHeight": 100,
+//			"output": "css",
+//			"showHRI": true,
+//            "fontSize": "1em"
+//		};
+//
+    var _barcode_options = {
+			"barWidth": 0.13,
+			"barHeight": 6.25,
+			"output": "css",
+			"showHRI": true,
+            "fontSize": "1em"
 		};
 
 	return {
@@ -24,8 +33,7 @@
 
 		generate: function (code){
 
-			var el,
-                i;
+			var el, i, barcodeDiv, success;
 
 			try{
 
@@ -36,9 +44,9 @@
 						"onclick": 'alert("selected barcode index ' + i + '");'
 					});
 
-					document.getElementById($.Constants.DIV_BARCODES).appendChild(el);
-
-					JQuery(el).barcode(code, $.Constants.BARCODE_TYPES[i], _barcode_options);
+					barcodeDiv = document.getElementById($.Constants.DIV_BARCODES);
+                    barcodeDiv.appendChild(el);
+                    success = JQuery(el).barcode(code, $.Constants.BARCODE_TYPES[i], _barcode_options);
 
 				}
 

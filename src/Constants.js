@@ -26,6 +26,7 @@
     },
 
 	"SELECT_BARCODES": "barcode_type",
-	"BARCODE_TYPES": ["ean13", "ean9", "code11", "code39", "code128", "codabar", "std25", "int25", "code93", "msi"]
+	"BARCODE_TYPES": ["ean13", "ean9", "code128"]
+//	"BARCODE_TYPES": ["ean13", "ean9", "code11", "code39", "code128", "codabar", "std25", "int25", "code93", "msi"]
 
 });

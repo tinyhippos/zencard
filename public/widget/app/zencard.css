@@ -76,7 +76,7 @@ h3{ font-size: 1.00em; }
 .layout .header{
 	/*background: -webkit-gradient(linear, 0% -50%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(0, 0, 0)));*/
     background: url('images/greyheadinggradient.png') repeat-x center;
-	height: 70px;
+	height: 4.38em;
     width: 100%;
     z-index: 100;
     position: relative;
@@ -170,21 +170,30 @@ h3{ font-size: 1.00em; }
     color: #000000;
     z-index: 60;
     background: #FFFFFF;
-    height:100%;
+
 }
 
 /*
  * Barcode Select View
  */
 
+#cardName{
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: #76A956;
+    margin-top: 0.5em;
+
+}
+
 .barcode_generated{
 	position: relative;
 	z-index: 600;
-	background: #999999;
+	background: #FFFFFF;
+    margin: 5em auto 0 auto;
 }
 
 .barcode_generated object{
-	height: 30px;
 	overflow: hidden;
 	position: relative;
 	z-index: 90;
@@ -239,7 +248,7 @@ h3{ font-size: 1.00em; }
     top: 0;
     overflow: hidden;
     text-align: center;
-    background: #141414;
+    background: #000000;
     color: #76A956;
 }
 .home_loader{
