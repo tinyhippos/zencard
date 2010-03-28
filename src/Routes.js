@@ -52,14 +52,37 @@
 
 			"cards/add.html": function(){
 
+                $.UI.showHeader();
 				$.UI.setLeftNav("Back");
 				$.UI.setTitle("Add");
 				$.UI.setRightNav("?", "help.html");
 
 				// bind to Forms submit here
 				JQuery("#cards_add_form button").click(function (){
-					console.log(JQuery("#cards_add_company_name")[0].value);
-					console.log(JQuery("#cards_add_code")[0].value);
+                    var name = JQuery("#cards_add_company_name")[0] ? JQuery("#cards_add_company_name")[0].value : "",
+                        code = JQuery("#cards_add_code")[0] ? JQuery("#cards_add_code")[0].value : "",
+                        msg = "";
+
+                    if (name === "") {
+                        msg = "* Please enter a company/card name.<br /><br />";
+                    }
+                    else {
+                        if (name.length > 50) {
+                            msg = "* Company/card name must be less then 50 characters long.<br /><br />";
+                        }
+                    }
+
+                    if (code === "") {
+                        msg += "* Please enter the numeric barcode found on your card";
+                    }
+
+                    if (msg !== "") {
+                        alert(msg);
+                    }
+                    else {
+                        $.Cards.save(JQuery("#cards_add_company_name")[0].value, JQuery("#cards_add_code")[0].value);
+                        $.Routes.navigate("cards/barcode_select.html");
+                    }
 				});
 
 			},

@@ -80,8 +80,53 @@
 			for (var i = 0; i < argArray.length; i+=1){
 				this.validateArgumentType(argArray[i], argTypeArray[i]);
 			}
-		}
+		},
 
+        saveKeyToCategory: function (categoryKey, itemKey) {
+            var value = $.Persistence.retrieve(categoryKey);
+
+            if (!value) {
+                $.Persistence.save(categoryKey, itemKey);
+            }
+            else {
+                $.Persistence.save(categoryKey, value + $.Constants.persistence.keyDelimiter + itemKey);
+            }
+        },
+
+        removeKeyFromCategory: function (categoryKey, removalKey) {
+            var potentialRemovalKeys, cleanKeysString, i,
+                cleanKeys = [],
+                keyDelimiter = $.Constants.persistence.keyDelimiter,
+                potentialRemovalKeysString = $.Persistence.retrieve(categoryKey);
+
+            try {
+                if (!potentialRemovalKeysString) {
+                    potentialRemovalKeys = potentialRemovalKeysString.split(keyDelimiter);
+                    for (i = 0; i < potentialRemovalKeys.length; i++){
+                        if (potentialRemovalKeys[i] !== removalKey){
+                            cleanKeys.push(potentialRemovalKeys[i]);
+                        }
+                    }
+                    if (cleanKeys.length === 0){
+                        $.Persistence.remove(categoryKey);
+                    }
+                    else if (cleanKeys.length == 1){
+                        cleanKeysString = cleanKeys[0];
+                    }
+                    else {
+                        cleanKeysString = cleanKeys.join(keyDelimiter);
+                    }
+                    return $.Persistence.save(categoryKey, cleanKeysString);
+                }
+                else {
+                    return false;
+                }
+            }
+            catch(err) {
+                alert(err);
+                return false;
+            }
+        }
 	};
 
 }(ZenCard));

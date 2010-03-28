@@ -159,7 +159,7 @@
 			$.Utils.validateArgumentType(prefix, "string");
 		}
 
-		return prefix || $.Constants.common.prefix;
+		return prefix || $.Constants.persistence.prefix;
 	}
 
 	// DETECT persistence
@@ -242,21 +242,6 @@
 
 			$.Event.trigger($.Event.eventTypes.storageUpdated);
 		}
-
-        //saveArray: function(keys, values){
-
-            //var i,
-                //passed = true;
-
-            //for (i = 0; i < keys.length; i++){
-                //if (!save(keys[i], values[i])){
-                    //passed = false;
-                //}
-            //}
-
-            //return passed;
-
-        //}
 
 	};
 }(ZenCard, $));
