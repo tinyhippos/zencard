@@ -23,6 +23,11 @@
 
             $.Utils.saveKeyToCategory($.Constants.persistence.cardKeys, name);
             $.Persistence.saveObject(name, card);
+        },
+
+        remove: function(name) {
+            $.Utils.removeKeyFromCategory($.Constants.persistence.cardKeys, name);
+            $.Persistence.remove(name);
         }
     }
 }(ZenCard));

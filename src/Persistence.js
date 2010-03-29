@@ -22,16 +22,13 @@
 	// attempt to detect persistence
 	function _detect(){
         try {
-            if(window && window.localStorage){
-                _currentPersistence = _persistenceTypes.localstorage;
-            }
-            else if(window && window.Widget){
+            if(window && window.Widget){
                 Widget.setPreferenceForKey("tinyHippos_key", "tinyHippos_value");
 
-                if(Widget.preferenceForKey("tinyHippos_key") = "tinyHippos_value"){
+                if(Widget.preferenceForKey("tinyHippos_key") === "tinyHippos_value"){
                     _currentPersistence = _persistenceTypes.Widget_1_0;
                 }
-                else if (Widget.preferenceForKey("tinyHippos_value") = "tinyHippos_key") {
+                else if (Widget.preferenceForKey("tinyHippos_value") === "tinyHippos_key") {
                     _currentPersistence = _persistenceTypes.Widget_1_2_1;
                 }
                 else {
@@ -40,6 +37,9 @@
             }
             else if(window && window.widget){
                 _currentPersistence = _persistenceTypes.widget;
+            }
+            else if(window && window.localStorage){
+                _currentPersistence = _persistenceTypes.localstorage;
             }
             else if (JQuery.cookie) {
                 _currentPersistence = _persistenceTypes.cookie;
@@ -64,11 +64,11 @@
 				break;
 
 			case _persistenceTypes.Widget_1_0:
-				Widget.setPreferenceForKey(value, prefix+key);
+                Widget.setPreferenceForKey(prefix+key, value);
 				break;
 
 			case _persistenceTypes.Widget_1_2_1:
-				Widget.setPreferenceForKey(prefix+key, value);
+                Widget.setPreferenceForKey(value, prefix+key);
 				break;
 
 			case _persistenceTypes.widget:
@@ -126,10 +126,6 @@
 
 		switch(_currentPersistence){
 			
-			case _persistenceTypes.localstorage:
-				result = localStorage.removeItem(prefix + key);
-				break;
-
 			case _persistenceTypes.Widget_1_0:
 				result = Widget.setPreferenceForKey(prefix + key, null);
 				break;
@@ -141,6 +137,10 @@
 			case _persistenceTypes.widget:
 				result = widget.setPreferenceForKey(null, prefix + key);
 				break;
+
+            case _persistenceTypes.localstorage:
+                result = localStorage.removeItem(prefix + key);
+                break;
 
             case _persistenceTypes.cookie:
                 result = JQuery.cookie(prefix+key, null);

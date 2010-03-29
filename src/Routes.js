@@ -55,7 +55,17 @@
                 }
 			},
 
-			"cards/add.html": function(){
+			"cards/add.html": function(params){
+                var card;
+                if (params) {
+                    card = $.Persistence.retrieveObject(params);
+                    if (card) {
+                        JQuery("#cards_add_company_name")[0].value = card.name;
+                        JQuery("#cards_add_code")[0].value = card.code;
+                        JQuery("#add_card")[0].innerHTML = "Edit Card";
+                        JQuery("#remove_card").removeClass("irrelevant");
+                    }
+                }
 
                 $.UI.showHeader();
 				$.UI.setLeftNav("Back");
@@ -63,7 +73,7 @@
 				$.UI.setRightNav("?", "help.html");
 
 				// bind to Forms submit here
-				JQuery("#cards_add_form button").click(function (){
+				JQuery("#add_card").click(function (){
                     var name = JQuery("#cards_add_company_name")[0] ? JQuery("#cards_add_company_name")[0].value : "",
                         code = JQuery("#cards_add_code")[0] ? JQuery("#cards_add_code")[0].value : "",
                         msg = "";
@@ -85,11 +95,26 @@
                         alert(msg);
                     }
                     else {
-                        $.Cards.save(JQuery("#cards_add_company_name")[0].value, JQuery("#cards_add_code")[0].value);
+                        $.Cards.save(name, code);
+                        if (card && card.name !== name) {
+                            // since the name changed (i.e. the key) we need to remove the old one
+                            $.Cards.remove(card.name);
+                        }
+                        //need to remove the last two entries from history
+                        _history.pop();
                         $.Routes.navigate("cards/barcode_select.html", [name]);
                     }
 				});
 
+                // bind to Forms submit here
+                JQuery("#remove_card").click(function (){
+                    if(card){
+                        $.Cards.remove(card.name);
+                        // clear history
+                        _history.pop();
+                        $.Routes.navigate("cards/list.html");
+                    }
+                });
 			},
 
 			"cards/edit.html": function(){
@@ -107,12 +132,12 @@
 			},
 
 			"cards/barcode_select.html": function(cardName){
-                var card;
+                var card = $.Cards.get(cardName);
+
 
 				$.UI.setLeftNav("Back");
 				$.UI.setTitle();
-				$.UI.setRightNav("?", "help.html");
-                card = $.Cards.get(cardName);
+				$.UI.setRightNav("Edit", "cards/add.html", [card.name]);
 
                 document.getElementById("cardName").innerHTML = cardName;
 

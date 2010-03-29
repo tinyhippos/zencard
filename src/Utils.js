@@ -112,12 +112,12 @@
                     }
                     else if (cleanKeys.length == 1){
                         cleanKeysString = cleanKeys[0];
+                        $.Persistence.save(categoryKey, cleanKeysString);
                     }
                     else {
                         cleanKeysString = cleanKeys.join(keyDelimiter);
+                        $.Persistence.save(categoryKey, cleanKeysString);
                     }
-
-                    $.Persistence.save(categoryKey, cleanKeysString);
                 }
             }
             catch(e) {

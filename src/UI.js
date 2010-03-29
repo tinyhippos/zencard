@@ -1,10 +1,10 @@
 // ----------------- Main ----------------- \\
 (ZenCard.UI = function ($, JQuery){
 
-    function _setNav(el, text, view){
+    function _setNav(el, text, view, params){
         el.innerHTML = text;
 
-        el.setAttribute("onmousedown", "ZenCard.Routes.navigate(" + (view ? "'" + view + "'" : "") + ")");
+        el.setAttribute("onmousedown", "ZenCard.Routes.navigate(" + (view ? "'" + view + "'" : "") + (params ? ", ['" + params.join(",") +"']" : "") + ")");
     }
 
     return {
@@ -18,8 +18,8 @@
             _setNav(document.getElementById($.Constants.common.navLeft), text, view);
         },
 
-        setRightNav: function(text, view, callback){
-            _setNav(document.getElementById($.Constants.common.navRight), text, view);
+        setRightNav: function(text, view, params, callback){
+            _setNav(document.getElementById($.Constants.common.navRight), text, view, params);
 
         },
 

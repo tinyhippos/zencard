@@ -17,232 +17,7 @@
   	Amy Vandenberg
   
 */
-// ----------------- Main ----------------- \\
-(ZenCard.UI = function ($, JQuery){
 
-    function _setNav(el, text, view){
-        el.innerHTML = text;
-
-        el.setAttribute("onmousedown", "ZenCard.Routes.navigate(" + (view ? "'" + view + "'" : "") + ")");
-    }
-
-    return {
-
-        loadView: function(str){
-            JQuery($.Constants.common.view).html(str);
-        },
-
-        // TODO; allow custom callbacks
-        setLeftNav: function(text, view, callback){
-            _setNav(document.getElementById($.Constants.common.navLeft), text, view);
-        },
-
-        setRightNav: function(text, view, callback){
-            _setNav(document.getElementById($.Constants.common.navRight), text, view);
-
-        },
-
-        setTitle: function (text){
-            JQuery($.Constants.common.headerTitle).html((text === "" || !text) ? "&nbsp;" : text);
-        },
-
-        hideHeader: function () {
-            JQuery($.Constants.common.header).addClass($.Constants.css.irrelevant);
-        },
-
-        showHeader: function () {
-            JQuery($.Constants.common.header).removeClass($.Constants.css.irrelevant);
-            this.setTitle();
-        },
-
-        showPopup: function (text) {
-            var popupDiv = document.getElementById("popup");
-            popupDiv.attributes["class"].nodeValue = "";
-            popupDiv.innerHTML = text;
-        },
-
-        hidePopup: function () {
-            var popupDiv = document.getElementById("popup");
-            popupDiv.attributes["class"].nodeValue = "irrelevant";           
-            popupDiv.innerHTML = "";
-        }
-
-
-    };
-
-}(ZenCard, $));
-/*
- * Class: Console
- * Purpose: Perform various functions with the browser javasript console
- */
-(ZenCard.Console = function ($) {
-
-
-	var _buffer = "",
-			_options = {
-			"append": "append"
-		};
-
-	return {
-
-		isAvailable: function(){
-			return window && window.console ? true : false;
-		},
-
-		/*
-		 * Public Method: returns all available logging options (only supports append at this time)
-		 * Purpose:
-		 */
-		getOptions: function (){
-			return $.Copy(_options);
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		bufferLog: function(msg, options, method){
-
-			if(!console){ $.Exception.raise($.Exception.types.ConsoleNotFound, "console was not found or is falsy."); }
-			if(!console[method]){ $.Exception.raise($.Exception.types.ConsoleMethodNotFound, "console method "+method+" was not found or is falsy."); }
-
-			options = options || {};
-
-			_buffer += msg;
-
-			if (options !== _options.append){
-				console[method](_buffer);
-				_buffer = "";
-			}
-
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		log: function (msg, options) {
-			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
-			this.bufferLog(msg, options, "log");
-		},
-
-         /*
-		 * Public Method:
-		 * Purpose:
-		 */
-		logObj: function (obj) {
-			$.Utils.validateNumberOfArguments(1, 1, arguments.length);
-			console.log(obj);
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		warn: function(msg, options){
-			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
-			this.bufferLog(msg, options, "warn");
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		error: function(msg, options){
-			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
-			this.bufferLog(msg, options, "error");
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		clear: function(){
-			console.clear();
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		transactionBegin: function(title){
-			console.group(title);
-		},
-
-		/*
-		 * Public Method:
-		 * Purpose:
-		 */
-		transactionEnd: function(){
-			console.groupEnd();
-		}
-
-	};
-
-}(ZenCard));
-// ----------------- Main ----------------- \\
-(ZenCard.Main = function ($, JQuery){
-
-//	var _barcode_options = {
-//			"barWidth": 2,
-//			"barHeight": 100,
-//			"output": "css",
-//			"showHRI": true,
-//            "fontSize": "1em"
-//		};
-//
-    var _barcode_options = {
-			"barWidth": 0.13,
-			"barHeight": 6.25,
-			"output": "css",
-			"showHRI": true,
-            "fontSize": "1em"
-		};
-
-	return {
-
-		initialize: function(){
-            var waitTime = 1000;
-
-            if ($.Persistence.retrieve($.Constants.persistence.cardKeys)) {
-                waitTime = 0;
-            }
-
-            setTimeout(function() {
-                $.Routes.navigate("cards/list.html");
-            }, waitTime);
-		},
-
-		generate: function (code){
-
-			var el, i, barcodeDiv, success;
-
-			try{
-
-				for (i = 0; i < $.Constants.BARCODE_TYPES.length; i++){
-
-					el = $.Utils.createElement("div", {
-						"class": "barcode_generated",
-						"onclick": 'alert("selected barcode index ' + i + '");'
-					});
-
-					barcodeDiv = document.getElementById($.Constants.DIV_BARCODES);
-                    barcodeDiv.appendChild(el);
-                    success = JQuery(el).barcode(code, $.Constants.BARCODE_TYPES[i], _barcode_options);
-
-				}
-
-			}
-			catch (e){ $.Exception.handle(e); }
-		},
-        
-		loading: function(){
-			$.UI.loadView('<div class="ajax_loader"></div>');
-		}
-
-	};
-
-}(ZenCard, $));
 (ZenCard.Constants = {
 	
 	"DIV_BARCODES": "barcodes",
@@ -275,6 +50,128 @@
 //	"BARCODE_TYPES": ["ean13", "ean9", "code11", "code39", "code128", "codabar", "std25", "int25", "code93", "msi"]
 
 });
+
+(ZenCard.Exception = function ($){
+
+	return {
+
+		types: {
+			ArgumentLength: "ArgumentLength",
+			ArgumentType: "ArgumentType",
+			Argument: "Argument", 
+			DomObjectNotFound: "DomObjectNotFound",
+			MethodNotImplemented: "MethodNotImplemented",
+			InvalidState: "InvalidState",
+			TestSuite: "TestSuiteException",
+			ConsoleNotFound: "ConsoleNotFound",
+			ConsoleMethodNotFound: "ConsoleMethodNotFound",
+			UnknownPersistence: "UnknownPersistence"
+		},
+
+		handle: function(exception, reThrow){
+			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
+
+			reThrow = reThrow || false;
+
+            // TODO: find out why jsUnity stops running if line below is deleted
+			$.Utils.validateMultipleArgumentTypes(arguments, ['object', 'boolean']);
+
+			var eMsg = exception.message || "exception caught!",
+				msg = eMsg+"\n\n"+(exception.stack || "*no stack provided*")+"\n\n";
+
+
+			// TODO: make this more robust (i.e. catch errors that could mangle logging an error to non-existence console or markup), also log Exception name
+			if($.Console.isAvailable()){
+				$.Console.error(msg);
+			}
+
+            alert(msg);
+
+			if (reThrow){
+				throw exception;
+			}
+		},
+
+		raise: function(exceptionType, message, customExceptionObject){
+			$.Utils.validateNumberOfArguments(1, 3, arguments.length);
+
+			var obj = customExceptionObject || {};
+			message = message || "";
+
+			$.Utils.validateMultipleArgumentTypes([exceptionType, message, obj], ['string', 'string', 'object']);
+
+			obj.name = exceptionType;
+			obj.type = exceptionType;
+			obj.message = message;
+
+			if($.Console.isAvailable()){ $.Console.error(obj); }
+
+			throw obj;
+		}
+
+
+	};
+
+}(ZenCard));
+/*
+ * Class: Event
+ * Purpose: publish-subscribe Event class for DOM based and non-DOM based event facilitation
+ * kudos: http://blog.jcoglan.com/2010/02/21/events-theyre-not-just-for-the-dom-you-know/
+ */
+(ZenCard.Event = function ($){
+
+		var _listeners = {};
+
+		return {
+
+			eventTypes: {
+				storageUpdated: "storageUpdated",
+				ApplicationState:"ApplicationState"
+			},
+
+			on: function (eventType, listener, scope) {
+				$.Utils.validateNumberOfArguments(2, 3, arguments.length);
+				$.Utils.validateMultipleArgumentTypes(arguments, ["string", "function", "object"]);
+				var listenerList = _listeners[eventType] = _listeners[eventType] || [];
+				listenerList.push([listener, scope]);
+			},
+
+			trigger: function (eventType, args) {
+				args = args || [];
+				$.Utils.validateNumberOfArguments(1, 2, arguments.length);
+				$.Utils.validateMultipleArgumentTypes(arguments, ["string", "array"]);
+
+				if (!_listeners || !_listeners[eventType]) {
+					return;
+				}
+
+				var i, listenerList = _listeners[eventType];
+
+				for (i = 0; i < listenerList.length; i+=1) {
+					try {
+						listenerList[i][0].apply(listenerList[i][1], args);
+					}
+					catch (e) {
+						$.Exception.handle(e);
+					}
+				}
+			},
+
+			eventHasSubscriber: function (eventType){
+				$.Utils.validateNumberOfArguments(1, 1, arguments.length);
+				$.Utils.validateArgumentType(eventType, "string");
+				return _listeners[eventType] ? true : false;
+			},
+
+			getEventSubscribers: function (eventType) {
+				$.Utils.validateNumberOfArguments(1, 1, arguments.length);
+				$.Utils.validateArgumentType(eventType, "string");
+				return $.Copy(_listeners[eventType]) || [];
+			}
+
+    };
+
+}(ZenCard));
 
 // ----------------- Utils ----------------- \\
 (ZenCard.Utils = function ($){
@@ -390,12 +287,12 @@
                     }
                     else if (cleanKeys.length == 1){
                         cleanKeysString = cleanKeys[0];
+                        $.Persistence.save(categoryKey, cleanKeysString);
                     }
                     else {
                         cleanKeysString = cleanKeys.join(keyDelimiter);
+                        $.Persistence.save(categoryKey, cleanKeysString);
                     }
-
-                    $.Persistence.save(categoryKey, cleanKeysString);
                 }
             }
             catch(e) {
@@ -405,6 +302,39 @@
         }
 	};
 
+}(ZenCard));
+// clone code courtesy of: http://my.opera.com/GreyWyvern/blog/show.dml/1725165
+// but modified and tightened by Dan Silivestru, Brent Lintner
+(ZenCard.Copy = function($){
+    return (function(obj) {
+
+        var i,
+            newObj = (obj instanceof Array) ? [] : {};
+        if( typeof obj === 'number' || typeof obj === 'string' || typeof obj === 'boolean'){
+            return obj;
+        }
+
+        if(obj instanceof Date){
+            newObj = new Date(obj);
+            return newObj;
+        }
+
+        for (i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                if (obj[i] && typeof obj[i] === "object") {
+                    if (obj[i] instanceof Date) {
+                        newObj[i] = obj[i];
+                    }
+                    else {
+                        newObj[i] = $.Copy(obj[i]);
+                    }
+                } else { newObj[i] = obj[i]; }
+            }
+        }
+
+
+        return newObj;
+    });
 }(ZenCard));
 (ZenCard.Cards = function($) {
     var _card = {
@@ -431,67 +361,465 @@
 
             $.Utils.saveKeyToCategory($.Constants.persistence.cardKeys, name);
             $.Persistence.saveObject(name, card);
+        },
+
+        remove: function(name) {
+            $.Utils.removeKeyFromCategory($.Constants.persistence.cardKeys, name);
+            $.Persistence.remove(name);
         }
     }
 }(ZenCard));
-(ZenCard.Exception = function ($){
+// ----------------- Main ----------------- \\
+(ZenCard.UI = function ($, JQuery){
+
+    function _setNav(el, text, view, params){
+        el.innerHTML = text;
+
+        el.setAttribute("onmousedown", "ZenCard.Routes.navigate(" + (view ? "'" + view + "'" : "") + (params ? ", ['" + params.join(",") +"']" : "") + ")");
+    }
+
+    return {
+
+        loadView: function(str){
+            JQuery($.Constants.common.view).html(str);
+        },
+
+        // TODO; allow custom callbacks
+        setLeftNav: function(text, view, callback){
+            _setNav(document.getElementById($.Constants.common.navLeft), text, view);
+        },
+
+        setRightNav: function(text, view, params, callback){
+            _setNav(document.getElementById($.Constants.common.navRight), text, view, params);
+
+        },
+
+        setTitle: function (text){
+            JQuery($.Constants.common.headerTitle).html((text === "" || !text) ? "&nbsp;" : text);
+        },
+
+        hideHeader: function () {
+            JQuery($.Constants.common.header).addClass($.Constants.css.irrelevant);
+        },
+
+        showHeader: function () {
+            JQuery($.Constants.common.header).removeClass($.Constants.css.irrelevant);
+            this.setTitle();
+        },
+
+        showPopup: function (text) {
+            var popupDiv = document.getElementById("popup");
+            popupDiv.attributes["class"].nodeValue = "";
+            popupDiv.innerHTML = text;
+        },
+
+        hidePopup: function () {
+            var popupDiv = document.getElementById("popup");
+            popupDiv.attributes["class"].nodeValue = "irrelevant";           
+            popupDiv.innerHTML = "";
+        }
+
+
+    };
+
+}(ZenCard, $));
+(ZenCard.Routes = function($, JQuery){
+
+	var _history = [],
+		_routes = {
+
+			"index.html": function(){
+
+				$.Routes.clearHistory();
+
+
+			},
+
+			"help.html": function(){
+
+				$.UI.setLeftNav("Back");
+
+			},
+            
+			"about.html": function(){
+
+				$.UI.setLeftNav("Back");
+
+			},
+
+			// Card Specific Routes
+
+			"cards/list.html": function(){
+                var cardNames,
+                    i,
+                    cardContainer;
+                    listContainer = document.getElementById($.Constants.htmlElements.cardList);
+
+                $.UI.showHeader();
+				$.UI.setLeftNav("About", "about.html");
+				$.UI.setTitle("ZenCards");				
+				$.UI.setRightNav("+", "cards/add.html");
+
+				cardNames = $.Cards.getAllCardNames();
+                if (cardNames) {
+                    for (i = 0; i < cardNames.length; i++) {
+                        cardContainer = $.Utils.createElement("div",{
+                                            "class": "card_to_select"
+                                        });
+                        cardContainer.appendChild(
+                                    $.Utils.createElement("a",{
+                                        "onmousedown": "ZenCard.Routes.navigate('cards/barcode_select.html', ['" + cardNames[i] + "'])",
+                                        "innerHTML": cardNames[i]
+                                    })
+                                );
+                        listContainer.appendChild(cardContainer);
+                    }
+                }
+                else {
+                    $.UI.showPopup("Welcome to ZenCard!<br /><br /> Let's get started by adding a membership / loyalty card. Press the + button at the top right to start. <br /><br /> May all your cards be one...");
+                }
+			},
+
+			"cards/add.html": function(params){
+                var card;
+                if (params) {
+                    card = $.Persistence.retrieveObject(params);
+                    if (card) {
+                        JQuery("#cards_add_company_name")[0].value = card.name;
+                        JQuery("#cards_add_code")[0].value = card.code;
+                        JQuery("#add_card")[0].innerHTML = "Edit Card";
+                        JQuery("#remove_card").removeClass("irrelevant");
+                    }
+                }
+
+                $.UI.showHeader();
+				$.UI.setLeftNav("Back");
+				$.UI.setTitle("Add");
+				$.UI.setRightNav("?", "help.html");
+
+				// bind to Forms submit here
+				JQuery("#add_card").click(function (){
+                    var name = JQuery("#cards_add_company_name")[0] ? JQuery("#cards_add_company_name")[0].value : "",
+                        code = JQuery("#cards_add_code")[0] ? JQuery("#cards_add_code")[0].value : "",
+                        msg = "";
+
+                    if (name === "") {
+                        msg = "* Please enter a company/card name.\n\n";
+                    }
+                    else {
+                        if (name.length > 50) {
+                            msg = "* Company/card name must be less then 50 characters long.\n\n";
+                        }
+                    }
+
+                    if (code === "") {
+                        msg += "* Please enter the numeric barcode found on your card";
+                    }
+
+                    if (msg !== "") {
+                        alert(msg);
+                    }
+                    else {
+                        $.Cards.save(name, code);
+                        if (card && card.name !== name) {
+                            // since the name changed (i.e. the key) we need to remove the old one
+                            $.Cards.remove(card.name);
+                        }
+                        //need to remove the last two entries from history
+                        _history.pop();
+                        $.Routes.navigate("cards/barcode_select.html", [name]);
+                    }
+				});
+
+                // bind to Forms submit here
+                JQuery("#remove_card").click(function (){
+                    if(card){
+                        $.Cards.remove(card.name);
+                        // clear history
+                        _history.pop();
+                        $.Routes.navigate("cards/list.html");
+                    }
+                });
+			},
+
+			"cards/edit.html": function(){
+
+				$.UI.setLeftNav("Back");
+				$.UI.setTitle("Edit");
+				$.UI.setLeftNav("Home", $.Constants.common.defaultView);
+
+				// bind to Forms submit here
+				JQuery("#cards_edit_form button").click(function (){
+					console.log(JQuery("#cards_edit_company_name")[0].value);
+					console.log(JQuery("#cards_edit_code")[0].value);
+				});
+
+			},
+
+			"cards/barcode_select.html": function(cardName){
+                var card = $.Cards.get(cardName);
+
+
+				$.UI.setLeftNav("Back");
+				$.UI.setTitle();
+				$.UI.setRightNav("Edit", "cards/add.html", [card.name]);
+
+                document.getElementById("cardName").innerHTML = cardName;
+
+                $.Main.generate(card.code);
+
+			}
+
+		};
 
 	return {
 
-		types: {
-			ArgumentLength: "ArgumentLength",
-			ArgumentType: "ArgumentType",
-			Argument: "Argument", 
-			DomObjectNotFound: "DomObjectNotFound",
-			MethodNotImplemented: "MethodNotImplemented",
-			InvalidState: "InvalidState",
-			TestSuite: "TestSuiteException",
-			ConsoleNotFound: "ConsoleNotFound",
-			ConsoleMethodNotFound: "ConsoleMethodNotFound",
-			UnknownPersistence: "UnknownPersistence"
+		load: function(view){
+
+			return _routes[view] || null;
+
 		},
 
-		handle: function(exception, reThrow){
-			$.Utils.validateNumberOfArguments(1, 2, arguments.length);
-
-			reThrow = reThrow || false;
-
-            // TODO: find out why jsUnity stops running if line below is deleted
-			$.Utils.validateMultipleArgumentTypes(arguments, ['object', 'boolean']);
-
-			var eMsg = exception.message || "exception caught!",
-				msg = eMsg+"\n\n"+(exception.stack || "*no stack provided*")+"\n\n";
-
-
-			// TODO: make this more robust (i.e. catch errors that could mangle logging an error to non-existence console or markup), also log Exception name
-			if($.Console.isAvailable()){
-				$.Console.error(msg);
-			}
-
-            alert(msg);
-
-			if (reThrow){
-				throw exception;
-			}
+		clearHistory: function (){
+			_history = [];
 		},
 
-		raise: function(exceptionType, message, customExceptionObject){
-			$.Utils.validateNumberOfArguments(1, 3, arguments.length);
+		// TODO: add other callback in case callee wants to pass a custom callback not in Routes.
+		// Note: if view is BACK or default view (hack for now) will default to last history item
+		navigate: function (view, params){
 
-			var obj = customExceptionObject || {};
-			message = message || "";
+            $.UI.hidePopup();
 
-			$.Utils.validateMultipleArgumentTypes([exceptionType, message, obj], ['string', 'string', 'object']);
+			try{
 
-			obj.name = exceptionType;
-			obj.type = exceptionType;
-			obj.message = message;
+				if(!view){
 
-			if($.Console.isAvailable()){ $.Console.error(obj); }
+                    // if im going back I need to remove myself first
+					_history.pop();
 
-			throw obj;
+					var lastView = _history.pop();
+
+					view = (lastView && lastView[0]) || $.Constants.common.defaultView;
+					params = (lastView && lastView[2]) || null;
+
+				}
+				
+				// TODO: save callback to history (and call it) only if its a custom one (and not Routes)
+				$.Main.loading();
+
+				var xhr = new XMLHttpRequest(),
+					callback;
+
+				xhr.onreadystatechange = function (){
+
+					if(this.readyState === 4){
+						
+						try{
+
+							$.UI.loadView(this.responseText);
+
+							callback = $.Routes.load(view);
+
+							if (callback){
+								callback.apply(null, params);
+							}
+
+							$.Routes.historyChanged(view, callback, params);
+							
+						}
+						catch (e){
+							$.Exception.handle(e);
+						}
+
+					}
+
+				};
+
+				xhr.open("GET", $.Constants.common.viewDirectory + view);
+
+				xhr.send(null);
+			}
+			catch (e){
+				$.Exception.handle(e);
+			}
+
+		},
+		
+		historyChanged: function(view, callback, params){
+			_history.push([view, callback, params]);
 		}
 
+	};
+
+}(ZenCard, $));
+// ----------------- Main ----------------- \\
+(ZenCard.Main = function ($, JQuery){
+
+//	var _barcode_options = {
+//			"barWidth": 2,
+//			"barHeight": 100,
+//			"output": "css",
+//			"showHRI": true,
+//            "fontSize": "1em"
+//		};
+//
+    var _barcode_options = {
+			"barWidth": 0.13,
+			"barHeight": 6.25,
+			"output": "css",
+			"showHRI": true,
+            "fontSize": "1em"
+		};
+
+	return {
+
+		initialize: function(){
+            var waitTime = 1000;
+
+            if ($.Persistence.retrieve($.Constants.persistence.cardKeys)) {
+                waitTime = 0;
+            }
+
+            setTimeout(function() {
+                $.Routes.navigate("cards/list.html");
+            }, waitTime);
+		},
+
+		generate: function (code){
+
+			var el, i, barcodeDiv, success;
+
+			try{
+
+				for (i = 0; i < $.Constants.BARCODE_TYPES.length; i++){
+
+					el = $.Utils.createElement("div", {
+						"class": "barcode_generated",
+						"onclick": 'alert("selected barcode index ' + i + '");'
+					});
+
+					barcodeDiv = document.getElementById($.Constants.DIV_BARCODES);
+                    barcodeDiv.appendChild(el);
+                    success = JQuery(el).barcode(code, $.Constants.BARCODE_TYPES[i], _barcode_options);
+
+				}
+
+			}
+			catch (e){ $.Exception.handle(e); }
+		},
+        
+		loading: function(){
+			$.UI.loadView('<div class="ajax_loader"></div>');
+		}
+
+	};
+
+}(ZenCard, $));
+/*
+ * Class: Console
+ * Purpose: Perform various functions with the browser javasript console
+ */
+(ZenCard.Console = function ($) {
+
+
+	var _buffer = "",
+			_options = {
+			"append": "append"
+		};
+
+	return {
+
+		isAvailable: function(){
+			return window && window.console ? true : false;
+		},
+
+		/*
+		 * Public Method: returns all available logging options (only supports append at this time)
+		 * Purpose:
+		 */
+		getOptions: function (){
+			return $.Copy(_options);
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		bufferLog: function(msg, options, method){
+
+			if(!console){ $.Exception.raise($.Exception.types.ConsoleNotFound, "console was not found or is falsy."); }
+			if(!console[method]){ $.Exception.raise($.Exception.types.ConsoleMethodNotFound, "console method "+method+" was not found or is falsy."); }
+
+			options = options || {};
+
+			_buffer += msg;
+
+			if (options !== _options.append){
+				console[method](_buffer);
+				_buffer = "";
+			}
+
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		log: function (msg, options) {
+			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
+			this.bufferLog(msg, options, "log");
+		},
+
+         /*
+		 * Public Method:
+		 * Purpose:
+		 */
+		logObj: function (obj) {
+			$.Utils.validateNumberOfArguments(1, 1, arguments.length);
+			console.log(obj);
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		warn: function(msg, options){
+			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
+			this.bufferLog(msg, options, "warn");
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		error: function(msg, options){
+			$.Utils.validateNumberOfArguments(0, 2, arguments.length);
+			this.bufferLog(msg, options, "error");
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		clear: function(){
+			console.clear();
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		transactionBegin: function(title){
+			console.group(title);
+		},
+
+		/*
+		 * Public Method:
+		 * Purpose:
+		 */
+		transactionEnd: function(){
+			console.groupEnd();
+		}
 
 	};
 
@@ -520,16 +848,13 @@
 	// attempt to detect persistence
 	function _detect(){
         try {
-            if(window && window.localStorage){
-                _currentPersistence = _persistenceTypes.localstorage;
-            }
-            else if(window && window.Widget){
+            if(window && window.Widget){
                 Widget.setPreferenceForKey("tinyHippos_key", "tinyHippos_value");
 
-                if(Widget.preferenceForKey("tinyHippos_key") = "tinyHippos_value"){
+                if(Widget.preferenceForKey("tinyHippos_key") === "tinyHippos_value"){
                     _currentPersistence = _persistenceTypes.Widget_1_0;
                 }
-                else if (Widget.preferenceForKey("tinyHippos_value") = "tinyHippos_key") {
+                else if (Widget.preferenceForKey("tinyHippos_value") === "tinyHippos_key") {
                     _currentPersistence = _persistenceTypes.Widget_1_2_1;
                 }
                 else {
@@ -538,6 +863,9 @@
             }
             else if(window && window.widget){
                 _currentPersistence = _persistenceTypes.widget;
+            }
+            else if(window && window.localStorage){
+                _currentPersistence = _persistenceTypes.localstorage;
             }
             else if (JQuery.cookie) {
                 _currentPersistence = _persistenceTypes.cookie;
@@ -562,11 +890,11 @@
 				break;
 
 			case _persistenceTypes.Widget_1_0:
-				Widget.setPreferenceForKey(value, prefix+key);
+                Widget.setPreferenceForKey(prefix+key, value);
 				break;
 
 			case _persistenceTypes.Widget_1_2_1:
-				Widget.setPreferenceForKey(prefix+key, value);
+                Widget.setPreferenceForKey(value, prefix+key);
 				break;
 
 			case _persistenceTypes.widget:
@@ -624,10 +952,6 @@
 
 		switch(_currentPersistence){
 			
-			case _persistenceTypes.localstorage:
-				result = localStorage.removeItem(prefix + key);
-				break;
-
 			case _persistenceTypes.Widget_1_0:
 				result = Widget.setPreferenceForKey(prefix + key, null);
 				break;
@@ -639,6 +963,10 @@
 			case _persistenceTypes.widget:
 				result = widget.setPreferenceForKey(null, prefix + key);
 				break;
+
+            case _persistenceTypes.localstorage:
+                result = localStorage.removeItem(prefix + key);
+                break;
 
             case _persistenceTypes.cookie:
                 result = JQuery.cookie(prefix+key, null);
@@ -742,302 +1070,4 @@
 		}
 
 	};
-}(ZenCard, $));
-// clone code courtesy of: http://my.opera.com/GreyWyvern/blog/show.dml/1725165
-// but modified and tightened by Dan Silivestru, Brent Lintner
-(ZenCard.Copy = function($){
-    return (function(obj) {
-
-        var i,
-            newObj = (obj instanceof Array) ? [] : {};
-        if( typeof obj === 'number' || typeof obj === 'string' || typeof obj === 'boolean'){
-            return obj;
-        }
-
-        if(obj instanceof Date){
-            newObj = new Date(obj);
-            return newObj;
-        }
-
-        for (i in obj) {
-            if (obj.hasOwnProperty(i)) {
-                if (obj[i] && typeof obj[i] === "object") {
-                    if (obj[i] instanceof Date) {
-                        newObj[i] = obj[i];
-                    }
-                    else {
-                        newObj[i] = $.Copy(obj[i]);
-                    }
-                } else { newObj[i] = obj[i]; }
-            }
-        }
-
-
-        return newObj;
-    });
-}(ZenCard));
-
-/*
- * Class: Event
- * Purpose: publish-subscribe Event class for DOM based and non-DOM based event facilitation
- * kudos: http://blog.jcoglan.com/2010/02/21/events-theyre-not-just-for-the-dom-you-know/
- */
-(ZenCard.Event = function ($){
-
-		var _listeners = {};
-
-		return {
-
-			eventTypes: {
-				storageUpdated: "storageUpdated",
-				ApplicationState:"ApplicationState"
-			},
-
-			on: function (eventType, listener, scope) {
-				$.Utils.validateNumberOfArguments(2, 3, arguments.length);
-				$.Utils.validateMultipleArgumentTypes(arguments, ["string", "function", "object"]);
-				var listenerList = _listeners[eventType] = _listeners[eventType] || [];
-				listenerList.push([listener, scope]);
-			},
-
-			trigger: function (eventType, args) {
-				args = args || [];
-				$.Utils.validateNumberOfArguments(1, 2, arguments.length);
-				$.Utils.validateMultipleArgumentTypes(arguments, ["string", "array"]);
-
-				if (!_listeners || !_listeners[eventType]) {
-					return;
-				}
-
-				var i, listenerList = _listeners[eventType];
-
-				for (i = 0; i < listenerList.length; i+=1) {
-					try {
-						listenerList[i][0].apply(listenerList[i][1], args);
-					}
-					catch (e) {
-						$.Exception.handle(e);
-					}
-				}
-			},
-
-			eventHasSubscriber: function (eventType){
-				$.Utils.validateNumberOfArguments(1, 1, arguments.length);
-				$.Utils.validateArgumentType(eventType, "string");
-				return _listeners[eventType] ? true : false;
-			},
-
-			getEventSubscribers: function (eventType) {
-				$.Utils.validateNumberOfArguments(1, 1, arguments.length);
-				$.Utils.validateArgumentType(eventType, "string");
-				return $.Copy(_listeners[eventType]) || [];
-			}
-
-    };
-
-}(ZenCard));
-
-(ZenCard.Routes = function($, JQuery){
-
-	var _history = [],
-		_routes = {
-
-			"index.html": function(){
-
-				$.Routes.clearHistory();
-
-
-			},
-
-			"help.html": function(){
-
-				$.UI.setLeftNav("Back");
-
-			},
-            
-			"about.html": function(){
-
-				$.UI.setLeftNav("Back");
-
-			},
-
-			// Card Specific Routes
-
-			"cards/list.html": function(){
-                var cardNames,
-                    i,
-                    cardContainer;
-                    listContainer = document.getElementById($.Constants.htmlElements.cardList);
-
-                $.UI.showHeader();
-				$.UI.setLeftNav("About", "about.html");
-				$.UI.setTitle("ZenCards");				
-				$.UI.setRightNav("+", "cards/add.html");
-
-				cardNames = $.Cards.getAllCardNames();
-                if (cardNames) {
-                    for (i = 0; i < cardNames.length; i++) {
-                        cardContainer = $.Utils.createElement("div",{
-                                            "class": "card_to_select"
-                                        });
-                        cardContainer.appendChild(
-                                    $.Utils.createElement("a",{
-                                        "onmousedown": "ZenCard.Routes.navigate('cards/barcode_select.html', ['" + cardNames[i] + "'])",
-                                        "innerHTML": cardNames[i]
-                                    })
-                                );
-                        listContainer.appendChild(cardContainer);
-                    }
-                }
-                else {
-                    $.UI.showPopup("Welcome to ZenCard!<br /><br /> Let's get started by adding a membership / loyalty card. Press the + button at the top right to start. <br /><br /> May all your cards be one...");
-                }
-			},
-
-			"cards/add.html": function(){
-
-                $.UI.showHeader();
-				$.UI.setLeftNav("Back");
-				$.UI.setTitle("Add");
-				$.UI.setRightNav("?", "help.html");
-
-				// bind to Forms submit here
-				JQuery("#cards_add_form button").click(function (){
-                    var name = JQuery("#cards_add_company_name")[0] ? JQuery("#cards_add_company_name")[0].value : "",
-                        code = JQuery("#cards_add_code")[0] ? JQuery("#cards_add_code")[0].value : "",
-                        msg = "";
-
-                    if (name === "") {
-                        msg = "* Please enter a company/card name.\n\n";
-                    }
-                    else {
-                        if (name.length > 50) {
-                            msg = "* Company/card name must be less then 50 characters long.\n\n";
-                        }
-                    }
-
-                    if (code === "") {
-                        msg += "* Please enter the numeric barcode found on your card";
-                    }
-
-                    if (msg !== "") {
-                        alert(msg);
-                    }
-                    else {
-                        $.Cards.save(JQuery("#cards_add_company_name")[0].value, JQuery("#cards_add_code")[0].value);
-                        $.Routes.navigate("cards/barcode_select.html", [name]);
-                    }
-				});
-
-			},
-
-			"cards/edit.html": function(){
-
-				$.UI.setLeftNav("Back");
-				$.UI.setTitle("Edit");
-				$.UI.setLeftNav("Home", $.Constants.common.defaultView);
-
-				// bind to Forms submit here
-				JQuery("#cards_edit_form button").click(function (){
-					console.log(JQuery("#cards_edit_company_name")[0].value);
-					console.log(JQuery("#cards_edit_code")[0].value);
-				});
-
-			},
-
-			"cards/barcode_select.html": function(cardName){
-                var card;
-
-				$.UI.setLeftNav("Back");
-				$.UI.setTitle();
-				$.UI.setRightNav("?", "help.html");
-                card = $.Cards.get(cardName);
-
-                document.getElementById("cardName").innerHTML = cardName;
-
-                $.Main.generate(card.code);
-
-			}
-
-		};
-
-	return {
-
-		load: function(view){
-
-			return _routes[view] || null;
-
-		},
-
-		clearHistory: function (){
-			_history = [];
-		},
-
-		// TODO: add other callback in case callee wants to pass a custom callback not in Routes.
-		// Note: if view is BACK or default view (hack for now) will default to last history item
-		navigate: function (view, params){
-
-            $.UI.hidePopup();
-
-			try{
-
-				if(!view){
-
-                    // if im going back I need to remove myself first
-					_history.pop();
-
-					var lastView = _history.pop();
-
-					view = (lastView && lastView[0]) || $.Constants.common.defaultView;
-					params = (lastView && lastView[2]) || null;
-
-				}
-				
-				// TODO: save callback to history (and call it) only if its a custom one (and not Routes)
-				$.Main.loading();
-
-				var xhr = new XMLHttpRequest(),
-					callback;
-
-				xhr.onreadystatechange = function (){
-
-					if(this.readyState === 4){
-						
-						try{
-
-							$.UI.loadView(this.responseText);
-
-							callback = $.Routes.load(view);
-
-							if (callback){
-								callback.apply(null, params);
-							}
-
-							$.Routes.historyChanged(view, callback, params);
-							
-						}
-						catch (e){
-							$.Exception.handle(e);
-						}
-
-					}
-
-				};
-
-				xhr.open("GET", $.Constants.common.viewDirectory + view);
-
-				xhr.send(null);
-			}
-			catch (e){
-				$.Exception.handle(e);
-			}
-
-		},
-		
-		historyChanged: function(view, callback, params){
-			_history.push([view, callback, params]);
-		}
-
-	};
-
 }(ZenCard, $));
