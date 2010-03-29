@@ -41,8 +41,20 @@
             return this;
         },
 
-        setBodyBgColour: function(){
+        setBodyBgColour: function(colour){
 
+			try{
+				var bodyStyle = $.Utils.getAllStylesheetRules(".layout"),
+				viewStyle = $.Utils.getAllStylesheetRules(".layout .view");
+
+				bodyStyle[0].style.backgroundColor = colour;	
+				viewStyle[0].style.backgroundColor = colour;
+			}
+			catch (e){
+				$.Exception.handle(e);					
+			}
+
+			return this;
         },
 
         showPopup: function (text) {

@@ -82,6 +82,30 @@
 			}
 		},
 
+		getAllStylesheetRules: function (title){
+			this.validateNumberOfArguments(1, 1, arguments.length);
+
+			var i, x, sheet, rules, styles_array = [];
+
+			// get style sheet according to title
+			for (i = 0; i < document.styleSheets.length; i += 1) {
+
+				sheet = document.styleSheets[i];
+				rules = sheet.cssRules;
+
+				if (rules){
+					for (x = 0; x < rules.length; x += 1) {
+
+						if (rules[x].selectorText && rules[x].selectorText === (title.toString())) {
+							styles_array.push(rules[x]);
+						}
+					}
+				}
+			}
+
+			return(styles_array);
+		},
+
         saveKeyToCategory: function (categoryKey, itemKey) {
             var value = $.Persistence.retrieve(categoryKey);
 

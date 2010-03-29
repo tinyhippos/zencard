@@ -1,14 +1,6 @@
 // ----------------- Main ----------------- \\
 (ZenCard.Main = function ($, JQuery){
 
-//	var _barcode_options = {
-//			"barWidth": 2,
-//			"barHeight": 100,
-//			"output": "css",
-//			"showHRI": true,
-//            "fontSize": "1em"
-//		};
-//
     var _barcode_options = {
 			"barWidth": 0.13,
 			"barHeight": 6.25,
@@ -22,7 +14,7 @@
 		initialize: function(){
             $.Persistence.detect();
             
-            var waitTime = 1000;
+            var waitTime = 3000;
 
             if ($.Persistence.retrieve($.Constants.persistence.cardKeys)) {
                 waitTime = 0;

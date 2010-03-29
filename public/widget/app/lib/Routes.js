@@ -5,20 +5,22 @@
 
 			"index.html": function(){
 
-				$.Routes.clearHistory();
-
+				$.Routes.clearHistory()
+				    .setBodyBgColour("#FFFFFF");
 
 			},
 
 			"help.html": function(){
 
-				$.UI.setLeftNav("Back");
+				$.UI.setLeftNav("Back")
+				    .setBodyBgColour("#FFFFFF");
 
 			},
             
 			"about.html": function(){
 
-				$.UI.setLeftNav("Back");
+				$.UI.setLeftNav("Back")
+				    .setBodyBgColour("#FFFFFF");
 
 			},
 
@@ -34,7 +36,8 @@
                     .showHeader()
                     .setLeftNav("About", "about.html")
 				    .setTitle("Select")
-				    .setRightNav("+", "cards/add.html");
+				    .setRightNav("+", "cards/add.html")
+				    .setBodyBgColour("#FFFFFF");
 
 				cardNames = $.Cards.getAllCardNames();
                 if (cardNames) {
@@ -72,7 +75,8 @@
                     .showHeader()
                     .setLeftNav("Back")
                     .setTitle("Add")
-                    .setRightNav("?", "help.html");
+                    .setRightNav("?", "help.html")
+				    .setBodyBgColour("#231F20");
 
 				// bind to Forms submit here
 				JQuery("#add_card").click(function (){
@@ -128,7 +132,8 @@
 
 				$.UI.setLeftNav("Back")
                     .setTitle()
-				    .setRightNav("Edit", "cards/add.html", [card.name]);
+				    .setRightNav("Edit", "cards/add.html", [card.name])
+				    .setBodyBgColour("#231F20");
 
                 document.getElementById("cardName").innerHTML = cardName;
 

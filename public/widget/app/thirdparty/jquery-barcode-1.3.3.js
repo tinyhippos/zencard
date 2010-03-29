@@ -12,6 +12,10 @@
  * 	dual licence : 	http://www.cecill.info/licences/Licence_CeCILL_V2-fr.html
  *   				http://www.gnu.org/licenses/gpl.html
  *
+ * 			-------------------------------------------------------------------------------
+ * 		---->  (March 28/2010) NOTE: Modified by Dan Silivestru to render in em vs. px 
+ *  		-------------------------------------------------------------------------------
+ *
  *  Managed :
  *     
  *  standard 2 of 5 (std25)
