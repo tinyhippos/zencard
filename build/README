@@ -1,8 +1,0 @@
-Some ruby code to do some simple things for deployment such as compressing javascript etc.
-
-Uses: Ruby 1.9.1 (or 1.8)
-
-require 'optparse' 
-require 'ostruct'
-require 'parseconfig'
-require 'fileutils'
