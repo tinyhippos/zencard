@@ -1,92 +1,83 @@
-/*
- * Globals
- */
+/* -------------------------- Global & Resets -------------------------- */
 
-html, body{
-	margin: 0;
-	padding: 0;
-	border: 0;
-	width: 100%;
-	height: 100%;
-}
-body{ font: 0.67em Helvetica, Verdana, Sans-serif; }
+    html, body{
+        margin: 0;
+        padding: 0;
+        border: 0;
+        width: 100%;
+        height: 100%;
+    }
+    body{ font: 1em Helvetica, Verdana, Sans-serif; }
 
-a{
-	outline: none;
-	text-decoration: underline;
-	text-transform: capitalize;
-	cursor: pointer;
-	color: #EEEEEE;
-}
+    a{
+        outline: none;
+        text-decoration: underline;
+        text-transform: capitalize;
+        cursor: pointer;
+        color: #EEEEEE;
+    }
 
-img{  border: 0; margin: 0; padding: 0; }
+    img{  border: 0; margin: 0; padding: 0; }
 
-table, tr, td{
-	border: 0;
-	margin: 0;
-	padding: 0;
-}
+    table, tr, td{
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
 
-input:hover, textarea:hover, select:hover, button:hover{
-	color: #777777;
-	background: #F0F0F0;
-	cursor: pointer;
-}
+    input:hover, textarea:hover, select:hover, button:hover{
+        color: #777777;
+        background: #F0F0F0;
+        cursor: pointer;
+    }
 
-textarea, input, button, select{
-	background: #EEEEEE;
-	color: #1E1E1E;
-	border: 1px solid #CCCCCC;
-	font-size: 1em;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
-}
+    textarea, input, button, select{
+        background: #EEEEEE;
+        color: #1E1E1E;
+        border: 1px solid #CCCCCC;
+        font-size: 1em;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius: 8px;
+    }
 
-h1, h2, h3, p{ margin: 0 0 1em 0; }
+    h1, h2, h3, p{ margin: 0 0 1em 0; }
 
-h1, h2, h3{ text-transform: capitalize; font-weight: bold; font-size: 1.33em; }
+    h1, h2, h3{ text-transform: capitalize; font-weight: bold; font-size: 1.33em; }
 
-h1 { font-size: 1.33em; }
+    h1 { font-size: 1.33em; }
 
-h2{ font-size: 1.14em; }
+    h2{ font-size: 1.14em; }
 
-h3{ font-size: 1.00em; }
+    h3{ font-size: 1.00em; }
 
-.irrelevant{ display: none; }
+    .irrelevant{ display: none; }
 
-/*
- * Main Layout
- */
+/* -------------------------- Main Layout -------------------------- */
 
-.layout{
-	width: 100%;
-	height: 100%;
-    position: relative;
-    background: #FFFFFF;
-}
+    .layout{
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background: #FFFFFF;
+    }
 
-
-
-/*
- * Header
- */
-
-.layout .header{
-	/*background: -webkit-gradient(linear, 0% -50%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(0, 0, 0)));*/
-    background: url('images/greyheadinggradient.png') repeat-x center;
-	height: 4.38em;
-    width: 100%;
-    z-index: 100;
-    position: relative;
-}
+/* -------------------------- Header -------------------------- */
+    .layout .header{
+        /*background: -webkit-gradient(linear, 0% -50%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(0, 0, 0)));*/
+        background: url('images/greyheadinggradient.png') repeat-x center;
+        height: 4.38em;
+        width: 100%;
+        z-index: 100;
+        position: relative;
+    }
 
     .layout .header h1{
         color: #F0F0F0;
         text-align: center;
         position: relative;
         z-index: 100;
-        top: 0.91em;
+        top: 30%;
         font-size: 1.69em;
     }
 
@@ -159,179 +150,197 @@ h3{ font-size: 1.00em; }
     }
 
 
-/*
- * Views
- */
+/* -------------------------- View Container -------------------------- */
 
-.layout .view{
-	padding: 0;
-	overflow: auto;
-    color: #000000;
-    z-index: 60;
-    background: #FFFFFF;
+    .layout .view{
+        padding: 0;
+        overflow: auto;
+        color: #000000;
+        z-index: 60;
+        background: #FFFFFF;
 
-}
-
-/*
- * Barcode Select View
- */
-
-#cardName{
-    text-align: center;
-    font-size: 2em;
-    font-weight: bold;
-    color: #76A956;
-    margin-top: 0.5em;
-
-}
-
-.barcode_generated{
-	position: relative;
-	z-index: 600;
-	background: #FFFFFF;
-    margin: 5em auto 0 auto;
-}
-
-.barcode_generated object{
-	overflow: hidden;
-	position: relative;
-	z-index: 90;
-}
-
-.layout .view #barcodes{
-    margin: 10px;
-    overflow: hidden;
-}
+    }
 
 
+/* -------------------------- Barcode Select View -------------------------- */
 
-/*
- * list view
- */
-.card_to_select{
-	padding: .5em 1.5em;
-	border-bottom: 1px solid #CCCCCC;
-	font-weight: bold;
-	font-size: 1.17em;
-}
+    #cardName{
+        text-align: center;
+        font-size: 2em;
+        font-weight: bold;
+        color: #76A956;
+        margin-top: 0.5em;
 
+    }
 
-/*
- * Ajax Loader
- */
-.ajax_loader{
-	background: url('images/loader_ajax.gif') no-repeat;
-	width: 35px;
-	height: 35px;
-	margin: 50% auto;
-	position: relative;
-}
+    .barcode_generated{
+        position: relative;
+        z-index: 600;
+        background: #FFFFFF;
+        margin: 5em auto 0 auto;
+    }
 
-/*
- * Add View
- */
-.add_bg{
-    background: #272836 url('images/addscreenbg.png') repeat-x 0 -10em;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    z-index: 61;
-}
+    .barcode_generated object{
+        overflow: hidden;
+        position: relative;
+        z-index: 90;
+    }
 
-#cards_add_form{
-    position: relative;
-    z-index: 62;
-    color: #FFFFFF;
-    padding-top: 1.22em;
-}
-
-#cards_add_form label{
-    font-size: 1.22em;
-    color: #FFFFFF;
-    margin: 0 2%;
-    width: 96%;
-    padding-left: 0.5em;
-    text-shadow: gray 1px 1px 1px;
-}
-
-#cards_add_form input{
-    margin: 0.5em 2%;
-    width: 94%;
-    padding: 0.5em 1%;
-    font-size: 1.22em;
-}
-
-#cards_add_form div.card_button{
-    text-align: center;
-    margin-bottom: 0.5em;
-}
-
-#cards_add_form div.card_button_top{
-    margin-top: 3.5em;
-}
-
-#cards_add_form div.card_button a{
-    text-align: center;
-    width: 17.44em;
-    height: 2.75em;
-    position: relative;
-    text-decoration: none;
-}
-
-#cards_add_form div.card_button a img{
-    width: 17.44em;
-    height: 2.75em;
-}
-
-#cards_add_form div.card_button a span{
-    position: absolute;
-    width: 17.44em;
-    left: 0;
-    margin-top: 0.75em;
-}
-
-/*
- * Home View
- */
-.home_bg{
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    overflow: hidden;
-    text-align: center;
-    background: #000000;
-    color: #76A956;
-}
-.home_loader{
-    background: #272836 url('images/home-loader.gif') no-repeat;
-    height: 15px;
-    width: 128px;
-    margin: 20px auto 20px auto;
-}
-.home_bg img{
-    width: 11.54em;
-    margin: 20px auto 0 auto;
-}
+    .layout .view #barcodes{
+        margin: 10px;
+        overflow: hidden;
+    }
 
 
+/* -------------------------- List View -------------------------- */
 
-/*
- * popup
- */
+    .card_to_select{
+        padding: .5em 5em .5em 1em;
+        border-bottom: 1px solid #CCCCCC;
+        font-weight: bold;
+        font-size: 1.25em;
+        display: block;
+        text-decoration: none;
+    }
 
-#popup {
-    width: 70%;
-    overflow: auto;
-    z-index: 900;
-    position: relative;
-    margin: 2em auto;
-    padding: 1em;
-    background-color: #76A956;
-    color: #FFFFFF;
-    font-size: 1.38em;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-}
+    .card_not_selected{
+        color: #000000;
+        background: url(images/littlearrow.png) no-repeat 95% center;
+    }
+
+    .card_selected, .card_not_selected:hover{
+        background: #76A956 url(images/whitecarrot.png) no-repeat 95% center;
+        color: #FFFFFF;
+    }
+
+
+/* -------------------------- Ajax Loader -------------------------- */
+
+    .ajax_loader{
+        background: url('images/loader_ajax.gif') no-repeat;
+        width: 35px;
+        height: 35px;
+        margin: 50% auto;
+        position: relative;
+    }
+
+
+/* -------------------------- Add Card View -------------------------- */
+
+    .add_bg{
+        background: #231F20 url('images/greybggradient.png') repeat-x top;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        z-index: 61;
+    }
+
+    #cards_add_form{
+        position: relative;
+        z-index: 62;
+        color: #FFFFFF;
+        padding-top: 1.25em;
+    }
+
+    #cards_add_form label{
+        font-size: 1.25em;
+        color: #FFFFFF;
+        margin: 0 2%;
+        width: 96%;
+        padding-left: 0.5em;
+        text-shadow: #666666 1px 1px 2px;
+        font-weight: bold;
+    }
+
+    #cards_add_form input{
+        margin: 0.5em 2% 1em 2%;
+        width: 94%;
+        padding: 0.5em 1%;
+        font-size: 1.25em;
+    }
+
+    #cards_add_form div.card_button{
+        text-align: center;
+        margin-bottom: 0.5em;
+    }
+
+    #cards_add_form div.card_button_top{
+        margin-top: 3.5em;
+    }
+
+    #cards_add_form div.card_button a{
+        text-align: center;
+        width: 17.06em;
+        height: 2.44em;
+        position: relative;
+        text-decoration: none;
+    }
+
+    #cards_add_form div.card_button a img{
+        width: 17.06em;
+        height: 2.44em;
+    }
+
+    #cards_add_form div.card_button a div{
+        position: absolute;
+        width: 100%;
+        left: 0;
+        margin-top: 0.45em;
+        font-size: 1.25em;
+        font-weight: bold;
+    }
+
+
+/* -------------------------- Home View -------------------------- */
+
+    .home_bg{
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        overflow: hidden;
+        text-align: center;
+        background: #231F20;
+        color: #76A956;
+    }
+    .home_loader{
+        background: #272836 url('images/home-loader.gif') no-repeat;
+        height: 15px;
+        width: 128px;
+        margin: 20px auto 20px auto;
+    }
+    .home_bg img{
+        max-width: 14.06em;
+        margin: 20px auto 0 auto;
+    }
+
+    .home_copyright{
+        font-size: 1em;
+        font-weight: bold;
+    }
+
+    .home_footer{
+        position: absolute;
+        bottom: 2em;
+        width: 90%;
+        padding: 0 5%;
+    }
+
+
+/* -------------------------- Popup -------------------------- */
+
+    #popup {
+        width: 70%;
+        overflow: auto;
+        z-index: 900;
+        position: relative;
+        margin: 2em auto;
+        padding: 1em;
+        background-color: #76A956;
+        color: #FFFFFF;
+        font-size: 1.38em;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+    }

@@ -30,24 +30,25 @@
                     cardContainer;
                     listContainer = document.getElementById($.Constants.htmlElements.cardList);
 
-                $.UI.showHeader();
-				$.UI.setLeftNav("About", "about.html");
-				$.UI.setTitle("ZenCards");				
-				$.UI.setRightNav("+", "cards/add.html");
+                $.UI
+                    .showHeader()
+                    .setLeftNav("About", "about.html")
+				    .setTitle("Select")
+				    .setRightNav("+", "cards/add.html");
 
 				cardNames = $.Cards.getAllCardNames();
                 if (cardNames) {
                     for (i = 0; i < cardNames.length; i++) {
-                        cardContainer = $.Utils.createElement("div",{
-                                            "class": "card_to_select"
-                                        });
-                        cardContainer.appendChild(
+
+                        listContainer.appendChild(
                                     $.Utils.createElement("a",{
-                                        "onmousedown": "ZenCard.Routes.navigate('cards/barcode_select.html', ['" + cardNames[i] + "'])",
+                                        "onmouseup": "ZenCard.Routes.navigate('cards/barcode_select.html', ['" + cardNames[i] + "'])",
+                                        "class": "card_to_select card_not_selected",
+                                        "onmousedown": '$(this).removeClass("card_not_selected").addClass("card_selected")',
+                                        "onclick": '$(this).removeClass("card_not_selected").addClass("card_selected")',
                                         "innerHTML": cardNames[i]
                                     })
                                 );
-                        listContainer.appendChild(cardContainer);
                     }
                 }
                 else {
@@ -62,15 +63,16 @@
                     if (card) {
                         JQuery("#cards_add_company_name")[0].value = card.name;
                         JQuery("#cards_add_code")[0].value = card.code;
-                        JQuery("#add_card")[0].innerHTML = "Edit Card";
+                        JQuery("#add_card div")[0].innerHTML = "Edit Card";
                         JQuery("#remove_card").removeClass("irrelevant");
                     }
                 }
 
-                $.UI.showHeader();
-				$.UI.setLeftNav("Back");
-				$.UI.setTitle("Add");
-				$.UI.setRightNav("?", "help.html");
+                $.UI
+                    .showHeader()
+                    .setLeftNav("Back")
+                    .setTitle("Add")
+                    .setRightNav("?", "help.html");
 
 				// bind to Forms submit here
 				JQuery("#add_card").click(function (){
@@ -120,27 +122,13 @@
                 });
 			},
 
-			"cards/edit.html": function(){
-
-				$.UI.setLeftNav("Back");
-				$.UI.setTitle("Edit");
-				$.UI.setLeftNav("Home", $.Constants.common.defaultView);
-
-				// bind to Forms submit here
-				JQuery("#cards_edit_form button").click(function (){
-					console.log(JQuery("#cards_edit_company_name")[0].value);
-					console.log(JQuery("#cards_edit_code")[0].value);
-				});
-
-			},
-
 			"cards/barcode_select.html": function(cardName){
                 var card = $.Cards.get(cardName);
 
 
-				$.UI.setLeftNav("Back");
-				$.UI.setTitle();
-				$.UI.setRightNav("Edit", "cards/add.html", [card.name]);
+				$.UI.setLeftNav("Back")
+                    .setTitle()
+				    .setRightNav("Edit", "cards/add.html", [card.name]);
 
                 document.getElementById("cardName").innerHTML = cardName;
 
@@ -163,7 +151,6 @@
 		},
 
 		// TODO: add other callback in case callee wants to pass a custom callback not in Routes.
-		// Note: if view is BACK or default view (hack for now) will default to last history item
 		navigate: function (view, params){
 
             $.UI.hidePopup();
