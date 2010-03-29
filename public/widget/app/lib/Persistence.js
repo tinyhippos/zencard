@@ -142,9 +142,11 @@
 
                     if(Widget.preferenceForKey("tinyHippos_key") === "tinyHippos_value"){
                         _currentPersistence = _persistenceTypes.Widget_1_0;
+                        Widget.setPreferenceForKey("tinyHippos_key", null);
                     }
                     else if (Widget.preferenceForKey("tinyHippos_value") === "tinyHippos_key") {
                         _currentPersistence = _persistenceTypes.Widget_1_2_1;
+                        Widget.setPreferenceForKey(null, "tinyHippos_value");
                     }
                     else {
                         $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism for Widget.");

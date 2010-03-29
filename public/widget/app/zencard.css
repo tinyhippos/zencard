@@ -9,7 +9,7 @@ html, body{
 	width: 100%;
 	height: 100%;
 }
-body{ font: 1em Helvetica, Verdana, Sans-serif; }
+body{ font: 0.67em Helvetica, Verdana, Sans-serif; }
 
 a{
 	outline: none;
@@ -36,12 +36,11 @@ input:hover, textarea:hover, select:hover, button:hover{
 textarea, input, button, select{
 	background: #EEEEEE;
 	color: #1E1E1E;
-	padding: 0.1em 0.4em;
 	border: 1px solid #CCCCCC;
 	font-size: 1em;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
 }
 
 h1, h2, h3, p{ margin: 0 0 1em 0; }
@@ -87,7 +86,7 @@ h3{ font-size: 1.00em; }
         text-align: center;
         position: relative;
         z-index: 100;
-        top: 25%;
+        top: 0.91em;
         font-size: 1.69em;
     }
 
@@ -232,10 +231,64 @@ h3{ font-size: 1.00em; }
  * Add View
  */
 .add_bg{
-    background: #272836 url('images/addscreenbg.png') repeat-x;
+    background: #272836 url('images/addscreenbg.png') repeat-x 0 -10em;
+    position: absolute;
     height: 100%;
     width: 100%;
-    top: 70px;
+    top: 0;
+    z-index: 61;
+}
+
+#cards_add_form{
+    position: relative;
+    z-index: 62;
+    color: #FFFFFF;
+    padding-top: 1.22em;
+}
+
+#cards_add_form label{
+    font-size: 1.22em;
+    color: #FFFFFF;
+    margin: 0 2%;
+    width: 96%;
+    padding-left: 0.5em;
+    text-shadow: gray 1px 1px 1px;
+}
+
+#cards_add_form input{
+    margin: 0.5em 2%;
+    width: 94%;
+    padding: 0.5em 1%;
+    font-size: 1.22em;
+}
+
+#cards_add_form div.card_button{
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+#cards_add_form div.card_button_top{
+    margin-top: 3.5em;
+}
+
+#cards_add_form div.card_button a{
+    text-align: center;
+    width: 17.44em;
+    height: 2.75em;
+    position: relative;
+    text-decoration: none;
+}
+
+#cards_add_form div.card_button a img{
+    width: 17.44em;
+    height: 2.75em;
+}
+
+#cards_add_form div.card_button a span{
+    position: absolute;
+    width: 17.44em;
+    left: 0;
+    margin-top: 0.75em;
 }
 
 /*
