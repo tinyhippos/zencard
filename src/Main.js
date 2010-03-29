@@ -20,6 +20,8 @@
 	return {
 
 		initialize: function(){
+            $.Persistence.detect();
+            
             var waitTime = 1000;
 
             if ($.Persistence.retrieve($.Constants.persistence.cardKeys)) {

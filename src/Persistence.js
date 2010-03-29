@@ -19,39 +19,6 @@
         }
     }
 
-	// attempt to detect persistence
-	function _detect(){
-        try {
-            if(window && window.Widget){
-                Widget.setPreferenceForKey("tinyHippos_key", "tinyHippos_value");
-
-                if(Widget.preferenceForKey("tinyHippos_key") === "tinyHippos_value"){
-                    _currentPersistence = _persistenceTypes.Widget_1_0;
-                }
-                else if (Widget.preferenceForKey("tinyHippos_value") === "tinyHippos_key") {
-                    _currentPersistence = _persistenceTypes.Widget_1_2_1;
-                }
-                else {
-                    $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism for Widget.");
-                }
-            }
-            else if(window && window.widget){
-                _currentPersistence = _persistenceTypes.widget;
-            }
-            else if(window && window.localStorage){
-                _currentPersistence = _persistenceTypes.localstorage;
-            }
-            else if (JQuery.cookie) {
-                _currentPersistence = _persistenceTypes.cookie;
-            }
-            else{
-                $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
-            }
-        }
-        catch(e) {
-            $.Exception.handle(e);
-        }
-	}
 
 	function _save(key, value, prefix){
 
@@ -163,11 +130,44 @@
 	}
 
 	// DETECT persistence
-	_detect();
+	//_detect();
 
 	// Public properties/methods
 	return {
-		
+        // attempt to detect persistence
+        detect: function(){
+            try {
+                if(window && window.Widget){
+                    Widget.setPreferenceForKey("tinyHippos_key", "tinyHippos_value");
+
+                    if(Widget.preferenceForKey("tinyHippos_key") === "tinyHippos_value"){
+                        _currentPersistence = _persistenceTypes.Widget_1_0;
+                    }
+                    else if (Widget.preferenceForKey("tinyHippos_value") === "tinyHippos_key") {
+                        _currentPersistence = _persistenceTypes.Widget_1_2_1;
+                    }
+                    else {
+                        $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism for Widget.");
+                    }
+                }
+                else if(window && window.widget){
+                    _currentPersistence = _persistenceTypes.widget;
+                }
+                else if(window && window.localStorage){
+                    _currentPersistence = _persistenceTypes.localstorage;
+                }
+                else if (JQuery.cookie) {
+                    _currentPersistence = _persistenceTypes.cookie;
+                }
+                else{
+                    $.Exception.raise($.Exception.types.UnknownPersistence, "Could not detect an appropriate persistence mechanism.");
+                }
+            }
+            catch(e) {
+                $.Exception.handle(e);
+            }
+        },
+
 		currentPersistence: function(){
 			return $.Copy(_persistenceTypes[_currentPersistence]);
 		},

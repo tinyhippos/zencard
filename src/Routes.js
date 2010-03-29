@@ -96,9 +96,12 @@
                     }
                     else {
                         $.Cards.save(name, code);
-                        if (card && card.name !== name) {
-                            // since the name changed (i.e. the key) we need to remove the old one
-                            $.Cards.remove(card.name);
+                        if (card) {
+                            _history.pop();
+                            if(card.name !== name) {
+                                // since the name changed (i.e. the key) we need to remove the old one
+                                $.Cards.remove(card.name);
+                            }
                         }
                         //need to remove the last two entries from history
                         _history.pop();
