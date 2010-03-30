@@ -16,29 +16,27 @@
 	}
 
 
-    a{
+    a {
         outline: none;
         text-decoration: underline;
-        text-transform: capitalize;
         cursor: pointer;
-        color: #EEEEEE;
     }
 
-    img{  border: 0; margin: 0; padding: 0; }
+    img {  border: 0; margin: 0; padding: 0; }
 
-    table, tr, td{
+    table, tr, td {
         border: 0;
         margin: 0;
         padding: 0;
     }
 
-    input:hover, textarea:hover, select:hover, button:hover{
+    .layout input:hover, .layout textarea:hover, .layout select:hover, .layout button:hover {
         color: #777777;
         background: #F0F0F0;
         cursor: pointer;
     }
 
-    textarea, input, button, select{
+    .layout textarea, .layout input, .layout button, .layout select{
         background: #EEEEEE;
         color: #1E1E1E;
         border: 1px solid #CCCCCC;
@@ -48,17 +46,25 @@
         border-radius: 10px;
     }
 
-    h1, h2, h3, p{ margin: 0 0 1em 0; }
+    .layout h1, .layout h2, .layout h3, .layout p {
+        margin: 0 0 1em 0;
+    }
 
-    h1, h2, h3{ text-transform: capitalize; font-weight: bold; }
+    .layout h1, .layout h2, .layout h3 {
+        text-transform: capitalize;
+        font-weight: bold;
+        color: #76A956;
+    }
 
-    h1 { font-size: 1.33em; }
+    .layout h1 { font-size: 1.33em; }
 
-    h2{ font-size: 1.14em; }
+    .layout h2{ font-size: 1.14em; }
 
-    h3{ font-size: 1.00em; }
+    .layout h3{ font-size: 1.00em; }
 
     .irrelevant{ display: none; }
+
+    .hidden{ visibility: hidden; }
 
 /* -------------------------- Main Layout -------------------------- */
 
@@ -84,7 +90,7 @@
         text-align: center;
         position: relative;
         z-index: 100;
-        top: 30%;
+        top: 32%;
         font-size: 1.69em;
     }
 
@@ -172,6 +178,19 @@
         color: #000000;
         z-index: 60;
         background: #FFFFFF;
+    }
+
+    .content {
+        text-align: center;
+        padding: 0 1em;
+    }
+
+    .content a {
+        color: #76A956;
+    }
+
+    .content h1{
+        margin-top: 0.5em;
     }
 
 
@@ -284,38 +303,6 @@
         font-size: 1.25em;
     }
 
-    div.card_button{
-        text-align: center;
-    }
-
-    div.card_button_top{
-        margin-top: 3.5em;
-        margin-bottom: 0.5em;
-    }
-
-    div.card_button a{
-        text-align: center;
-        width: 17.06em;
-        height: 2.44em;
-        position: relative;
-        text-decoration: none;
-    }
-
-    div.card_button a img{
-        width: 17.06em;
-        height: 2.44em;
-    }
-
-    div.card_button a div{
-        position: absolute;
-        width: 100%;
-        left: 0;
-        margin-top: 0.45em;
-        font-size: 1.25em;
-        font-weight: bold;
-    }
-
-
 /* -------------------------- Home View -------------------------- */
 
     .home_bg{
@@ -370,4 +357,50 @@
         -webkit-box-shadow: 0px 1px 5px #333333;
 		-moz-box-shadow: 0px 1px 5px #333333;
 		box-shadow: 0px 1px 5px #333333;
+    }
+
+/* -------------------------- About -------------------------- */
+
+    .icon {
+        width: 4.06em;
+        padding-top: 0.5em;
+    }
+
+    .logos img{
+        width: 35%;
+    }
+
+
+/* -------------------------- Large Green Button -------------------------- */
+
+    div.card_button{
+        text-align: center;
+    }
+
+    div.card_button_top{
+        margin-top: 3.5em;
+        margin-bottom: 0.5em;
+    }
+
+    div.card_button a{
+        text-align: center;
+        width: 17.06em;
+        height: 2.44em;
+        position: relative;
+        text-decoration: none;
+    }
+
+    div.card_button a img{
+        width: 17.06em;
+        height: 2.44em;
+    }
+
+    div.card_button a div{
+        position: absolute;
+        width: 100%;
+        left: 0;
+        margin-top: 0.45em;
+        font-size: 1.25em;
+        font-weight: bold;
+        color: #FFFFFF;
     }

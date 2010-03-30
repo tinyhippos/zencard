@@ -9,15 +9,39 @@
 
 			},
 
-			"help.html": function(){
+			"help/add_card.html": function(){
 
 				$.UI.setLeftNav("Back");
+                $.UI.setTitle("Help");
+                $.UI.setRightNav();
 
 			},
-            
+
+			"help/edit_card.html": function(){
+
+				$.UI.setLeftNav("Back");
+                $.UI.setTitle("Help");
+                $.UI.setRightNav();
+
+			},
+
+			"help/barcode_select.html": function(){
+
+				$.UI.setLeftNav("Back");
+                $.UI.setTitle("Help");
+                $.UI.setRightNav();
+
+                JQuery(".barcode_select_help").mousedown(function(){
+                    $.Routes.navigate("help/barcode_select.html");
+                });
+
+			},
+
 			"about.html": function(){
 
 				$.UI.setLeftNav("Back");
+                $.UI.setRightNav();
+                $.UI.setTitle();
 
 			},
 
@@ -69,10 +93,16 @@
 
                 $.UI
                     .showHeader()
-                    .setLeftNav("Back")
+                    .setLeftNav("Cancel")
                     .setTitle("Add")
-                    .setRightNav("?", "help/add_card.html")
 				    .setBodyBgColour("#231F20");
+
+                if (card) {
+                    $.UI.setRightNav("?", "help/edit_card.html");
+                }
+                else {
+                    $.UI.setRightNav("?", "help/add_card.html");                    
+                }
 
 				// bind to Forms submit here
 				JQuery("#add_card").mousedown(function (){

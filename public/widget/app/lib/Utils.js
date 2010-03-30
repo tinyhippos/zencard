@@ -1,5 +1,5 @@
 // ----------------- Utils ----------------- \\
-(ZenCard.Utils = function ($){
+(ZenCard.Utils = function ($, JQuery){
 
 	return {
 
@@ -107,13 +107,20 @@
 		},
 
         saveKeyToCategory: function (categoryKey, itemKey) {
-            var value = $.Persistence.retrieve(categoryKey);
+            var keysString = $.Persistence.retrieve(categoryKey),
+                keys;
 
-            if (!value) {
+            if (!keysString) {
                 $.Persistence.save(categoryKey, itemKey);
             }
             else {
-                $.Persistence.save(categoryKey, value + $.Constants.persistence.keyDelimiter + itemKey);
+                keys = keysString.split($.Constants.persistence.keyDelimiter);
+                if (JQuery.inArray(itemKey, keys) === -1) {
+                    $.Persistence.save(categoryKey, keysString + $.Constants.persistence.keyDelimiter + itemKey);
+                }
+                else {
+                    // the key is in there already so don't do anything.
+                }
             }
         },
 
@@ -151,4 +158,4 @@
         }
 	};
 
-}(ZenCard));
+}(ZenCard, $));

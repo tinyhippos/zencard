@@ -21,23 +21,29 @@
         },
 
         setRightNav: function(text, view, params, navType, callback){
-
-			if(navType === "big"){
-				JQuery(".nav_right div.image img")[0]
-					.src = "app/images/smallgreenbutton.png";
-				JQuery(".nav_right")
-					.addClass("nav_right_big")
-					.removeClass("nav_right_small");
-			}
-			else{
-				JQuery(".nav_right div.image img")
-					.attr("src", "app/images/breenbox.png");
-				JQuery(".nav_right")
-					.addClass("nav_right_small")
-					.removeClass("nav_right_big");
-			}
+            if (arguments.length === 0) {
+                JQuery(".nav_right").addClass("hidden");
+            }
+            else {
+                JQuery(".nav_right").removeClass("hidden");
+                if(navType === "big"){
+                    JQuery(".nav_right div.image img")[0]
+                        .src = "app/images/smallgreenbutton.png";
+                    JQuery(".nav_right")
+                        .addClass("nav_right_big")
+                        .removeClass("nav_right_small");
+                }
+                else{
+                    JQuery(".nav_right div.image img")
+                        .attr("src", "app/images/breenbox.png");
+                    JQuery(".nav_right")
+                        .addClass("nav_right_small")
+                        .removeClass("nav_right_big");
+                }
 			
-            _setNav(document.getElementById($.Constants.common.navRight), text, view, params);
+                _setNav(document.getElementById($.Constants.common.navRight), text, view, params);
+            }
+
             return this;
         },
 
