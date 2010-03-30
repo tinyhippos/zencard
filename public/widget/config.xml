@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget  xmlns="http://www.jil.org/ns/widgets"
-         xmlns:its="http://www.w3.org/2005/11/its"
-         id="http://jil.org/wid/8a6615320f0b811aad0d812944bf74bcc969d1700390406600636cbe5d7308e3/ZenCard"
-         version="1.0-dev"
-         height="684"
+<widget xmlns="http://www.jil.org/ns/widgets"
+        id="c27e1dec-17b9-4abb-96e5-42e0f250f6ae"
+        version="01.00.beta"
+        height="684"
          width="480">
-    <maximum_display_mode height="684" width="480"/>
-    <update href="http://www.jil.org/widgets/" period="2"/>
-    <access network="true" localfs="true" remote_scripts="false"/>
-    <billing required="false"/>
-    <icon src="Icon.svg"/>
-    <content src="index.html" type="text/html"/>
-    <feature name="http://jil.org/jil/api/1.1/xmlHttpRequest"/>
     <name>ZenCard</name>
-    <description>May all your cards be one.</description>
-    <license href="http://license.example.org/">Copyright  2010 tinyHippos/CuteGcko (MIT)</license>
-    <author email="myname@host">zencard</author>
+    <description>This is my first Widget.</description>
+    <content src="index.html" />
+    <icon src="Icon.svg" />
+    <author email="zencard@tinyhippos.com">tinyHipps Inc. CuteGecko</author>
+    <license href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache v2</license>
+    <access network="true" localfs="true" remote_scripts="false"/>
+    <update href="http://www.jil.org/widgets/" period="2"/>
+    <maximum_display_mode height="684" width="480"/>
+    <billing required="false"/>
 </widget>

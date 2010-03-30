@@ -9,12 +9,29 @@
     }
     body{ font: 1em Helvetica, Verdana, Sans-serif; }
 
-	@media all and (min-resolution: 170dpi) {
+	@media all and (min-resolution: 50dpi) {
 	  body {
-		font-size: 0.67em;
+		font-size: 0.5em;
 	  }
 	}
 
+    @media all and (min-resolution: 150dpi) {
+      body {
+        font-size: 0.63em;
+      }
+    }
+
+    @media all and (min-resolution: 200dpi) {
+	  body {
+		font-size: 0.88em;
+	  }
+	}
+
+    @media all and (min-resolution: 250dpi) {
+	  body {
+		font-size: 1em;
+	  }
+	}
 
     a {
         outline: none;
@@ -30,13 +47,13 @@
         padding: 0;
     }
 
-    .layout input:hover, .layout textarea:hover, .layout select:hover, .layout button:hover {
+    input:hover, .textarea:hover, .select:hover, button:hover {
         color: #777777;
         background: #F0F0F0;
         cursor: pointer;
     }
 
-    .layout textarea, .layout input, .layout button, .layout select{
+    textarea, input, button, select{
         background: #EEEEEE;
         color: #1E1E1E;
         border: 1px solid #CCCCCC;
