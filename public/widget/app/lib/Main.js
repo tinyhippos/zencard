@@ -14,7 +14,7 @@
 		initialize: function(){
             $.Persistence.detect();
             
-            var waitTime = 3000;
+            var waitTime = 2000;
 
             if ($.Persistence.retrieve($.Constants.persistence.cardKeys)) {
                 waitTime = 0;
@@ -27,20 +27,34 @@
 
 		generate: function (code){
 
-			var el, i, barcodeDiv, success;
+			var el, elParent,
+				i, barcodeDiv,
+				barcodeTypes = $.Constants.BARCODE_TYPES;
 
 			try{
 
-				for (i = 0; i < $.Constants.BARCODE_TYPES.length; i++){
+				barcodeDiv = document.getElementById($.Constants.DIV_BARCODES);
+
+				for (i = 0; i < barcodeTypes.length; i++){
 
 					el = $.Utils.createElement("div", {
-						"class": "barcode_generated",
-						"onclick": 'alert("selected barcode index ' + i + '");'
+						"class": "barcode_generated"
 					});
+					
+					elParent = $.Utils.createElement("div", {
+						"class": "barcode_generated_container"
+					});
+					
+                    elParent.appendChild(el);
+                    barcodeDiv.appendChild(elParent);
+                    
+                    JQuery(el).barcode(code, barcodeTypes[i], _barcode_options);
 
-					barcodeDiv = document.getElementById($.Constants.DIV_BARCODES);
-                    barcodeDiv.appendChild(el);
-                    success = JQuery(el).barcode(code, $.Constants.BARCODE_TYPES[i], _barcode_options);
+					// if generation failed
+					if(el.childNodes.length === 0){
+						barcodeDiv.removeChild(elParent);	
+					}
+					
 
 				}
 
@@ -49,7 +63,8 @@
 		},
         
 		loading: function(){
-			$.UI.loadView('<div class="ajax_loader"></div>');
+			$.UI.setBodyBgColour("#FFFFFF")
+				.loadView('<div class="ajax_loader"></div>');
 		}
 
 	};

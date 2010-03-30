@@ -15,12 +15,28 @@
         },
 
         // TODO; allow custom callbacks
-        setLeftNav: function(text, view, callback){
-            _setNav(document.getElementById($.Constants.common.navLeft), text, view);
+        setLeftNav: function(text, view, params, callback){
+            _setNav(document.getElementById($.Constants.common.navLeft), text, view, params);
             return this;
         },
 
-        setRightNav: function(text, view, params, callback){
+        setRightNav: function(text, view, params, navType, callback){
+
+			if(navType === "big"){
+				JQuery(".nav_right div.image img")[0]
+					.src = "app/images/smallgreenbutton.png";
+				JQuery(".nav_right")
+					.addClass("nav_right_big")
+					.removeClass("nav_right_small");
+			}
+			else{
+				JQuery(".nav_right div.image img")
+					.attr("src", "app/images/breenbox.png");
+				JQuery(".nav_right")
+					.addClass("nav_right_small")
+					.removeClass("nav_right_big");
+			}
+			
             _setNav(document.getElementById($.Constants.common.navRight), text, view, params);
             return this;
         },

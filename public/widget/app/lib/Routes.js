@@ -5,22 +5,19 @@
 
 			"index.html": function(){
 
-				$.Routes.clearHistory()
-				    .setBodyBgColour("#FFFFFF");
+				$.Routes.clearHistory();
 
 			},
 
 			"help.html": function(){
 
-				$.UI.setLeftNav("Back")
-				    .setBodyBgColour("#FFFFFF");
+				$.UI.setLeftNav("Back");
 
 			},
             
 			"about.html": function(){
 
-				$.UI.setLeftNav("Back")
-				    .setBodyBgColour("#FFFFFF");
+				$.UI.setLeftNav("Back");
 
 			},
 
@@ -36,8 +33,7 @@
                     .showHeader()
                     .setLeftNav("About", "about.html")
 				    .setTitle("Select")
-				    .setRightNav("+", "cards/add.html")
-				    .setBodyBgColour("#FFFFFF");
+				    .setRightNav("+", "cards/add.html");
 
 				cardNames = $.Cards.getAllCardNames();
                 if (cardNames) {
@@ -75,54 +71,64 @@
                     .showHeader()
                     .setLeftNav("Back")
                     .setTitle("Add")
-                    .setRightNav("?", "help.html")
+                    .setRightNav("?", "help/add_card.html")
 				    .setBodyBgColour("#231F20");
 
 				// bind to Forms submit here
-				JQuery("#add_card").click(function (){
-                    var name = JQuery("#cards_add_company_name")[0] ? JQuery("#cards_add_company_name")[0].value : "",
+				JQuery("#add_card").mousedown(function (){
+					try{
+						var name = JQuery("#cards_add_company_name")[0] ? JQuery("#cards_add_company_name")[0].value : "",
                         code = JQuery("#cards_add_code")[0] ? JQuery("#cards_add_code")[0].value : "",
                         msg = "";
 
-                    if (name === "") {
-                        msg = "* Please enter a company/card name.\n\n";
-                    }
-                    else {
-                        if (name.length > 50) {
-                            msg = "* Company/card name must be less then 50 characters long.\n\n";
-                        }
-                    }
+						if (name === "") {
+							msg = "* Please enter a company/card name.\n\n";
+						}
+						else {
+							if (name.length > 50) {
+								msg = "* Company/card name must be less then 50 characters long.\n\n";
+							}
+						}
 
-                    if (code === "") {
-                        msg += "* Please enter the numeric barcode found on your card";
-                    }
+						if (code === "") {
+							msg += "* Please enter the numeric barcode found on your card";
+						}
 
-                    if (msg !== "") {
-                        alert(msg);
-                    }
-                    else {
-                        $.Cards.save(name, code);
-                        if (card) {
-                            _history.pop();
-                            if(card.name !== name) {
-                                // since the name changed (i.e. the key) we need to remove the old one
-                                $.Cards.remove(card.name);
-                            }
-                        }
-                        //need to remove the last two entries from history
-                        _history.pop();
-                        $.Routes.navigate("cards/barcode_select.html", [name]);
-                    }
+						if (msg !== "") {
+							alert(msg);
+						}
+						else {
+							$.Cards.save(name, code);
+							if (card) {
+								_history.pop();
+								if(card.name !== name) {
+									// since the name changed (i.e. the key) we need to remove the old one
+									$.Cards.remove(card.name);
+								}
+							}
+							//need to remove the last two entries from history
+							_history.pop();
+							$.Routes.navigate("cards/barcode_select.html", [name]);
+						}
+					}
+					catch (e){
+						$.Exception.handle(e);
+					}
 				});
 
                 // bind to Forms submit here
-                JQuery("#remove_card").click(function (){
-                    if(card){
-                        $.Cards.remove(card.name);
-                        // clear history
-                        _history.pop();
-                        $.Routes.navigate("cards/list.html");
-                    }
+                JQuery("#remove_card").mousedown(function (){
+					try{
+						if(card){
+							$.Cards.remove(card.name);
+							// clear history
+							_history.pop();
+							$.Routes.navigate("cards/list.html");
+						}
+					}
+					catch (e){
+						$.Exception.handle(e);
+					}
                 });
 			},
 
@@ -131,9 +137,13 @@
 
 
 				$.UI.setLeftNav("Back")
+					.setBodyBgColour("#231F20")
                     .setTitle()
-				    .setRightNav("Edit", "cards/add.html", [card.name])
-				    .setBodyBgColour("#231F20");
+				    .setRightNav("Edit", "cards/add.html", [card.name], "big");
+
+				JQuery("#barcode_select_help").mousedown(function (){
+					$.Routes.navigate("help/barcode_select.html");
+                });	
 
                 document.getElementById("cardName").innerHTML = cardName;
 

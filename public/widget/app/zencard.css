@@ -9,6 +9,13 @@
     }
     body{ font: 1em Helvetica, Verdana, Sans-serif; }
 
+	@media all and (min-resolution: 170dpi) {
+	  body {
+		font-size: 0.67em;
+	  }
+	}
+
+
     a{
         outline: none;
         text-decoration: underline;
@@ -99,7 +106,14 @@
     .layout .header div.nav_right{
         float: right;
         margin: 0 0.75em 0 0;
-        width: 2.62em;
+    }
+
+    .layout .header div.nav_right_big{
+    	width: 4.75em;
+    }
+
+    .layout .header div.nav_right_small{
+    	width: 2.62em;
     }
 
     .header div.nav_left div.link, .header div.nav_right div.link{
@@ -168,15 +182,11 @@
         font-size: 2em;
         font-weight: bold;
         color: #76A956;
-        margin-top: 0.5em;
-
+        margin: 0.5em 0 1em 0;
     }
 
     .barcode_generated{
-        position: relative;
-        z-index: 600;
-        background: #FFFFFF;
-        margin: 5em auto 0 auto;
+        margin: 0 auto;
     }
 
     .barcode_generated object{
@@ -185,9 +195,24 @@
         z-index: 90;
     }
 
+    .barcode_generated_container{
+		position: relative;
+        z-index: 600;
+        background: #FFFFFF;
+        margin: 0 auto 2em auto;
+		-webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        padding: 2em 0.75em;
+    }
+
     .layout .view #barcodes{
         margin: 10px;
         overflow: hidden;
+    }
+
+    .barcode_select_edit{
+		margin: 0.75em 0 1.5em 0;
     }
 
 
@@ -207,7 +232,7 @@
         background: url(images/littlearrow.png) no-repeat 95% center;
     }
 
-    .card_selected, .card_not_selected:hover{
+    .card_selected, .card_not_selected:active, .card_not_selected:hover{
         background: #76A956 url(images/whitecarrot.png) no-repeat 95% center;
         color: #FFFFFF;
     }
@@ -259,16 +284,16 @@
         font-size: 1.25em;
     }
 
-    #cards_add_form div.card_button{
+    div.card_button{
         text-align: center;
+    }
+
+    div.card_button_top{
+        margin-top: 3.5em;
         margin-bottom: 0.5em;
     }
 
-    #cards_add_form div.card_button_top{
-        margin-top: 3.5em;
-    }
-
-    #cards_add_form div.card_button a{
+    div.card_button a{
         text-align: center;
         width: 17.06em;
         height: 2.44em;
@@ -276,12 +301,12 @@
         text-decoration: none;
     }
 
-    #cards_add_form div.card_button a img{
+    div.card_button a img{
         width: 17.06em;
         height: 2.44em;
     }
 
-    #cards_add_form div.card_button a div{
+    div.card_button a div{
         position: absolute;
         width: 100%;
         left: 0;
