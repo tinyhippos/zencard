@@ -12,17 +12,17 @@
 	return {
 
 		initialize: function(){
-            $.Persistence.detect();
-            
-            var waitTime = 3000;
+			$.Persistence.detect();
+			
+			var waitTime = 3000;
 
-            if ($.Persistence.retrieve($.Constants.persistence.cardKeys)) {
-                waitTime = 0;
-            }
+			if ($.Persistence.retrieve($.Constants.persistence.cardKeys)) {
+				waitTime = 0;
+			}
 
-            setTimeout(function() {
-                $.Routes.navigate("cards/list.html");
-            }, waitTime);
+			setTimeout(function() {
+				$.Routes.navigate("cards/list.html");
+			}, waitTime);
 		},
 
 		generate: function (code){
@@ -40,28 +40,28 @@
 					el = $.Utils.createElement("div", {
 						"class": "barcode_generated"
 					});
-					
+
 					elParent = $.Utils.createElement("div", {
 						"class": "barcode_generated_container"
 					});
-					
+
                     elParent.appendChild(el);
                     barcodeDiv.appendChild(elParent);
-                    
+
                     JQuery(el).barcode(code, barcodeTypes[i], _barcode_options);
 
 					// if generation failed
 					if(el.childNodes.length === 0){
-						barcodeDiv.removeChild(elParent);	
+						barcodeDiv.removeChild(elParent);
 					}
-					
+
 
 				}
 
 			}
 			catch (e){ $.Exception.handle(e); }
 		},
-        
+
 		loading: function(){
 			$.UI.setBodyBgColour("#FFFFFF")
 				.loadView('<div class="ajax_loader"></div>');
