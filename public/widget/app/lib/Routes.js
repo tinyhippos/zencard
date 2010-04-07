@@ -11,25 +11,25 @@
 
 			"help/add_card.html": function(){
 
-				$.UI.setLeftNav("Back");
-                $.UI.setTitle("Help");
-                $.UI.setRightNav();
+				$.UI.setLeftNav("Back")
+					.setTitle("Help")
+					.setRightNav();
 
 			},
 
 			"help/edit_card.html": function(){
 
-				$.UI.setLeftNav("Back");
-                $.UI.setTitle("Help");
-                $.UI.setRightNav();
+				$.UI.setLeftNav("Back")
+					.setTitle("Help")
+                	.setRightNav();
 
 			},
 
 			"help/barcode_select.html": function(){
 
-				$.UI.setLeftNav("Back");
-                $.UI.setTitle("Help");
-                $.UI.setRightNav();
+				$.UI.setLeftNav("Back")
+					.setTitle("Help")
+					.setRightNav();
 
                 JQuery(".barcode_select_help").mousedown(function(){
                     $.Routes.navigate("help/barcode_select.html");
@@ -39,9 +39,9 @@
 
 			"about.html": function(){
 
-				$.UI.setLeftNav("Back");
-                $.UI.setRightNav();
-                $.UI.setTitle();
+				$.UI.setLeftNav("Back")
+					.setRightNav()
+                	.setTitle();
 
 			},
 
@@ -53,8 +53,7 @@
                     cardContainer;
                     listContainer = document.getElementById($.Constants.htmlElements.cardList);
 
-                $.UI
-                    .showHeader()
+                $.UI.showHeader()
                     .setLeftNav("About", "about.html")
 				    .setTitle("Select")
 				    .setRightNav("+", "cards/add.html");
@@ -91,8 +90,7 @@
                     }
                 }
 
-                $.UI
-                    .showHeader()
+                $.UI.showHeader()
                     .setLeftNav("Cancel")
                     .setTitle("Add")
 				    .setBodyBgColour("#231F20");
