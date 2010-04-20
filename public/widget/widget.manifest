@@ -1,9 +1,23 @@
 CACHE MANIFEST
+
+CACHE:
 index.html
-app/lib/zencard.js
-app/lib/css/zencard.css
+app/lib/Cards.js
+app/lib/Console.js
+app/lib/Constants.js
+app/lib/Copy.js
+app/lib/Event.js
+app/lib/Exception.js
+app/lib/Main.js
+app/lib/Persistence.js
+app/lib/Routes.js
+app/lib/UI.js
+app/lib/Utils.js
+app/lib/zencard.css
 app/thirdparty/jquery-1.4.2.js
 app/thirdparty/jquery-barcode-1.3.3.min.js
+app/thirdparty/jquery-cookie.js
+app/thirdparty/json2.js
 app/views/index.html
 app/views/help.html
 app/views/cards/add.html

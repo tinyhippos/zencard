@@ -24,6 +24,9 @@
             var ZenCard = {};
 
             window.addEventListener("load", function (){
+				window.applicationCache.addEventListener('checking', functino(){
+						alert("test!");
+					}, false);
                 ZenCard.Main.initialize();
             }, false);
 
