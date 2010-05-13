@@ -5,11 +5,11 @@
         height="684"
          width="480">
     <name>ZenCard</name>
-    <description>This is my first Widget.</description>
+    <description>May all your cards be one.</description>
     <content src="index.html" />
     <icon src="Icon.svg" />
     <author email="zencard@tinyhippos.com">tinyHipps Inc. CuteGecko</author>
-    <license href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache v2</license>
+    <license href="http://license.example.org/">Copyright  2010 tinyHippos/CuteGcko (MIT)</license>
     <access network="true" localfs="true" remote_scripts="false"/>
     <update href="http://www.jil.org/widgets/" period="2"/>
     <maximum_display_mode height="684" width="480"/>

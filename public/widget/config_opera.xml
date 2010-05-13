@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<widget dockable="yes" network="public">
+  <widgetname>ZenCard</widgetname>
+  <description>May all your cards be one.</description>
+  <icon width="64" height="64">Icon.png</icon>
+  <width>480</width>
+  <height>684</height>
+  <author>
+    <name>tinyHipps Inc. CuteGecko</name>
+  <organization /><email /><link /></author>
+  <id>
+    <name>ZenCard</name>
+    <revised>2010-04-01</revised>
+  </id>
+</widget>
