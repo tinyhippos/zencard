@@ -9,13 +9,12 @@
     <description>May all your cards be one.</description>
     <content src="index.html" />
     <icon src="Icon.svg" />
-    <author email="zencard@tinyhippos.com">tinyHipps Inc. CuteGecko</author>
+    <author email="zencard@tinyhippos.com">tinyHipps Inc. and CuteGecko</author>
     <license href="http://license.example.org/">Copyright  2010 tinyHippos/CuteGcko (MIT)</license>
     <feature name="http://jil.org/jil/api/1.2/widget" required="false" />
     <feature name="http://jil.org/jil/api/1.1.5/exception" required="false" />
     <feature name="http://jil.org/jil/api/1.1.5/exceptiontypes" required="false" />
     <feature name="http://jil.org/jil/api/1.2/device" required="false" />
-    <author email="zencard@tinyhippos.com">tinyHipps Inc. CuteGecko</author>
     <JIL:access network="true" localfs="true" remote_scripts="false"/>
     <JIL:update href="http://www.jil.org/widgets/" period="2"/>
     <JIL:billing required="false"/>
