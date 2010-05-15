@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.jil.org/ns/widgets"
+<widget xmlns="http://www.w3.org/ns/widgets"
+		xmlns:JIL="http://www.jil.org/ns/widgets1.2"
         id="c27e1dec-17b9-4abb-96e5-42e0f250f6ae"
         version="01.00.beta"
         height="684"
-         width="480">
+		width="480">
     <name>ZenCard</name>
     <description>May all your cards be one.</description>
     <content src="index.html" />
     <icon src="Icon.svg" />
     <author email="zencard@tinyhippos.com">tinyHipps Inc. CuteGecko</author>
     <license href="http://license.example.org/">Copyright  2010 tinyHippos/CuteGcko (MIT)</license>
-    <access network="true" localfs="true" remote_scripts="false"/>
-    <update href="http://www.jil.org/widgets/" period="2"/>
-    <maximum_display_mode height="684" width="480"/>
-    <billing required="false"/>
+    <feature name="http://jil.org/jil/api/1.2/widget" required="false" />
+    <feature name="http://jil.org/jil/api/1.1.5/exception" required="false" />
+    <feature name="http://jil.org/jil/api/1.1.5/exceptiontypes" required="false" />
+    <feature name="http://jil.org/jil/api/1.2/device" required="false" />
+    <author email="zencard@tinyhippos.com">tinyHipps Inc. CuteGecko</author>
+    <JIL:access network="true" localfs="true" remote_scripts="false"/>
+    <JIL:update href="http://www.jil.org/widgets/" period="2"/>
+    <JIL:billing required="false"/>
 </widget>

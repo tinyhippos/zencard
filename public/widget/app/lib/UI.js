@@ -66,13 +66,12 @@
         setBodyBgColour: function(colour){
 
 			try{
-				var layoutStyle = $.Utils.getAllStylesheetRules(".layout"),
-					viewStyle = $.Utils.getAllStylesheetRules(".layout .view");
-					bodyStyle = $.Utils.getAllStylesheetRules("body");
+				var bodyStyle = $.Utils.getAllStylesheetRules(/.layout/),
+				viewStyle = $.Utils.getAllStylesheetRules(/.layout .view/);
+
 
 				bodyStyle[0].style.backgroundColor = colour;	
 				viewStyle[0].style.backgroundColor = colour;
-				layoutStyle[0].style.backgroundColor = colour;
 			}
 			catch (e){
 				$.Exception.handle(e);					

@@ -96,7 +96,7 @@
 				if (rules){
 					for (x = 0; x < rules.length; x += 1) {
 
-						if (rules[x].selectorText && rules[x].selectorText === (title.toString())) {
+						if (rules[x].selectorText && rules[x].selectorText.match(title)) {
 							styles_array.push(rules[x]);
 						}
 					}
