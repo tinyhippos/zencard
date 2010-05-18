@@ -9,7 +9,7 @@
     <update href="http://www.jil.org/widgets/" period="2"/>
     <access network="true" localfs="true" remote_scripts="false"/>
     <billing required="false"/>
-    <icon src="Icon.svg"/>
+    <icon src="Icon.png"/>
     <content src="index.html" type="text/html"/>
     <feature name="http://jil.org/jil/api/1.1/xmlHttpRequest"/>
     <name>ZenCard</name>

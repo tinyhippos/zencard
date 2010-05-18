@@ -8,7 +8,7 @@
     <name>ZenCard</name>
     <description>May all your cards be one.</description>
     <content src="index.html" />
-    <icon src="Icon.svg" />
+    <icon src="Icon.png" />
     <author email="zencard@tinyhippos.com">tinyHipps Inc. and CuteGecko</author>
     <license href="http://license.example.org/">Copyright  2010 tinyHippos/CuteGcko (MIT)</license>
     <feature name="http://jil.org/jil/api/1.2/widget" required="false" />
